@@ -49,6 +49,7 @@ project(":core") {
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.github.czyzby:ktx-actors:1.9.5-b1"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     }
 }

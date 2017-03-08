@@ -6,7 +6,10 @@ import mmorihiro.jeweledoor.MainListener
 
 object DesktopLauncher {
     @JvmStatic fun main(arg: Array<String>) {
-        val config = LwjglApplicationConfiguration()
+        val config = LwjglApplicationConfiguration().apply {
+            resizable = false
+        }
+        
         LwjglApplication(MainListener(), config)
     }
 }

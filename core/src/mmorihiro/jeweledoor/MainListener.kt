@@ -3,28 +3,36 @@ package mmorihiro.jeweledoor
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.viewport.FitViewport
+import ktx.actors.onClick
+import ktx.actors.plus
 
 class MainListener : ApplicationAdapter() {
-    lateinit internal var batch: SpriteBatch
-    lateinit internal var img: Texture
+    lateinit var currentView: View
+    lateinit var stage: Stage
 
     override fun create() {
-        batch = SpriteBatch()
-        img = Texture("badlogic.jpg")
+        currentView = View().apply {
+            onClick { _, _, x, y -> println("x:$x, y: $y") }
+        }
+
+        stage = Stage(FitViewport(width, height)).apply {
+            this + currentView
+            Gdx.input.inputProcessor = this
+        }
     }
 
     override fun render() {
-        Gdx.gl.glClearColor(1f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        batch.begin()
-        batch.draw(img, 0f, 0f)
-        batch.end()
+        stage.act(Gdx.graphics.deltaTime)
+        stage.draw()
     }
 
     override fun dispose() {
-        batch.dispose()
-        img.dispose()
+        stage.dispose()
     }
 }
+
+val width = Gdx.graphics.width.toFloat()
+val height = Gdx.graphics.height.toFloat()
