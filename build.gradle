@@ -22,6 +22,7 @@ allprojects {
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
+        ktxVersion = '1.9.5-b1'
     }
 
     repositories {
@@ -49,7 +50,8 @@ project(":core") {
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.github.czyzby:ktx-actors:1.9.5-b1"
+        compile "com.github.czyzby:ktx-actors:$ktxVersion"
+        compile "com.github.czyzby:ktx-assets:$ktxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     }
 }
