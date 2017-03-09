@@ -5,8 +5,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import ktx.actors.onClick
 import ktx.actors.plus
+import ktx.actors.then
 import ktx.assets.Assets
 import ktx.assets.load
 
@@ -20,9 +22,18 @@ class MainListener : ApplicationAdapter() {
         Assets.manager.finishLoading()
 
         currentView = View().apply {
-            backGround.onClick { _, _, x, y ->
-                println("clicked $x, $y")
-                shoot()
+            backGround.onClick { _, _, clickedX, clickedY ->
+                val ySide = (clickedY - Values.centerY).toDouble()
+                val xSide = (clickedX - Values.centerX).toDouble()
+                val direction = Math.atan2(ySide, xSide)
+                val vx = Math.cos(direction).toFloat()
+                val vy = Math.sin(direction).toFloat()
+                shoot().let {
+                    val actions =
+                            Actions.moveBy(vx * 280, vy * 280, 0.9f) then
+                                    Actions.run { removeBullet(it) }
+                    it + actions
+                }
             }
             this + backGround
             Gdx.input.inputProcessor = this
@@ -40,5 +51,9 @@ class MainListener : ApplicationAdapter() {
     }
 }
 
-val width = Gdx.graphics.width.toFloat()
-val height = Gdx.graphics.height.toFloat()
+object Values {
+    val width = Gdx.graphics.width.toFloat()
+    val height = Gdx.graphics.height.toFloat()
+    val centerX = width / 2
+    val centerY = height / 2
+}
