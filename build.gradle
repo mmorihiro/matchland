@@ -7,7 +7,6 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "org.junit.platform:junit-platform-gradle-plugin:1.0.0-M3"
     }
 }
 
@@ -24,14 +23,12 @@ allprojects {
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
         ktxVersion = '1.9.5-b1'
-        spekVersion = '1.1.0-beta3'
     }
 
     repositories {
         mavenLocal()
         mavenCentral()
         jcenter()
-        maven { url "http://dl.bintray.com/jetbrains/spek" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
