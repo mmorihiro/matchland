@@ -11,8 +11,8 @@ import mmorihiro.jeweledoor.model.BasicViewModel
 import mmorihiro.jeweledoor.view.BasicView
 
 
-class BasicViewCreator {
-    val view = BasicView().apply {
+class BasicViewController : ViewController {
+    override val view = BasicView().apply {
         backGround.onClick { _, _, clickedX, clickedY ->
             shoot().let {
                 val (vx, vy) =

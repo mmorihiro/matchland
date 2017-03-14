@@ -5,30 +5,32 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.scenes.scene2d.Stage
 import ktx.assets.Assets
+import ktx.assets.dispose
 import ktx.assets.load
-import mmorihiro.jeweledoor.view.BasicView
 
 
 class MainListener : ApplicationAdapter() {
-    lateinit var currentView: BasicView
+    var currentViews: List<Stage> = listOf()
 
     override fun create() {
         Assets.manager = AssetManager()
         load<Texture>("bullet.png")
         load<Texture>("cannon.png")
         load<Texture>("background.png")
+        load<Texture>("doorBackground.png")
         Assets.manager.finishLoading()
-        currentView = BasicViewCreator().view
+        currentViews = listOf(BasicViewController().view, DoorViewController().view)
     }
 
     override fun render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        currentView.act(Gdx.graphics.deltaTime)
-        currentView.draw()
+        currentViews.forEach { it.act(Gdx.graphics.deltaTime) }
+        currentViews.forEach(Stage::draw)
     }
 
     override fun dispose() {
-        currentView.dispose()
+        currentViews.dispose()
     }
 }
