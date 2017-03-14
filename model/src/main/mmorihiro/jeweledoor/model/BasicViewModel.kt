@@ -1,14 +1,25 @@
 package mmorihiro.jeweledoor.model
 
+import com.badlogic.gdx.math.Circle
+import com.badlogic.gdx.math.MathUtils
 
-class BasicViewModel {
-    fun getBulletTarget(startX: Float, startY: Float, clickedX: Float, clickedY: Float): Pair<Float, Float> {
-        val ySide = (clickedY - startY).toDouble()
-        val xSide = (clickedX - startX).toDouble()
-        val degree = Math.atan2(ySide, xSide)
-        val vx = Math.cos(degree).toFloat()
-        val vy = Math.sin(degree).toFloat()
-        return (if (xSide == 0.0) 0f else vx) to (if (ySide == 0.0) 0f else vy)
+
+class BasicViewModel(val jewelSize: Int,
+                     val backGroundWidth: Float,
+                     val backGroundHeight: Float,
+                     val cannonArea: Circle) {
+    fun jewelPosition(area: Int,
+                      total: Int): Pair<Float, Float> {
+        val xRange = (backGroundWidth - jewelSize) / total
+        val jewelX = MathUtils.random(xRange * (area % total),
+                xRange * (area % total + 1) - jewelSize)
+        val jewelY = MathUtils.random(backGroundHeight - jewelSize)
+        val jewelRadius = jewelSize / 2f
+        val jewelArea = Circle(
+                jewelX + jewelRadius, jewelY + jewelRadius, jewelRadius)
+
+        return if (cannonArea.overlaps(jewelArea)) {
+            jewelPosition(area, total)
+        } else jewelX to jewelY
     }
 }
-

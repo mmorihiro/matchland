@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import ktx.actors.onClick
 import ktx.actors.plus
 import ktx.actors.then
-import mmorihiro.jeweledoor.model.BasicViewModel
+import mmorihiro.jeweledoor.model.BasicControllerModel
 import mmorihiro.jeweledoor.view.BasicView
 
 
@@ -16,7 +16,7 @@ class BasicViewController : ViewController {
         backGround.onClick { _, _, clickedX, clickedY ->
             shoot().let {
                 val (vx, vy) =
-                        BasicViewModel().getBulletTarget(
+                        BasicControllerModel().getBulletTarget(
                                 backGround.width / 2, backGround.height / 2,
                                 clickedX, clickedY)
                 val actions = Actions.moveBy(vx * 260, vy * 260, 0.9f) then
@@ -27,6 +27,7 @@ class BasicViewController : ViewController {
         }
         this + backGround
         this + cannon
+        jewels.forEach { this + it }
         Gdx.input.inputProcessor = this
     }
 
