@@ -1,0 +1,11 @@
+apply plugin: "kotlin"
+
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets.main.kotlin.srcDirs = [ "src/main" ]
+sourceSets.test.kotlin.srcDirs = [ "src/test" ]
+
+eclipse.project {
+    name = appName + "-model"
+}

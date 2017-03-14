@@ -7,6 +7,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.junit.platform:junit-platform-gradle-plugin:1.0.0-M3"
     }
 }
 
@@ -23,11 +24,14 @@ allprojects {
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
         ktxVersion = '1.9.5-b1'
+        spekVersion = '1.1.0-beta3'
     }
 
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
+        maven { url "http://dl.bintray.com/jetbrains/spek" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
@@ -49,10 +53,35 @@ project(":core") {
     apply plugin: "kotlin"
 
     dependencies {
+        compile project(":model")
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.github.czyzby:ktx-actors:$ktxVersion"
         compile "com.github.czyzby:ktx-assets:$ktxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    }
+}
+
+project(":model") {
+    apply plugin: "java"
+    apply plugin: "kotlin"
+    apply plugin: "jacoco"
+    
+    jacoco {
+        reportsDir = file("$rootProject.buildDir/reports/jacoco")
+    }
+
+    jacocoTestReport {
+        reports {
+            html.enabled = true
+            xml.enabled = true
+            csv.enabled = false
+        }
+    }
+
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+        testCompile 'io.kotlintest:kotlintest:1.3.7'
     }
 }
 
