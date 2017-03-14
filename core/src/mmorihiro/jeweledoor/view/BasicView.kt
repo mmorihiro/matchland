@@ -1,7 +1,7 @@
 package mmorihiro.jeweledoor.view
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.utils.viewport.FitViewport
@@ -12,20 +12,19 @@ import mmorihiro.jeweledoor.model.Values
 
 class BasicView : Stage(FitViewport(Values.width, Values.height)) {
     private var bullets: List<Image> = listOf()
+    val darkFilter = Color(0.7f, 0.7f, 0.7f, 1f)
 
-    val backGround = object : Actor() {
-        override fun act(delta: Float) = stage.viewport.run {
-            width = screenWidth.toFloat()
-            height = screenHeight.toFloat()
-            x = screenX.toFloat()
-            y = screenY.toFloat()
-        }
+    val backGround = Image(asset<Texture>("background.png"))
+
+    val cannon = Image(asset<Texture>("cannon.png")).apply {
+        centerPosition(backGround.width, backGround.height)
+        color = darkFilter
     }
 
     fun shoot(): Image =
             Image(asset<Texture>("bullet.png")).apply {
                 bullets += this
-                centerPosition(Values.width, Values.height)
+                centerPosition(backGround.width, backGround.height)
                 this@BasicView + this
             }
 
@@ -33,6 +32,5 @@ class BasicView : Stage(FitViewport(Values.width, Values.height)) {
         bullet.remove()
         bullets -= bullet
     }
-
 }
 

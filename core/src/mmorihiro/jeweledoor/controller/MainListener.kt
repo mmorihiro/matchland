@@ -16,6 +16,8 @@ class MainListener : ApplicationAdapter() {
     override fun create() {
         Assets.manager = AssetManager()
         load<Texture>("bullet.png")
+        load<Texture>("cannon.png")
+        load<Texture>("background.png")
         Assets.manager.finishLoading()
         currentView = BasicViewCreator().view
     }
