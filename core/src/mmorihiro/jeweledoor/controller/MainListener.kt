@@ -20,6 +20,7 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("cannon.png")
         load<Texture>("background.png")
         load<Texture>("doorBackground.png")
+        load<Texture>("jewels.png")
         Assets.manager.finishLoading()
         currentViews = listOf(BasicViewController().view, DoorViewController().view)
     }
