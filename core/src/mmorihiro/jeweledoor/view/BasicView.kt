@@ -25,26 +25,31 @@ class BasicView : Stage() {
         color = darkFilter
     }
 
-    val jewels: List<Image> =
-            asset<Texture>("jewels.png").let { sheet ->
-                val jewelSize = 32
-                val row = sheet.width / jewelSize
-                val col = sheet.height / jewelSize
-                val tiles = TextureRegion.split(sheet, jewelSize, jewelSize)
-                (0..3).map { area ->
-                    Image(tiles[random(col - 1)][random(row - 1)]).apply {
-                        val cannonArea = with(cannon) {
-                            Circle(x + width / 2, y + height / 2, width / 2)
-                        }
-                        val (jewelX, jewelY) =
-                                BasicViewModel(jewelSize,
-                                        backGround.width,
-                                        backGround.height,
-                                        cannonArea).jewelPosition(area, 4)
+    var jewels: List<Image> = createJewels()
+        get private set
+
+    private var listeners: List<(BasicView) -> Unit> = listOf()
+
+    private fun createJewels(): List<Image> {
+        val sheet = asset<Texture>("jewels.png")
+        val jewelSize = 32
+        val row = sheet.width / jewelSize
+        val col = sheet.height / jewelSize
+        val tiles = TextureRegion.split(sheet, jewelSize, jewelSize)
+        val cannonArea = with(cannon) {
+            Circle(x + width / 2, y + height / 2, width / 2)
+        }
+        return (0..3).map { area ->
+            val (jewelX, jewelY) = BasicViewModel(
+                    jewelSize,
+                    backGround.width,
+                    backGround.height,
+                    cannonArea).jewelPosition(area, 4)
+            Image(tiles[random(col - 1)][random(row - 1)]).apply {
                         setPosition(jewelX, jewelY)
                     }
-                }
-            }
+        }
+    }
 
     fun shoot(): Image =
             Image(asset<Texture>("bullet.png")).apply {
@@ -56,6 +61,23 @@ class BasicView : Stage() {
     fun removeBullet(bullet: Image) {
         bullet.remove()
         bullets -= bullet
+    }
+
+    fun removeJewel(jewel: Image) {
+        jewel.remove()
+        jewels -= jewel
+    }
+
+
+    fun addListener(listener: (BasicView) -> Unit) {
+        listeners += listener
+    }
+
+    override fun act(delta: Float) {
+        super.act(delta)
+        listeners.forEach {
+            it(this)
+        }
     }
 }
 
