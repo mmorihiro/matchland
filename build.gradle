@@ -54,6 +54,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.github.czyzby:ktx-actors:$ktxVersion"
         compile "com.github.czyzby:ktx-assets:$ktxVersion"
+        compile "com.github.czyzby:ktx-scene2d:$ktxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     }
 }

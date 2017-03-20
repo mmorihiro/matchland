@@ -6,9 +6,12 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import ktx.assets.Assets
+import ktx.assets.asset
 import ktx.assets.dispose
 import ktx.assets.load
+import ktx.scene2d.Scene2DSkin
 
 
 class MainListener : ApplicationAdapter() {
@@ -16,6 +19,7 @@ class MainListener : ApplicationAdapter() {
 
     override fun create() {
         loadAssets()
+        Scene2DSkin.defaultSkin = asset<Skin>("uiskin.json")
         val barView = BarViewController(originBullets = 16).view
         currentViews = listOf(
                 BasicViewController({
@@ -32,6 +36,7 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("doorBackground.png")
         load<Texture>("jewels.png")
         load<Texture>("backGroundBar.png")
+        load<Skin>("uiskin.json")
         Assets.manager.finishLoading()
     }
 
