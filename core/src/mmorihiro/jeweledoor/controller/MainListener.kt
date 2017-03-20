@@ -21,8 +21,12 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("background.png")
         load<Texture>("doorBackground.png")
         load<Texture>("jewels.png")
+        load<Texture>("backGroundBar.png")
         Assets.manager.finishLoading()
-        currentViews = listOf(BasicViewController().view, DoorViewController().view)
+        currentViews = listOf(
+                BasicViewController().view,
+                DoorViewController().view,
+                BarViewController(16).view)
     }
 
     override fun render() {
