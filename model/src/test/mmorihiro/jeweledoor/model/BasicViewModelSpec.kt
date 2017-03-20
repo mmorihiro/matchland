@@ -33,7 +33,7 @@ class BasicViewModelSpec : ShouldSpec() {
         val circles = (0..3).map {
             val (vx, vy) = model.jewelPosition(it, 4)
             cannonArea.contains(vx, vy) shouldBe false
-            Circle(vx + jewelRadius, vx + jewelRadius,
+            Circle(vx + jewelRadius, vy + jewelRadius,
                     jewelRadius.toFloat())
         }
         return Pair(cannonArea, circles)
