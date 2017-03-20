@@ -15,6 +15,16 @@ class MainListener : ApplicationAdapter() {
     var currentViews: List<Stage> = listOf()
 
     override fun create() {
+        loadAssets()
+        val barView = BarViewController(originBullets = 16).view
+        currentViews = listOf(
+                BasicViewController({
+                    barView.bar.decreaseBullets()
+                }).view,
+                DoorViewController().view, barView)
+    }
+
+    private fun loadAssets() {
         Assets.manager = AssetManager()
         load<Texture>("bullet.png")
         load<Texture>("cannon.png")
@@ -23,10 +33,6 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("jewels.png")
         load<Texture>("backGroundBar.png")
         Assets.manager.finishLoading()
-        currentViews = listOf(
-                BasicViewController().view,
-                DoorViewController().view,
-                BarViewController(16).view)
     }
 
     override fun render() {

@@ -10,7 +10,7 @@ import mmorihiro.jeweledoor.model.BasicControllerModel
 import mmorihiro.jeweledoor.view.BasicView
 
 
-class ShootAction {
+class ShootAction(val bulletCounter: () -> Unit) {
     fun shootAction(view: BasicView) = view.run {
         backGround.onClick { _, _, clickedX, clickedY ->
             shoot().let {
@@ -22,6 +22,7 @@ class ShootAction {
                         Actions.run { removeBullet(it) }
                 it + actions
                 cannon + blinkCannon(darkFilter)
+                bulletCounter()
             }
         }
     }

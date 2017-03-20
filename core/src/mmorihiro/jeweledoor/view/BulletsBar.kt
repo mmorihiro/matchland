@@ -8,24 +8,25 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 
 class BulletsBar(val origin: Int) : Actor() {
     private val renderer = ShapeRenderer()
-    private var remain = origin.toFloat()
+    private var remain = origin
     
     override fun draw(batch: Batch?, parentAlpha: Float) {
         batch!!.end()
-        if (remain > 0) {
-            remain -= 0.1f
-        }
         renderer.run {
             projectionMatrix = batch.projectionMatrix
             begin(ShapeRenderer.ShapeType.Filled)
-            val percent = remain / origin
+            val percent = remain / origin.toFloat()
             color = when {
                 percent < 0.25f -> Color.ORANGE
                 else -> Color.GREEN
             }
-            rect(4f, 2f, 280f * remain / origin, 16f)
+            rect(4f, 2f, 280f * percent, 16f)
             end()
         }
         batch.begin()
+    }
+
+    fun decreaseBullets() {
+        remain -= 1
     }
 }

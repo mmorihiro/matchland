@@ -6,9 +6,9 @@ import ktx.actors.plus
 import mmorihiro.jeweledoor.view.BasicView
 
 
-class BasicViewController : ViewController {
+class BasicViewController(bulletCounter: () -> Unit) : ViewController {
     override val view = BasicView().apply {
-        val shoot = ShootAction()
+        val shoot = ShootAction(bulletCounter)
         shoot.shootAction(this)
         shoot.collision(this)
         jewels.forEach { jewel ->
