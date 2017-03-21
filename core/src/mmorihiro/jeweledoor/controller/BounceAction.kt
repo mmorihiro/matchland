@@ -1,13 +1,22 @@
 package mmorihiro.jeweledoor.controller
 
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.plus
 import mmorihiro.jeweledoor.view.BasicView
 
 
-class BounceAction(val view: BasicView, val jewel: Image) {
+class BounceAction(val view: BasicView) {
+    fun first(): Pair<Float, Float> =
+            when (MathUtils.random(3)) {
+                0 -> 1f to 1f
+                1 -> -1f to 1f
+                2 -> 1f to -1f
+                3 -> -1f to -1f
+                else -> error("")
+            }
+    
     fun bounceAction(vx: Float, vy: Float): Action = view.run {
         val action = action {
             when {
@@ -17,13 +26,6 @@ class BounceAction(val view: BasicView, val jewel: Image) {
                 cannon.circle().overlaps(jewel.circle()) -> {
                     jewel.x -= vx * 3
                     jewel.y -= vy * 3
-                    bounce(-vx, -vy)
-                }
-                jewels.filterNot { it == jewel }.any {
-                    it.circle().overlaps(jewel.circle())
-                } -> {
-                    jewel.x -= vx * 2
-                    jewel.y -= vy * 2
                     bounce(-vx, -vy)
                 }
                 else -> false
