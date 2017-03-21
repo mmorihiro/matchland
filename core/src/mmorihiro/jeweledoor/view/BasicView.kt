@@ -25,12 +25,12 @@ class BasicView : Stage() {
         color = darkFilter
     }
 
-    var jewels: List<Image> = createJewels()
+    var jewel = createJewel()
         get private set
 
     private var listeners: List<(BasicView) -> Unit> = listOf()
 
-    private fun createJewels(): List<Image> {
+    private fun createJewel(): Image {
         val sheet = asset<Texture>("jewels.png")
         val jewelSize = 32
         val row = sheet.width / jewelSize
@@ -39,19 +39,17 @@ class BasicView : Stage() {
         val cannonArea = with(cannon) {
             Circle(x + width / 2, y + height / 2, width / 2)
         }
-        return (0..3).map { area ->
-            val (jewelX, jewelY) = BasicViewModel(
-                    jewelSize,
-                    backGround.width,
-                    backGround.height,
-                    cannonArea).jewelPosition(area, 4)
-            Image(tiles[random(col - 1)][random(row - 1)]).apply {
-                        setPosition(jewelX, jewelY)
-                    }
+        val (jewelX, jewelY) = BasicViewModel(
+                jewelSize,
+                backGround.width,
+                backGround.height,
+                cannonArea).jewelPosition()
+        return Image(tiles[random(col - 1)][random(row - 1)]).apply {
+            setPosition(jewelX, jewelY)
         }
     }
 
-    fun shoot(): Image =
+    fun shoot() =
             Image(asset<Texture>("bullet.png")).apply {
                 bullets += this
                 centerPosition(backGround.width, backGround.height)
@@ -63,11 +61,11 @@ class BasicView : Stage() {
         bullets -= bullet
     }
 
-    fun removeJewel(jewel: Image) {
+    fun removeJewel() {
         jewel.remove()
-        jewels -= jewel
+        this.jewel = createJewel()
+        this + jewel
     }
-
 
     fun addListener(listener: (BasicView) -> Unit) {
         listeners += listener
