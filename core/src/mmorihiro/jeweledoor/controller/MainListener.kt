@@ -12,6 +12,7 @@ import ktx.assets.asset
 import ktx.assets.dispose
 import ktx.assets.load
 import ktx.scene2d.Scene2DSkin
+import mmorihiro.jeweledoor.view.LoadJewels
 
 
 class MainListener : ApplicationAdapter() {
@@ -21,11 +22,11 @@ class MainListener : ApplicationAdapter() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("uiskin.json")
         val barView = BarViewController(originBullets = 16).view
+        val doorView = DoorViewController().view
         currentViews = listOf(
                 BasicViewController({
                     barView.bar.decreaseBullets()
-                }).view,
-                DoorViewController().view, barView)
+                }, LoadJewels().getJewels(32, 4, "jewels.png")).view, doorView, barView)
     }
 
     private fun loadAssets() {
@@ -34,7 +35,9 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("cannon.png")
         load<Texture>("background.png")
         load<Texture>("doorBackground.png")
+        load<Texture>("door.png")
         load<Texture>("jewels.png")
+        load<Texture>("jewelFrames.png")
         load<Texture>("backGroundBar.png")
         load<Skin>("uiskin.json")
         Assets.manager.finishLoading()

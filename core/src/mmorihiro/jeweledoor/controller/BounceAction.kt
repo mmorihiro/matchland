@@ -20,12 +20,12 @@ class BounceAction(val view: BasicView) {
     fun bounceAction(vx: Float, vy: Float): Action = view.run {
         val action = action {
             when {
-                !backGround.rectAngle().contains(jewel.rectAngle()) -> {
+                !backGround.rectAngle().contains(currentJewel.rectAngle()) -> {
                     bounceWall(vx, vy)
                 }
-                cannon.circle().overlaps(jewel.circle()) -> {
-                    jewel.x -= vx * 3
-                    jewel.y -= vy * 3
+                cannon.circle().overlaps(currentJewel.circle()) -> {
+                    currentJewel.x -= vx * 3
+                    currentJewel.y -= vy * 3
                     bounce(-vx, -vy)
                 }
                 else -> false
@@ -36,24 +36,24 @@ class BounceAction(val view: BasicView) {
     }
 
     private fun bounceWall(vx: Float, vy: Float): Boolean = view.run {
-        val jewelRight = jewel.x + jewel.width
-        val jewelUp = jewel.y + jewel.height
-        val vx2 = if (jewelRight >= backGround.width || jewel.x <= 0) {
-            if (jewel.x <= 0) jewel.x += 2
-            if (jewelRight >= backGround.width) jewel.x -= 2
+        val jewelRight = currentJewel.x + currentJewel.width
+        val jewelUp = currentJewel.y + currentJewel.height
+        val vx2 = if (jewelRight >= backGround.width || currentJewel.x <= 0) {
+            if (currentJewel.x <= 0) currentJewel.x += 2
+            if (jewelRight >= backGround.width) currentJewel.x -= 2
             -vx
         } else vx
-        val vy2 = if (jewelUp >= backGround.height || jewel.y <= 0) {
-            if (jewel.y <= 0) jewel.y += 2
-            if (jewelUp >= backGround.height) jewel.y -= 2
+        val vy2 = if (jewelUp >= backGround.height || currentJewel.y <= 0) {
+            if (currentJewel.y <= 0) currentJewel.y += 2
+            if (jewelUp >= backGround.height) currentJewel.y -= 2
             -vy
         } else vy
         bounce(vx2, vy2)
     }
 
     private fun bounce(vx: Float, vy: Float): Boolean = view.run {
-        jewel.clearActions()
-        jewel + bounceAction(vx, vy)
+        currentJewel.clearActions()
+        currentJewel + bounceAction(vx, vy)
         true
     }
 }
