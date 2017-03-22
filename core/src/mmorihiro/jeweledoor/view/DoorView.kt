@@ -14,8 +14,8 @@ class DoorView : Stage() {
     val leftDoor = Image(asset<Texture>("door.png")).apply {
         setPosition(44f, rightDoor.y)
     }
-    val jewels = LoadJewels()
-            .getJewels(32, 4, "jewelFrames.png").mapIndexed { index, image ->
+    val jewels = LoadJewels(32, 4, "jewelFrames.png")
+            .loadRandom().mapIndexed { index, jewel ->
         val (x, y) = when (index) {
             0 -> 5f to 60f
             1 -> 45f to 60f
@@ -23,6 +23,6 @@ class DoorView : Stage() {
             3 -> 45f to 10f
             else -> error("")
         }
-        image.apply { setPosition(rightDoor.x + x, rightDoor.y + y) }
+        jewel.apply { setPosition(rightDoor.x + x, rightDoor.y + y) }
     }
 }

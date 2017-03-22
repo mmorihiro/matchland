@@ -10,7 +10,9 @@ import ktx.actors.plus
 import ktx.assets.asset
 import mmorihiro.jeweledoor.model.BasicViewModel
 
-class BasicView(private var jewels: List<Image>) : Stage() {
+class BasicView(positions: List<Pair<Int, Int>>) : Stage() {
+    private var jewels = LoadJewels(32, 4, "jewels.png").load(positions)
+    
     var bullets: List<Image> = listOf()
         get private set
 
@@ -28,7 +30,7 @@ class BasicView(private var jewels: List<Image>) : Stage() {
 
     private var listeners: List<(BasicView) -> Unit> = listOf()
 
-    private fun newJewel(jewel: Image): Image {
+    private fun newJewel(jewel: Jewel): Jewel {
         val cannonArea = with(cannon) {
             Circle(x + width / 2, y + height / 2, width / 2)
         }
