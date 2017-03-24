@@ -1,29 +1,27 @@
 package mmorihiro.jeweledoor.controller
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.math.MathUtils
 import ktx.actors.plus
 import mmorihiro.jeweledoor.view.BasicView
+import mmorihiro.jeweledoor.view.Jewel
 
 
-class BasicViewController(bulletCounter: () -> Unit) : ViewController {
-    override val view = BasicView().apply {
-        val shoot = ShootAction(bulletCounter)
+class BasicViewController(bulletCounter: () -> Unit,
+                          positions: List<Pair<Int, Int>>,
+                          onHit: (jewel: Jewel) -> Unit) : ViewController {
+    override val view = BasicView(positions).apply {
+        val shoot = ShootAction(bulletCounter, onHit)
         shoot.shootAction(this)
         shoot.collision(this)
-        jewels.forEach { jewel ->
-            val (vx, vy) = when (MathUtils.random(3)) {
-                0 -> 1f to 1f
-                1 -> -1f to 1f
-                2 -> 1f to -1f
-                3 -> -1f to -1f
-                else -> error("")
-            }
-            jewel + BounceAction(this, jewel).bounceAction(vx, vy)
+
+        currentJewel + BounceAction(this).run {
+            val (vx, vy) = first()
+            bounceAction(vx, vy)
         }
+        
         this + backGround
         this + cannon
-        jewels.forEach { this + it }
+        this + currentJewel
         Gdx.input.inputProcessor = this
     }
 }

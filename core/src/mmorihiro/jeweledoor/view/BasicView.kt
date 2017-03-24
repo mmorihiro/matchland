@@ -2,9 +2,7 @@ package mmorihiro.jeweledoor.view
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Circle
-import com.badlogic.gdx.math.MathUtils.random
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.centerPosition
@@ -12,7 +10,9 @@ import ktx.actors.plus
 import ktx.assets.asset
 import mmorihiro.jeweledoor.model.BasicViewModel
 
-class BasicView : Stage() {
+class BasicView(jewelTypes: List<Pair<Int, Int>>) : Stage() {
+    private var jewels = LoadJewels(32, 4, "jewels.png").load(jewelTypes)
+    
     var bullets: List<Image> = listOf()
         get private set
 
@@ -25,33 +25,24 @@ class BasicView : Stage() {
         color = darkFilter
     }
 
-    var jewels: List<Image> = createJewels()
+    var currentJewel = newJewel(jewels.first())
         get private set
 
     private var listeners: List<(BasicView) -> Unit> = listOf()
 
-    private fun createJewels(): List<Image> {
-        val sheet = asset<Texture>("jewels.png")
-        val jewelSize = 32
-        val row = sheet.width / jewelSize
-        val col = sheet.height / jewelSize
-        val tiles = TextureRegion.split(sheet, jewelSize, jewelSize)
+    private fun newJewel(jewel: Jewel): Jewel {
         val cannonArea = with(cannon) {
             Circle(x + width / 2, y + height / 2, width / 2)
         }
-        return (0..3).map { area ->
-            val (jewelX, jewelY) = BasicViewModel(
-                    jewelSize,
-                    backGround.width,
-                    backGround.height,
-                    cannonArea).jewelPosition(area, 4)
-            Image(tiles[random(col - 1)][random(row - 1)]).apply {
-                        setPosition(jewelX, jewelY)
-                    }
+        val (jewelX, jewelY) = BasicViewModel(
+                32, backGround.width, backGround.height, cannonArea)
+                .jewelPosition()
+        return jewel.apply {
+            setPosition(jewelX, jewelY)
         }
     }
 
-    fun shoot(): Image =
+    fun shoot() =
             Image(asset<Texture>("bullet.png")).apply {
                 bullets += this
                 centerPosition(backGround.width, backGround.height)
@@ -63,11 +54,16 @@ class BasicView : Stage() {
         bullets -= bullet
     }
 
-    fun removeJewel(jewel: Image) {
-        jewel.remove()
-        jewels -= jewel
+    fun removeJewel() {
+        currentJewel.remove()
+        if (jewels.size == 1) {
+            println("complete")
+        } else {
+            jewels = jewels.drop(1)
+            currentJewel = newJewel(jewels.first())
+            this + currentJewel
+        }
     }
-
 
     fun addListener(listener: (BasicView) -> Unit) {
         listeners += listener
@@ -80,4 +76,3 @@ class BasicView : Stage() {
         }
     }
 }
-

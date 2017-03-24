@@ -21,11 +21,13 @@ class MainListener : ApplicationAdapter() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("uiskin.json")
         val barView = BarViewController(originBullets = 16).view
-        currentViews = listOf(
-                BasicViewController({
-                    barView.bar.decreaseBullets()
-                }).view,
-                DoorViewController().view, barView)
+        val doorController = DoorViewController()
+        val doorView = doorController.view
+        
+        val basicView = BasicViewController({
+            barView.bar.decreaseBullets()
+        }, doorView.jewelFrames.map { it.type }, doorController::onHit).view
+        currentViews = listOf(basicView, doorView, barView)
     }
 
     private fun loadAssets() {
@@ -34,7 +36,10 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("cannon.png")
         load<Texture>("background.png")
         load<Texture>("doorBackground.png")
+        load<Texture>("door.png")
         load<Texture>("jewels.png")
+        load<Texture>("miniJewels.png")
+        load<Texture>("jewelFrames.png")
         load<Texture>("backGroundBar.png")
         load<Skin>("uiskin.json")
         Assets.manager.finishLoading()
