@@ -21,10 +21,12 @@ class MainListener : ApplicationAdapter() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("uiskin.json")
         val barView = BarViewController(originBullets = 16).view
-        val doorView = DoorViewController().view
+        val doorController = DoorViewController()
+        val doorView = doorController.view
+        
         val basicView = BasicViewController({
             barView.bar.decreaseBullets()
-        }, doorView.jewels.map { it.type }).view
+        }, doorView.jewelFrames.map { it.type }, doorController::onHit).view
         currentViews = listOf(basicView, doorView, barView)
     }
 
@@ -36,6 +38,7 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("doorBackground.png")
         load<Texture>("door.png")
         load<Texture>("jewels.png")
+        load<Texture>("miniJewels.png")
         load<Texture>("jewelFrames.png")
         load<Texture>("backGroundBar.png")
         load<Skin>("uiskin.json")

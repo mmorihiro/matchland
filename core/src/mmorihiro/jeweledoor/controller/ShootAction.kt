@@ -8,9 +8,11 @@ import ktx.actors.plus
 import ktx.actors.then
 import mmorihiro.jeweledoor.model.BasicControllerModel
 import mmorihiro.jeweledoor.view.BasicView
+import mmorihiro.jeweledoor.view.Jewel
 
 
-class ShootAction(val bulletCounter: () -> Unit) {
+class ShootAction(val bulletCounter: () -> Unit,
+                  val onHit: (jewel: Jewel) -> Unit) {
     fun shootAction(view: BasicView) = view.run {
         backGround.onClick { _, _, clickedX, clickedY ->
             shoot().let {
@@ -36,6 +38,7 @@ class ShootAction(val bulletCounter: () -> Unit) {
         addListener {
             bullets.forEach { bullet ->
                 if (bullet.circle().overlaps(currentJewel.circle())) {
+                    onHit(currentJewel)
                     removeJewel()
                     currentJewel + BounceAction(this).run {
                         val (vx, vy) = first()

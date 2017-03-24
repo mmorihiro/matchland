@@ -14,7 +14,7 @@ class LoadJewels(val jewelSize: Int, val size: Int, filePath: String) {
         val tiles = TextureRegion.split(sheet, jewelSize, jewelSize)
         return (0..(size - 1)).map {
             val (x, y) = positions[it]
-            Jewel(tiles[x][y], x to y)
+            Jewel(tiles[x][y], x to y, it)
         }
     }
 

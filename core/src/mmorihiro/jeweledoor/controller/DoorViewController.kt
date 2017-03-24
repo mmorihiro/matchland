@@ -2,6 +2,7 @@ package mmorihiro.jeweledoor.controller
 
 import ktx.actors.plus
 import mmorihiro.jeweledoor.view.DoorView
+import mmorihiro.jeweledoor.view.Jewel
 
 class DoorViewController : ViewController {
     override val view = DoorView().apply {
@@ -9,6 +10,10 @@ class DoorViewController : ViewController {
         this + backGround
         this + rightDoor
         this + leftDoor
-        jewels.forEach { this + it }
+        jewelFrames.forEach { this + it }
+    }
+
+    fun onHit(jewel: Jewel) {
+        view.addJewel(jewel)
     }
 }

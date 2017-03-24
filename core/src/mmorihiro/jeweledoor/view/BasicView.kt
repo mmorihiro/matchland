@@ -10,8 +10,8 @@ import ktx.actors.plus
 import ktx.assets.asset
 import mmorihiro.jeweledoor.model.BasicViewModel
 
-class BasicView(positions: List<Pair<Int, Int>>) : Stage() {
-    private var jewels = LoadJewels(32, 4, "jewels.png").load(positions)
+class BasicView(jewelTypes: List<Pair<Int, Int>>) : Stage() {
+    private var jewels = LoadJewels(32, 4, "jewels.png").load(jewelTypes)
     
     var bullets: List<Image> = listOf()
         get private set
