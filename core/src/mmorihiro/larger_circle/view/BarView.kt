@@ -1,4 +1,4 @@
-package mmorihiro.jeweledoor.view
+package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture

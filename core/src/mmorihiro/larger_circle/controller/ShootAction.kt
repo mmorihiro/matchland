@@ -1,4 +1,4 @@
-package mmorihiro.jeweledoor.controller
+package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Action
@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import ktx.actors.onClick
 import ktx.actors.plus
 import ktx.actors.then
-import mmorihiro.jeweledoor.model.BasicControllerModel
-import mmorihiro.jeweledoor.view.BasicView
+import mmorihiro.larger_circle.model.BasicControllerModel
+import mmorihiro.larger_circle.view.BasicView
 
 
 class ShootAction(val bulletCounter: () -> Unit) {

@@ -1,4 +1,4 @@
-package mmorihiro.jeweledoor.model
+package mmorihiro.larger_circle.model
 
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.MathUtils

@@ -1,7 +1,7 @@
-package mmorihiro.jeweledoor.controller
+package mmorihiro.larger_circle.controller
 
 import ktx.actors.plus
-import mmorihiro.jeweledoor.view.BarView
+import mmorihiro.larger_circle.view.BarView
 
 
 class BarViewController(originBullets: Int) : ViewController {

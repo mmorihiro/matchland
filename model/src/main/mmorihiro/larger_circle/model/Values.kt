@@ -1,4 +1,4 @@
-package mmorihiro.jeweledoor.model
+package mmorihiro.larger_circle.model
 
 object Values {
     const val width = 288f

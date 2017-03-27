@@ -1,4 +1,4 @@
-package mmorihiro.jeweledoor.view
+package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.centerPosition
 import ktx.actors.plus
 import ktx.assets.asset
-import mmorihiro.jeweledoor.model.BasicViewModel
+import mmorihiro.larger_circle.model.BasicViewModel
 
 class BasicView : Stage() {
     var bullets: List<Image> = listOf()

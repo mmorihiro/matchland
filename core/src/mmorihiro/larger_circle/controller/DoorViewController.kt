@@ -1,7 +1,7 @@
-package mmorihiro.jeweledoor.controller
+package mmorihiro.larger_circle.controller
 
 import ktx.actors.plus
-import mmorihiro.jeweledoor.view.DoorView
+import mmorihiro.larger_circle.view.DoorView
 
 class DoorViewController : ViewController {
     override val view = DoorView().apply {

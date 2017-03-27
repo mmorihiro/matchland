@@ -1,10 +1,10 @@
-package mmorihiro.jeweledoor.controller
+package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import ktx.actors.plus
-import mmorihiro.jeweledoor.view.BasicView
+import mmorihiro.larger_circle.view.BasicView
 
 
 class BounceAction(val view: BasicView) {

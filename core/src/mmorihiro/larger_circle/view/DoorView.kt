@@ -1,4 +1,4 @@
-package mmorihiro.jeweledoor.view
+package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage

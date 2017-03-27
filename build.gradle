@@ -16,7 +16,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "jeweledoor"
+        appName = "largerCircle"
         gdxVersion = '1.9.6'
         roboVMVersion = '2.2.0'
         box2DLightsVersion = '1.4'

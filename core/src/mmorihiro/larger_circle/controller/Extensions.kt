@@ -1,4 +1,4 @@
-package mmorihiro.jeweledoor.controller
+package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Rectangle

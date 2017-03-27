@@ -1,9 +1,9 @@
-package mmorihiro.jeweledoor.desktop
+package mmorihiro.larger_circle.desktop
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
-import mmorihiro.jeweledoor.controller.MainListener
-import mmorihiro.jeweledoor.model.Values
+import mmorihiro.larger_circle.controller.MainListener
+import mmorihiro.larger_circle.model.Values
 
 object DesktopLauncher {
     @JvmStatic fun main(arg: Array<String>) {
