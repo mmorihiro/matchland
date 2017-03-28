@@ -10,15 +10,9 @@ class BasicViewController(bulletCounter: () -> Unit) : ViewController {
         val shoot = ShootAction(bulletCounter)
         shoot.shootAction(this)
         shoot.collision(this)
-
-        jewel + BounceAction(this).run {
-            val (vx, vy) = first()
-            bounceAction(vx, vy)
-        }
-        
         this + backGround
         this + cannon
-        this + jewel
+        jewels.forEach { this + it }
         Gdx.input.inputProcessor = this
     }
 }

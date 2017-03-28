@@ -35,12 +35,10 @@ class ShootAction(val bulletCounter: () -> Unit) {
     fun collision(view: BasicView) = view.run {
         addListener {
             bullets.forEach { bullet ->
-                if (bullet.circle().overlaps(jewel.circle())) {
-                    removeJewel()
-                    jewel + BounceAction(this).run {
-                        val (vx, vy) = first()
-                        bounceAction(vx, vy)
-                    }
+                jewels.filter { jewel ->
+                    bullet.circle().overlaps(jewel.circle())
+                }.forEach {
+                    removeJewel(it)
                     removeBullet(bullet)
                 }
             }

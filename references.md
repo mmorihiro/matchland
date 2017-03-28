@@ -1,6 +1,6 @@
 ## OpenGameArt
 - http://opengameart.org/content/candy-pack-1
-- http://opengameart.org/content/puzzle-theme-jewels
+https://opengameart.org/content/orbs
 - http://opengameart.org/content/fantasy-ui-elements-by-ravenmore
 ## CLOSET
 - https://sites.google.com/site/closetvx/picture/09

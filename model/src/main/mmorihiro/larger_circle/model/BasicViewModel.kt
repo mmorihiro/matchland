@@ -8,14 +8,18 @@ class BasicViewModel(val jewelSize: Int,
                      val backGroundWidth: Float,
                      val backGroundHeight: Float,
                      val cannonArea: Circle) {
-    fun jewelPosition(): Pair<Float, Float> {
-        val jewelX = MathUtils.random(backGroundWidth - jewelSize)
+    fun jewelPosition(area: Int,
+                      total: Int): Pair<Float, Float> {
+        val xRange = (backGroundWidth - jewelSize) / total
+        val jewelX = MathUtils.random(xRange * (area % total),
+                xRange * (area % total + 1) - jewelSize)
         val jewelY = MathUtils.random(backGroundHeight - jewelSize)
         val jewelRadius = jewelSize / 2f
         val jewelArea = Circle(
                 jewelX + jewelRadius, jewelY + jewelRadius, jewelRadius)
+
         return if (cannonArea.overlaps(jewelArea)) {
-            jewelPosition()
+            jewelPosition(area, total)
         } else jewelX to jewelY
     }
 }
