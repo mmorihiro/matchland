@@ -6,7 +6,7 @@ import io.kotlintest.specs.ShouldSpec
 
 class BasicViewModelSpec : ShouldSpec() {
     init {
-        "jewelPosition" {
+        "bubblePosition" {
             val (cannonArea, circles) = circles()
             should("大砲と被らない位置を返す") {
                 circles.forEach {
@@ -31,7 +31,7 @@ class BasicViewModelSpec : ShouldSpec() {
         val jewelRadius = 10
         val model = BasicViewModel(jewelRadius * 2, width, height, cannonArea)
         val circles = (0..3).map {
-            val (vx, vy) = model.jewelPosition(it, 4)
+            val (vx, vy) = model.bubblePosition(it, 4)
             cannonArea.contains(vx, vy) shouldBe false
             Circle(vx + jewelRadius, vy + jewelRadius,
                     jewelRadius.toFloat())
