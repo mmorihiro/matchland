@@ -12,13 +12,13 @@ import mmorihiro.larger_circle.view.BasicView
 
 class ShootAction(val bulletCounter: () -> Unit) {
     fun shootAction(view: BasicView) = view.run {
-        backGround.onClick { _, _, clickedX, clickedY ->
+        backgroundBubble.onClick { _, _, clickedX, clickedY ->
             shoot().let {
                 val (vx, vy) =
                         BasicControllerModel().getBulletTarget(
-                                backGround.width / 2, backGround.height / 2,
+                                backGround.width / 2, viewHeight / 2,
                                 clickedX, clickedY)
-                val actions = Actions.moveBy(vx * 230, vy * 230, 0.9f) then
+                val actions = Actions.moveBy(vx * 132, vy * 132, 0.5f) then
                         Actions.run { removeBullet(it) }
                 it + actions
                 cannon + blinkCannon(darkFilter)
@@ -35,7 +35,7 @@ class ShootAction(val bulletCounter: () -> Unit) {
     fun collision(view: BasicView) = view.run {
         addListener {
             bullets.forEach { bullet ->
-                jewels.filter { jewel ->
+                bubbles.filter { jewel ->
                     bullet.circle().overlaps(jewel.circle())
                 }.forEach {
                     removeJewel(it)

@@ -11,8 +11,9 @@ class BasicViewController(bulletCounter: () -> Unit) : ViewController {
         shoot.shootAction(this)
         shoot.collision(this)
         this + backGround
+        this + backgroundBubble
         this + cannon
-        jewels.forEach { this + it }
+        bubbles.forEach { this + it }
         Gdx.input.inputProcessor = this
     }
 }

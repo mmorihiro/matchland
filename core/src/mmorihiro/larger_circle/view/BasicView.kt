@@ -13,25 +13,30 @@ import ktx.assets.asset
 import mmorihiro.larger_circle.model.BasicViewModel
 
 class BasicView : Stage() {
+    val viewHeight = 288f
     var bullets: List<Image> = listOf()
         get private set
 
     val darkFilter = Color(0.7f, 0.7f, 0.7f, 1f)
 
     val backGround = Image(asset<Texture>("background.png"))
+    val backgroundBubble =
+            Image(asset<Texture>("backgroundBubble.png")).apply {
+                setPosition(4f, 4f)
+            }
 
     val cannon = Image(asset<Texture>("cannon.png")).apply {
-        centerPosition(backGround.width, backGround.height)
+        centerPosition(backGround.width, viewHeight)
         color = darkFilter
     }
 
-    var jewels: List<Image> = createJewels()
+    var bubbles: List<Image> = createBubbles()
         get private set
 
     private var listeners: List<(BasicView) -> Unit> = listOf()
 
-    private fun createJewels(): List<Image> {
-        val sheet = asset<Texture>("jewels.png")
+    private fun createBubbles(): List<Image> {
+        val sheet = asset<Texture>("bubbles.png")
         val jewelSize = 32
         val row = sheet.width / jewelSize
         val col = sheet.height / jewelSize
@@ -40,13 +45,13 @@ class BasicView : Stage() {
             Circle(x + width / 2, y + height / 2, width / 2)
         }
         return (0..3).map { area ->
-            val (jewelX, jewelY) = BasicViewModel(
+            val (bubbleX, bubbleY) = BasicViewModel(
                     jewelSize,
                     backGround.width,
-                    backGround.height,
-                    cannonArea).jewelPosition(area, 4)
+                    viewHeight,
+                    cannonArea).bubblePosition(area, 4)
             Image(tiles[random(col - 1)][random(row - 1)]).apply {
-                        setPosition(jewelX, jewelY)
+                setPosition(bubbleX, bubbleY)
                     }
         }
     }
@@ -54,7 +59,7 @@ class BasicView : Stage() {
     fun shoot(): Image =
             Image(asset<Texture>("bullet.png")).apply {
                 bullets += this
-                centerPosition(backGround.width, backGround.height)
+                centerPosition(backGround.width, viewHeight)
                 this@BasicView + this
             }
 
@@ -63,9 +68,9 @@ class BasicView : Stage() {
         bullets -= bullet
     }
 
-    fun removeJewel(jewel: Image) {
-        jewel.remove()
-        jewels -= jewel
+    fun removeJewel(bubble: Image) {
+        bubble.remove()
+        bubbles -= bubble
     }
 
 
