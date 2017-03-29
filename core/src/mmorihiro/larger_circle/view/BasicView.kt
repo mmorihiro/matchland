@@ -37,22 +37,22 @@ class BasicView : Stage() {
 
     private fun createBubbles(): List<Image> {
         val sheet = asset<Texture>("bubbles.png")
-        val jewelSize = 32
-        val row = sheet.width / jewelSize
-        val col = sheet.height / jewelSize
-        val tiles = TextureRegion.split(sheet, jewelSize, jewelSize)
+        val size = 32
+        val row = sheet.width / size
+        val col = sheet.height / size
+        val tiles = TextureRegion.split(sheet, size, size)
         val cannonArea = with(cannon) {
             Circle(x + width / 2, y + height / 2, width / 2)
         }
         return (0..3).map { area ->
             val (bubbleX, bubbleY) = BasicViewModel(
-                    jewelSize,
+                    size,
                     backGround.width,
                     viewHeight,
                     cannonArea).bubblePosition(area, 4)
             Image(tiles[random(col - 1)][random(row - 1)]).apply {
                 setPosition(bubbleX, bubbleY)
-                    }
+            }
         }
     }
 
