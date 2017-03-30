@@ -20,12 +20,12 @@ class MainListener : ApplicationAdapter() {
     override fun create() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("uiskin.json")
-        // val barView = BarViewController(originBullets = 16).view
+        val barView = BarViewController(originBullets = 16).view
         currentViews = listOf(
                 BasicViewController({
-                    //  barView.bar.decreaseBullets()
+                    barView.bar.decreaseBullets()
                 }).view,
-                DoorViewController().view/*, barView*/)
+                DoorViewController().view, barView)
     }
 
     private fun loadAssets() {
