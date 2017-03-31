@@ -10,7 +10,8 @@ import mmorihiro.larger_circle.model.BasicControllerModel
 import mmorihiro.larger_circle.view.ShootingView
 
 
-class ShootAction(val bulletCounter: () -> Unit) {
+class ShootAction(val bulletCounter: () -> Unit,
+                  val onHit: (Pair<Int, Int>) -> Unit) {
     fun shootAction(view: ShootingView) = view.run {
         backgroundBubble.onClick { _, _, clickedX, clickedY ->
             shoot().let {
@@ -38,8 +39,9 @@ class ShootAction(val bulletCounter: () -> Unit) {
                 bubbles.filter { jewel ->
                     bullet.circle().overlaps(jewel.circle())
                 }.forEach {
-                    removeJewel(it)
+                    removeBubble(it)
                     removeBullet(bullet)
+                    onHit(it.type)
                 }
             }
         }

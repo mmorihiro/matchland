@@ -21,11 +21,12 @@ class MainListener : ApplicationAdapter() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("uiskin.json")
         val barView = BarViewController(originBullets = 16).view
+        val battleController = BattleViewController()
         currentViews = listOf(
                 ShootingViewController({
                     barView.bar.decreaseBullets()
-                }).view,
-                BattleViewController().view, barView)
+                }, battleController::onHit).view,
+                battleController.view, barView)
     }
 
     private fun loadAssets() {

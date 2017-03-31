@@ -8,14 +8,19 @@ import ktx.assets.asset
 
 class LoadBubbles(val bubbleSize: Int, val size: Int, filePath: String) {
     val sheet = asset<Texture>(filePath)
+    val tiles: Array<Array<TextureRegion>> =
+            TextureRegion.split(sheet, bubbleSize, bubbleSize)
 
     fun load(positions: List<Pair<Int, Int>>): List<Bubble> {
         assert(positions.size == size)
-        val tiles = TextureRegion.split(sheet, bubbleSize, bubbleSize)
         return (0..(size - 1)).map {
-            val (x, y) = positions[it]
-            Bubble(tiles[x][y], x to y)
+            load(positions[it])
         }
+    }
+
+    fun load(position: Pair<Int, Int>): Bubble {
+        val (x, y) = position
+        return Bubble(tiles[x][y], x to y)
     }
 
     fun loadRandom(): List<Bubble> {
