@@ -58,7 +58,7 @@ class ShootingView : Stage() {
         bullets -= bullet
     }
 
-    fun removeJewel(bubble: Bubble) {
+    fun removeBubble(bubble: Bubble) {
         bubble.remove()
         bubbles -= bubble
     }

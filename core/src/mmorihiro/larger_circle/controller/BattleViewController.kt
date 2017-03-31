@@ -6,7 +6,11 @@ import mmorihiro.larger_circle.view.BattleView
 class BattleViewController : ViewController {
     override val view = BattleView().apply {
         viewport.camera.translate(0f, -288f, 0f)
-        this + player
-        this + enemy
+        this + player.group
+        this + enemy.group
+    }
+
+    fun onHit(type: Pair<Int, Int>) {
+        view.updatePlayer(view.player.newBubble(type))
     }
 }
