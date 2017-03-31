@@ -22,10 +22,10 @@ class MainListener : ApplicationAdapter() {
         Scene2DSkin.defaultSkin = asset<Skin>("uiskin.json")
         val barView = BarViewController(originBullets = 16).view
         currentViews = listOf(
-                BasicViewController({
+                ShootingViewController({
                     barView.bar.decreaseBullets()
                 }).view,
-                DoorViewController().view, barView)
+                BattleViewController().view, barView)
     }
 
     private fun loadAssets() {
@@ -35,6 +35,7 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("background.png")
         load<Texture>("backgroundBubble.png")
         load<Texture>("bubbles.png")
+        load<Texture>("largerBubbles.png")
         load<Texture>("backGroundBar.png")
         load<Skin>("uiskin.json")
         Assets.manager.finishLoading()

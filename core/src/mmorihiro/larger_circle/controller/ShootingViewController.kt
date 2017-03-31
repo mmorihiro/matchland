@@ -6,11 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import ktx.actors.plus
 import ktx.actors.then
 import mmorihiro.larger_circle.model.CircularMotion
-import mmorihiro.larger_circle.view.BasicView
+import mmorihiro.larger_circle.view.ShootingView
 
 
-class BasicViewController(bulletCounter: () -> Unit) : ViewController {
-    override val view = BasicView().apply {
+class ShootingViewController(bulletCounter: () -> Unit) : ViewController {
+    override val view = ShootingView().apply {
         val shoot = ShootAction(bulletCounter)
         shoot.shootAction(this)
         shoot.collision(this)
