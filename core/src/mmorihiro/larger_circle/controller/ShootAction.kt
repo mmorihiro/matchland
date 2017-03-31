@@ -7,11 +7,11 @@ import ktx.actors.onClick
 import ktx.actors.plus
 import ktx.actors.then
 import mmorihiro.larger_circle.model.BasicControllerModel
-import mmorihiro.larger_circle.view.BasicView
+import mmorihiro.larger_circle.view.ShootingView
 
 
 class ShootAction(val bulletCounter: () -> Unit) {
-    fun shootAction(view: BasicView) = view.run {
+    fun shootAction(view: ShootingView) = view.run {
         backgroundBubble.onClick { _, _, clickedX, clickedY ->
             shoot().let {
                 val (vx, vy) =
@@ -32,7 +32,7 @@ class ShootAction(val bulletCounter: () -> Unit) {
                     Actions.delay(0.1f) then
                     Actions.color(originColor, 0.1f)
 
-    fun collision(view: BasicView) = view.run {
+    fun collision(view: ShootingView) = view.run {
         addListener {
             bullets.forEach { bullet ->
                 bubbles.filter { jewel ->
