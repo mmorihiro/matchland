@@ -1,6 +1,7 @@
 package mmorihiro.larger_circle.controller
 
 import ktx.actors.plus
+import mmorihiro.larger_circle.model.BattleModel
 import mmorihiro.larger_circle.view.BattleView
 
 class BattleViewController : ViewController {
@@ -12,5 +13,13 @@ class BattleViewController : ViewController {
 
     fun onHit(type: Pair<Int, Int>) {
         view.updatePlayer(view.player.newBubble(type))
+    }
+
+    fun decideWinner() {
+        view.run {
+            val winner = BattleModel().decideWinner(
+                    player.number, player.type, enemy.number, enemy.type)
+            println(winner)
+        }
     }
 }
