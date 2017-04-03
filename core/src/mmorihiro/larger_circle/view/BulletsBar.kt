@@ -10,6 +10,7 @@ class BulletsBar(val origin: Int) : Actor() {
     private val renderer = ShapeRenderer()
     private var remain = origin
     private var call: ((Int) -> Unit)? = null
+    private var finish: ((Int) -> Unit)? = null
     private val green = Color(50f / 256f, 205f / 256f, 50f / 256f, 1f)
     
     init {
@@ -36,10 +37,16 @@ class BulletsBar(val origin: Int) : Actor() {
         if (remain > 0) {
             remain -= 1
             this.call?.invoke(remain)
+        } else {
+            this.finish?.invoke(remain)
         }
     }
 
     fun onDecrease(call: (Int) -> Unit) {
         this.call = call
+    }
+
+    fun onFinish(call: (Int) -> Unit) {
+        this.finish = call
     }
 }
