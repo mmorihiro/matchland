@@ -1,6 +1,7 @@
 package mmorihiro.larger_circle.model
 
 import com.badlogic.gdx.scenes.scene2d.Actor
+import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.ShouldSpec
 
 

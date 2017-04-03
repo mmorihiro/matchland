@@ -80,7 +80,7 @@ project(":model") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-        testCompile 'io.kotlintest:kotlintest:1.3.7'
+        testCompile 'io.kotlintest:kotlintest:2.0.0'
     }
 }
 
