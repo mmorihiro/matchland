@@ -30,18 +30,19 @@ class MainListener : ApplicationAdapter() {
                 },
                 onHit = battleController::onHit,
                 onComplete = battleController::decideWinner).view
-        currentViews = listOf(shootingView, battleController.view, barView)
+        currentViews = listOf(battleController.view, shootingView, barView)
     }
 
     private fun loadAssets() {
         Assets.manager = AssetManager()
         load<Texture>("bullet.png")
         load<Texture>("cannon.png")
+        load<Texture>("upBackground.png")
+        load<Texture>("playerCannon.png")
+        load<Texture>("tiles.png")
         load<Texture>("background.png")
         load<Texture>("backgroundBubble.png")
         load<Texture>("bubbles.png")
-        load<Texture>("largerBubbles.png")
-        load<Texture>("backGroundBar.png")
         load<Skin>("uiskin.json")
         Assets.manager.finishLoading()
     }

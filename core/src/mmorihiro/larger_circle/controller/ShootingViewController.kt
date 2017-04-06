@@ -17,7 +17,7 @@ class ShootingViewController(onShoot: () -> Unit,
         shoot.shootAction(this)
         shoot.collision(this)
         bubbles.forEach {
-            val move = CircularMotion(144f, 144f, 6, it)
+            val move = CircularMotion(viewSize / 2, (viewSize - 10) / 2, 6, it)
             it + forever(fadeIn(0.6f) then fadeOut(0.2f) then
                     delay(0.8f) then Actions.run {
                 val (nextX, nextY) = move.next()
