@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.assets.asset
+import mmorihiro.larger_circle.model.Values
 
 
 class BattleView : Stage() {
@@ -12,39 +13,33 @@ class BattleView : Stage() {
     }
 
     val ground = Image(asset<Texture>("tiles.png")).apply {
-        y = -20f
+        y = -10f
     }
-    //  private val bubbles = loadBubbles.loadRandom()
 
-    val playerCannon = Image(asset<Texture>("cannon.png")).apply {
-        setPosition(50f, 76f)
+    val rightGround = Image(asset<Texture>("rightGround.png")).apply {
+        setPosition(Values.width - 32, ground.y)
     }
-/*var player = bubbles[0].let {
-    it.numberBubble(1).apply {
-        decorateBubble(this)
-    }
-}
-    private set
 
-val enemy = bubbles[1].let {
-    it.numberBubble(5).apply {
-        group.setPosition(197f, 55f)
+    val cannon = Image(asset<Texture>("cannon.png")).apply {
+        setPosition(50f, ground.y + 96f)
     }
-}
 
-fun decorateBubble(bubble: NumberBubble) {
-    bubble.run {
-        setPosition(30f, 53f)
-        setScale(0.5f + 0.5f * number / 5)
-        val position = width / 2 * scaleX
-        label.setPosition(25f + position, 40f + position)
+    val bubbles = (0..3).map {
+        Row.nextRow().apply {
+            y = (it - 1) * 38f + 10
+            bubbles.mapIndexed { index, bubble ->
+                bubble.apply {
+                    x = 122 + (width + 6) * index
+                }
+            }
+        }
     }
-}
 
-fun updatePlayer(new: NumberBubble) {
-    decorateBubble(new)
-    player.group.remove()
-    player = new
-    this + new.group
- */
+    val ropes = (0..2).map {
+        Image(asset<Texture>("rope.png")).apply {
+            x = 96f
+            y = it * 38 + 4.5f
+        }
+    }
+
 }

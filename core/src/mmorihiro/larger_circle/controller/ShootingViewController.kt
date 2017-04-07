@@ -10,15 +10,14 @@ import mmorihiro.larger_circle.view.ShootingView
 
 
 class ShootingViewController(onShoot: () -> Unit,
-                             onHit: (Pair<Int, Int>) -> Unit,
-                             onComplete: () -> Unit) : ViewController {
+                             onHit: (Pair<Int, Int>) -> Unit) : ViewController {
     override val view = ShootingView().apply {
-        val shoot = ShootAction(onShoot, onHit, onComplete)
+        val shoot = ShootAction(onShoot, onHit)
         shoot.shootAction(this)
         shoot.collision(this)
         bubbles.forEach {
             val move = CircularMotion(viewWidth / 2, viewHeight / 2, 6, it)
-            it + forever(fadeIn(0.2f) then delay(0.4f) then fadeOut(0.2f) then
+            it + forever(fadeIn(0.3f) then delay(0.8f) then fadeOut(0.3f) then
                     delay(0.8f) then Actions.run {
                 val (nextX, nextY) = move.next()
                 it.setPosition(nextX, nextY)

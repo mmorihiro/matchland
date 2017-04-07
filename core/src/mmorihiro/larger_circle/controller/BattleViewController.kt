@@ -8,18 +8,13 @@ class BattleViewController : ViewController {
         viewport.camera.translate(0f, -288f, 0f)
         this + background
         this + ground
-        this + playerCannon
+        this + rightGround
+        this + cannon
+        ropes.forEach { this + it }
+        bubbles.forEach { this + it }
     }
 
     fun onHit(type: Pair<Int, Int>) {
-        //  view.updatePlayer(view.player.newBubble(type))
-    }
-
-    fun decideWinner() {
-        /* view.run {
-             val winner = BattleModel().decideWinner(
-                     player.number, player.type, enemy.number, enemy.type)
-             println(winner)
-         }*/
+        println("hit $type")
     }
 }
