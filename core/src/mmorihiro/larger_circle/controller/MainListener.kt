@@ -36,9 +36,8 @@ class MainListener : ApplicationAdapter() {
     private fun loadAssets() {
         Assets.manager = AssetManager()
         load<Texture>("bullet.png")
-        load<Texture>("cannon.png")
         load<Texture>("upBackground.png")
-        load<Texture>("playerCannon.png")
+        load<Texture>("cannon.png")
         load<Texture>("tiles.png")
         load<Texture>("background.png")
         load<Texture>("backgroundBubble.png")

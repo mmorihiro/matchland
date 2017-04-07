@@ -12,13 +12,11 @@ class ShootAction(val onShoot: () -> Unit,
                   val onHit: (Pair<Int, Int>) -> Unit,
                   val onComplete: () -> Unit) {
     fun shootAction(view: ShootingView) = view.run {
-        backgroundBubble.onClick { _, _, clickedX, clickedY ->
+        backGround.onClick { _, _, clickedX, clickedY ->
             shoot().let {
-                val (vx, vy) =
-                        BasicControllerModel().getBulletTarget(
-                                backGround.width / 2, viewSize / 2,
-                                clickedX, clickedY)
-                val actions = Actions.moveBy(vx * 132, vy * 132, 0.5f) then
+                val (vx, vy) = BasicControllerModel().getBulletTarget(
+                        viewWidth / 2, viewHeight / 2, clickedX, clickedY)
+                val actions = Actions.moveBy(vx * 200, vy * 200, 0.7f) then
                         Actions.run { removeBullet(it) }
                 it + actions
                 onShoot()
