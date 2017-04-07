@@ -2,7 +2,8 @@ package mmorihiro.larger_circle.model
 
 
 class BasicControllerModel {
-    fun getBulletTarget(startX: Float, startY: Float, clickedX: Float, clickedY: Float): Pair<Float, Float> {
+    fun getBulletTarget(startX: Float, startY: Float,
+                        clickedX: Float, clickedY: Float): Pair<Float, Float> {
         val ySide = (clickedY - startY).toDouble()
         val xSide = (clickedX - startX).toDouble()
         val degree = Math.atan2(ySide, xSide)

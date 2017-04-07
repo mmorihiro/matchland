@@ -10,36 +10,21 @@ import ktx.assets.asset
 import mmorihiro.larger_circle.model.BasicViewModel
 
 class ShootingView : Stage() {
-    val viewSize = 288f
+    val viewWidth = 288f
+    val viewHeight = viewWidth - 18
     var bullets: List<Image> = listOf()
         private set
 
     val backGround = Image(asset<Texture>("background.png"))
-    val backgroundBubble =
-            Image(asset<Texture>("backgroundBubble.png")).apply {
-                centerPosition(viewSize, viewSize - 10)
-                /* x = (viewSize - width) / 2
-                 y = viewSize - height - 20*/
-            }
 
-    val cannon = Image(asset<Texture>("cannon.png")).apply {
-        centerPosition(backGround.width, viewSize)
-    }
-
-    private val cannonArea = with(cannon) {
-        Circle(x + width / 2, y + height / 2, height / 2)
-    }
+    private val cannonArea = Circle(viewWidth / 2, viewHeight / 2, 30f)
 
     var bubbles: List<Bubble> = LoadBubbles(32, 4, "bubbles.png")
             .loadRandom().mapIndexed { index, bubble ->
         val (bubbleX, bubbleY) = BasicViewModel(
-                32,
-                backgroundBubble.width,
-                backgroundBubble.height,
-                cannonArea).bubblePosition(index, 4)
+                32, viewWidth, viewHeight, cannonArea).bubblePosition(index, 4)
         bubble.apply {
-            x = bubbleX + backgroundBubble.x
-            y = bubbleY + backgroundBubble.y
+            setPosition(bubbleX, bubbleY)
         }
     }
         private set
@@ -49,7 +34,7 @@ class ShootingView : Stage() {
     fun shoot(): Image =
             Image(asset<Texture>("bullet.png")).apply {
                 bullets += this
-                centerPosition(backGround.width, viewSize)
+                centerPosition(viewWidth, viewHeight)
                 this@ShootingView + this
             }
 

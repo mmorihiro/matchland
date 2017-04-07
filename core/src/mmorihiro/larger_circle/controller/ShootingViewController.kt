@@ -17,16 +17,19 @@ class ShootingViewController(onShoot: () -> Unit,
         shoot.shootAction(this)
         shoot.collision(this)
         bubbles.forEach {
-            val move = CircularMotion(viewSize / 2, (viewSize - 10) / 2, 6, it)
-            it + forever(fadeIn(0.6f) then fadeOut(0.2f) then
+            val move = CircularMotion(viewWidth / 2, viewHeight / 2, 6, it)
+            it + forever(fadeIn(0.2f) then delay(0.4f) then fadeOut(0.2f) then
                     delay(0.8f) then Actions.run {
                 val (nextX, nextY) = move.next()
                 it.setPosition(nextX, nextY)
             })
         }
+        addListener {
+            bullets.filter { it.y + it.height > viewHeight }.forEach {
+                removeBullet(it)
+            }
+        }
         this + backGround
-        this + backgroundBubble
-        this + cannon
         bubbles.forEach { this + it }
         Gdx.input.inputProcessor = this
     }

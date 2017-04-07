@@ -16,7 +16,7 @@ class BattleView : Stage() {
     }
     //  private val bubbles = loadBubbles.loadRandom()
 
-    val playerCannon = Image(asset<Texture>("playerCannon.png")).apply {
+    val playerCannon = Image(asset<Texture>("cannon.png")).apply {
         setPosition(50f, 76f)
     }
 /*var player = bubbles[0].let {
