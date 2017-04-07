@@ -9,8 +9,7 @@ import mmorihiro.larger_circle.view.ShootingView
 
 
 class ShootAction(val onShoot: () -> Unit,
-                  val onHit: (Pair<Int, Int>) -> Unit,
-                  val onComplete: () -> Unit) {
+                  val onHit: (Pair<Int, Int>) -> Unit) {
     fun shootAction(view: ShootingView) = view.run {
         backGround.onClick { _, _, clickedX, clickedY ->
             shoot().let {
@@ -33,7 +32,6 @@ class ShootAction(val onShoot: () -> Unit,
                     removeBubble(it)
                     removeBullet(bullet)
                     onHit(it.type)
-                    if (bubbles.isEmpty()) onComplete()
                 }
             }
         }

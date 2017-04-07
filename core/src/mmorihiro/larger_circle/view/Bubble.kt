@@ -32,4 +32,4 @@ class NumberBubble(region: TextureRegion,
             loadBubbles.load(type).numberBubble(number + 1)
 }
 
-val loadBubbles = LoadBubbles(64, 2, "largerBubbles.png")
+val loadBubbles = LoadBubbles(32, 3, "bubbles.png")
