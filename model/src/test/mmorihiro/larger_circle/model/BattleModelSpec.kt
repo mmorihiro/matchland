@@ -6,13 +6,13 @@ import io.kotlintest.specs.ShouldSpec
 
 class BattleModelSpec : ShouldSpec() {
     init {
-        "decideWinner" {
-            should("相性を含めて判定する") {
+        "decideReaction" {
+            should("相性を判定する") {
                 val model = BattleModel()
-                val result = model.decideWinner(
-                        5, BubbleType.BLUE.position,
-                        5, BubbleType.RED.position)
-                result shouldBe true
+                val result = model.decideReaction(
+                        BubbleType.BLUE.position,
+                        BubbleType.RED.position)
+                result shouldBe Reaction.WIN
             }
         }
     }

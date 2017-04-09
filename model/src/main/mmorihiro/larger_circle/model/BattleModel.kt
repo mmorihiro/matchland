@@ -3,32 +3,34 @@ package mmorihiro.larger_circle.model
 
 class BattleModel {
 
-    fun decideWinner(player: Int,
-                     playerType: Pair<Int, Int>,
-                     enemy: Int,
-                     enemyType: Pair<Int, Int>): Boolean {
-        val a = when (playerType) {
+    fun decideReaction(playerType: Pair<Int, Int>,
+                       enemyType: Pair<Int, Int>): Reaction =
+            when (playerType) {
             BubbleType.RED.position ->
                 when (enemyType) {
-                    BubbleType.RED.position -> 1.0
-                    BubbleType.GREEN.position -> 1.2
-                    BubbleType.BLUE.position -> 0.8
+                    BubbleType.RED.position -> Reaction.NORMAL
+                    BubbleType.GREEN.position -> Reaction.WIN
+                    BubbleType.BLUE.position -> Reaction.DEFEAT
                     else -> error("")
                 }
             BubbleType.GREEN.position -> when (enemyType) {
-                BubbleType.RED.position -> 0.8
-                BubbleType.GREEN.position -> 1.0
-                BubbleType.BLUE.position -> 1.2
+                BubbleType.RED.position -> Reaction.DEFEAT
+                BubbleType.GREEN.position -> Reaction.NORMAL
+                BubbleType.BLUE.position -> Reaction.WIN
                 else -> error("")
             }
             BubbleType.BLUE.position -> when (enemyType) {
-                BubbleType.RED.position -> 1.2
-                BubbleType.GREEN.position -> 0.8
-                BubbleType.BLUE.position -> 1.0
+                BubbleType.RED.position -> Reaction.WIN
+                BubbleType.GREEN.position -> Reaction.DEFEAT
+                BubbleType.BLUE.position -> Reaction.NORMAL
                 else -> error("")
             }
             else -> error("")
         }
-        return player * a > enemy
-    }
+}
+
+enum class Reaction {
+    NORMAL,
+    WIN,
+    DEFEAT 
 }
