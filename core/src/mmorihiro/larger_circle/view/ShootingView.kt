@@ -2,14 +2,13 @@ package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Circle
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.centerPosition
 import ktx.actors.plus
 import ktx.assets.asset
 import mmorihiro.larger_circle.model.BasicViewModel
 
-class ShootingView : Stage() {
+class ShootingView : View() {
     val viewWidth = 288f
     val viewHeight = viewWidth - 18
     var bullets: List<Image> = listOf()
@@ -29,8 +28,6 @@ class ShootingView : Stage() {
     }
         private set
 
-    private var listeners: List<(ShootingView) -> Unit> = listOf()
-
     fun shoot(): Image =
             Image(asset<Texture>("bullet.png")).apply {
                 bullets += this
@@ -46,18 +43,6 @@ class ShootingView : Stage() {
     fun removeBubble(bubble: Bubble) {
         bubble.remove()
         bubbles -= bubble
-    }
-
-
-    fun addListener(listener: (ShootingView) -> Unit) {
-        listeners += listener
-    }
-
-    override fun act(delta: Float) {
-        super.act(delta)
-        listeners.forEach {
-            it(this)
-        }
     }
 }
 

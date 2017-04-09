@@ -23,7 +23,7 @@ class ShootingViewController(onShoot: () -> Unit,
                 it.setPosition(nextX, nextY)
             })
         }
-        addListener {
+        onEveryAct {
             bullets.filter { it.y + it.height > viewHeight }.forEach {
                 removeBullet(it)
             }

@@ -2,6 +2,7 @@ package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Texture.TextureFilter
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -12,8 +13,19 @@ import ktx.scene2d.Scene2DSkin
 
 open class Bubble(val region: TextureRegion,
                   val type: Pair<Int, Int>) : Image(region) {
+    var isDamaged = false
+        private set
+
+    fun damage() {
+        assert(!isDamaged)
+        isDamaged = true
+    }
+
     fun numberBubble(number: Int): NumberBubble =
             NumberBubble(region, type, number)
+
+    fun circle(): Circle = Circle(
+            x + imageWidth / 2, y + imageWidth / 2, imageWidth / 2)
 }
 
 class NumberBubble(region: TextureRegion,

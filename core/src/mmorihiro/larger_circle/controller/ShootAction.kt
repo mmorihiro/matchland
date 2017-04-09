@@ -24,7 +24,7 @@ class ShootAction(val onShoot: () -> Unit,
     }
 
     fun collision(view: ShootingView) = view.run {
-        addListener {
+        onEveryAct {
             bullets.forEach { bullet ->
                 bubbles.filter { jewel ->
                     bullet.circle().overlaps(jewel.circle())
