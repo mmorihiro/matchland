@@ -38,6 +38,7 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("tiles.png")
         load<Texture>("rightGround.png")
         load<Texture>("rope.png")
+        load<Texture>("bullets.png")
         load<Texture>("background.png")
         load<Texture>("bubbles.png")
         load<Skin>("uiskin.json")
