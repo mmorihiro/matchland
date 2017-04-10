@@ -19,29 +19,21 @@ class MainListener : ApplicationAdapter() {
 
     override fun create() {
         loadAssets()
-        Scene2DSkin.defaultSkin = asset<Skin>("uiskin.json")
-        val battleController = BattleViewController()
-        val barView = BarViewController(originBullets = 16).view
-        val shootingView = ShootingViewController(
-                onShoot = {
-                    barView.bar.decreaseBullets()
-                },
-                onHit = battleController::onHit).view
+        Scene2DSkin.defaultSkin = asset<Skin>("ui/uiskin.json")
+        val battleController = BattleController()
+        val barView = BarController(originBullets = 16).view
+        val shootingView = PuzzleController(battleController::onHit).view
         currentViews = listOf(battleController.view, shootingView, barView)
     }
 
     private fun loadAssets() {
         Assets.manager = AssetManager()
-        load<Texture>("bullet.png")
         load<Texture>("upBackground.png")
-        load<Texture>("cannon.png")
-        load<Texture>("tiles.png")
-        load<Texture>("rightGround.png")
-        load<Texture>("rope.png")
         load<Texture>("bullets.png")
         load<Texture>("background.png")
+        load<Texture>("bar.png")
         load<Texture>("bubbles.png")
-        load<Skin>("uiskin.json")
+        load<Skin>("ui/uiskin.json")
         Assets.manager.finishLoading()
     }
 
