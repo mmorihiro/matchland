@@ -13,6 +13,9 @@ import ktx.scene2d.Scene2DSkin
 
 open class Bubble(val region: TextureRegion,
                   val type: Pair<Int, Int>) : Image(region) {
+    init {
+        region.texture.setFilter(TextureFilter.Linear, TextureFilter.Linear)
+    }
     var isDamaged = false
         private set
 
@@ -31,10 +34,6 @@ open class Bubble(val region: TextureRegion,
 class NumberBubble(region: TextureRegion,
                    type: Pair<Int, Int>,
                    val number: Int) : Bubble(region, type) {
-    init {
-        region.texture.setFilter(TextureFilter.Linear, TextureFilter.Linear)
-    }
-
     val label = Label("$number", Scene2DSkin.defaultSkin).apply {
         centerPosition(this@NumberBubble.width, this@NumberBubble.height)
     }

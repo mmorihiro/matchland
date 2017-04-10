@@ -2,6 +2,7 @@ package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import ktx.actors.plus
 import ktx.assets.asset
 import mmorihiro.larger_circle.model.Values
 
@@ -23,7 +24,7 @@ class BattleView : View() {
         setPosition(50f, ground.y + 96f)
     }
 
-    val rows = (0..3).map {
+    var rows = (0..3).map {
         Row.nextRow().apply {
             bubbles.mapIndexed { index, bubble ->
                 bubble.apply {
@@ -33,11 +34,22 @@ class BattleView : View() {
             }
         }
     }
+        private set
 
     val ropes = (0..2).map {
         Image(asset<Texture>("rope.png")).apply {
             x = 96f
             y = it * 38 + 4.5f
         }
+    }
+
+    fun removeRow(row: Row) {
+        row.remove()
+        rows -= row
+    }
+
+    fun newRow(row: Row) {
+        this + row
+        rows = listOf(row) + rows
     }
 }
