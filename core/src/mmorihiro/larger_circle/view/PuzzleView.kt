@@ -26,14 +26,13 @@ class PuzzleView : View() {
                 }
             }
 
-    fun nextRow(): List<Bubble> {
-        val row = createRow(bubbles.lastIndex)
-        bubbles = bubbles.drop(1).plus<List<Bubble>>(row.map {
-            this + it
-            it
-        })
-        return row
-    }
+    fun nextRow(): List<Bubble> =
+            createRow(bubbles.lastIndex).also { row ->
+                bubbles = bubbles.drop(1) + listOf(row.map {
+                    this + it
+                    it
+                })
+            }
 
     fun removeBubble(bubble: Bubble) {
         bubbles = bubbles.map { row -> row - bubble }
