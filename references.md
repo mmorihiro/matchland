@@ -5,6 +5,7 @@
 - https://opengameart.org/content/bubbles8-colors
 - https://opengameart.org/content/platformer-art-request-pack
 - https://opengameart.org/content/platformer-art-deluxe
+- https://opengameart.org/content/puzzle-theme-jewels
 ## Kenney
 - https://kenney.nl/assets/abstract-platformer
 ## CLOSET

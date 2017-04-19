@@ -7,7 +7,7 @@ class BattleController : Controller {
         viewport.camera.translate(0f, -288f, 0f)
     }
 
-    fun onHit(type: Pair<Int, Int>) {
-
+    fun onHit(resume: () -> Unit) {
+        resume()
     }
 }

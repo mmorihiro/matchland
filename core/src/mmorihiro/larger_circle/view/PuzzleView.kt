@@ -3,8 +3,11 @@ package mmorihiro.larger_circle.view
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import ktx.actors.centerPosition
 import ktx.actors.plus
 import ktx.assets.asset
+import ktx.scene2d.Scene2DSkin
 
 class PuzzleView : View() {
     val tileSize = 48f
@@ -17,6 +20,7 @@ class PuzzleView : View() {
     val bar = Image(asset<Texture>("bar.png")).apply {
         y = puzzleBackGround.height
     }
+    val cover = Image(asset<Texture>("cover.png"))
 
     private fun createRow(yIndex: Int): List<Bubble> =
             (0..5).map { xIndex ->
@@ -36,6 +40,17 @@ class PuzzleView : View() {
 
     fun removeBubble(bubble: Bubble) {
         bubbles = bubbles.map { row -> row - bubble }
+    }
+
+    fun createLabel(number: Int) =
+            Label(" x $number", Scene2DSkin.defaultSkin).apply {
+                centerPosition(288f, 192f)
+                x += 10f
+            }
+
+    fun createBubble(type: Pair<Int, Int>) = loader.load(type).apply {
+        centerPosition(288f, 192f)
+        x -= 25f
     }
 }
 
