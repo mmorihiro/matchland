@@ -15,3 +15,4 @@
 ## Freepik
 - http://fr.freepik.com/vecteurs-libre/conception-de-fond-texture_919043.htm#term=textures&page=1&position=13
 - http://www.freepik.com/free-vector/colored-buttons-pack_849231.htm#term=button circle&page=1&position=3
+- http://www.freepik.com/free-vector/large-collection-of-white-clouds_988595.htm

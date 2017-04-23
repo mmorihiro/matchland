@@ -9,7 +9,8 @@ import mmorihiro.larger_circle.view.Bubble
 import mmorihiro.larger_circle.view.PuzzleView
 
 
-class PuzzleController(val onHit: (() -> Unit) -> Unit) : Controller {
+class PuzzleController(
+        val onHit: (Int, Pair<Int, Int>, () -> Unit) -> Unit) : Controller {
     override val view = PuzzleView().apply {
         this + backGround
         this + puzzleBackGround
@@ -64,7 +65,7 @@ class PuzzleController(val onHit: (() -> Unit) -> Unit) : Controller {
         })
         label + (fadeAction() then Actions.run {
             this - label
-            onHit(this@PuzzleController::resume)
+            onHit(size, type, this@PuzzleController::resume)
         })
         this + bubble
         this + label
