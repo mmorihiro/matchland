@@ -8,6 +8,7 @@
 - https://opengameart.org/content/puzzle-theme-jewels
 ## Kenney
 - https://kenney.nl/assets/abstract-platformer
+- https://kenney.nl/assets/puzzle-pack
 ## CLOSET
 - https://sites.google.com/site/closetvx/picture/09
 ## Icon

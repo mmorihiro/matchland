@@ -2,6 +2,7 @@ package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
@@ -23,7 +24,13 @@ class MainListener : ApplicationAdapter() {
         val mapController = MapController()
         val barView = BarController(originBullets = 16).view
         val puzzleView = PuzzleController(mapController::onHit).view
-        currentViews = listOf(puzzleView, mapController.view, barView)
+        val mapView = mapController.view
+        InputMultiplexer().run {
+            addProcessor(puzzleView)
+            addProcessor(mapView)
+            Gdx.input.inputProcessor = this
+        }
+        currentViews = listOf(puzzleView, mapView, barView)
     }
 
     private fun loadAssets() {
@@ -35,6 +42,7 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("bubbles.png")
         load<Texture>("pointer.png")
         load<Texture>("tile.png")
+        load<Texture>("star.png")
         load<Skin>("ui/uiskin.json")
         Assets.manager.finishLoading()
     }

@@ -1,6 +1,5 @@
 package mmorihiro.larger_circle.controller
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import ktx.actors.*
@@ -28,7 +27,6 @@ class PuzzleController(
                 }
             }
         }
-        Gdx.input.inputProcessor = this
     }
 
     private fun touchAction(view: PuzzleView, row: List<Bubble>) = view.run {
