@@ -10,9 +10,10 @@ import ktx.actors.then
 import mmorihiro.larger_circle.model.BubbleType
 import mmorihiro.larger_circle.view.MapView
 
-class MapController : Controller {
+class MapController(val onTurnEnd: () -> Unit,
+                    val onGet: () -> Unit) : Controller {
     override val view = MapView().apply {
-        viewport.camera.translate(0f, -195f, 0f)
+        viewport.camera.translate(0f, -191f, 0f)
         this + tiles
         this + stars
         this + pointer
@@ -31,8 +32,10 @@ class MapController : Controller {
         val repeatAction = Actions.run {
             val rectangle =
                     Rectangle(pointer.x + x + 10f, pointer.y + y + 10f, 2f, 2f)
-            stars.children
-                    .find { it.rectAngle().overlaps(rectangle) }?.remove()
+            stars.children.find { it.rectAngle().overlaps(rectangle) }?.let {
+                it + (moveTo(83f, 256f, 0.3f) then Actions.run { it.remove() })
+                onGet()
+            }
             if (tiles.children.none { it.rectAngle().overlaps(rectangle) }) {
                 pointer.clearActions()
                 pointer + (delay(0.5f) then Actions.run { resume() })
@@ -45,7 +48,8 @@ class MapController : Controller {
             else -> error("")
         } then delay(0.4f)
 
-        pointer + (repeat(size, repeatAction) then delay(0.5f)
+        pointer + (repeat(size, repeatAction)
+                then Actions.run { onTurnEnd() } then delay(0.5f)
                 then Actions.run { resume() })
     }
 
