@@ -10,6 +10,9 @@ enum class BubbleType {
     },
     BLUE {
         override val position = 0 to 2
+    },
+    Purple {
+        override val position = 0 to 3
     };
 
     abstract val position: Pair<Int, Int>

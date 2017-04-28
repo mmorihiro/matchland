@@ -2,6 +2,7 @@ package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
@@ -20,20 +21,28 @@ class MainListener : ApplicationAdapter() {
     override fun create() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("ui/uiskin.json")
-        val battleController = BattleController()
+        val mapController = MapController()
         val barView = BarController(originBullets = 16).view
-        val shootingView = PuzzleController(battleController::onHit).view
-        currentViews = listOf(battleController.view, shootingView, barView)
+        val puzzleView = PuzzleController(mapController::onHit).view
+        val mapView = mapController.view
+        InputMultiplexer().run {
+            addProcessor(puzzleView)
+            addProcessor(mapView)
+            Gdx.input.inputProcessor = this
+        }
+        currentViews = listOf(puzzleView, mapView, barView)
     }
 
     private fun loadAssets() {
         Assets.manager = AssetManager()
         load<Texture>("upBackground.png")
-        load<Texture>("bullets.png")
         load<Texture>("background.png")
         load<Texture>("cover.png")
         load<Texture>("bar.png")
         load<Texture>("bubbles.png")
+        load<Texture>("pointer.png")
+        load<Texture>("tile.png")
+        load<Texture>("star.png")
         load<Skin>("ui/uiskin.json")
         Assets.manager.finishLoading()
     }
