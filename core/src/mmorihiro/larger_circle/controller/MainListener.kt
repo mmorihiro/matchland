@@ -21,7 +21,7 @@ class MainListener : ApplicationAdapter() {
     override fun create() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("ui/uiskin.json")
-        val barView = BarController(originBullets = 16).view
+        val barView = BarController(turns = 30).view
         val mapController = MapController(barView::onTurnEnd, barView::onGet)
         val puzzleView = PuzzleController(mapController::onHit).view
         val mapView = mapController.view
