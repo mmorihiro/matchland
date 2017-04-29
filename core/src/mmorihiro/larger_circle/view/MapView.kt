@@ -1,11 +1,12 @@
 package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.plus
 import ktx.assets.asset
+import mmorihiro.larger_circle.model.CreateMap
+import mmorihiro.larger_circle.model.TileType
 
 
 class MapView : View() {
@@ -16,41 +17,40 @@ class MapView : View() {
     val loader = LoadBubbles(32, "bubbles.png")
     val bubbles = Group()
     val tileSize = 34f
-    val tiles = Group().apply {
-        (0..7).map { xIndex ->
-            newCol(xIndex).forEach { tile ->
-                tile.x += 52f
-                this + tile
+    val tiles = Group()
+    val stars = Group()
+
+    var nextMap: List<List<TileType>> = listOf()
+    var startY = 3
+
+    init {
+        CreateMap().nextMap(
+                List(8, { List(7, { TileType.Space }) }), 2 to startY).let {
+            it.first.mapIndexed { xIndex, col ->
+                newCol(col, xIndex).forEach { tile -> tiles + tile }
+                newStars(col, xIndex).forEach { star -> stars + star }
             }
+            startY = it.second
         }
     }
 
-    val stars = Group().apply {
-        (0..MathUtils.random(3)).map {
-            MathUtils.random(6)
-        }.toSet().map { xIndex ->
-            newStars(xIndex).forEach { tile ->
-                tile.x += 52f
-                this + tile
-            }
-        }
-    }
+    fun newCol(col: List<TileType>, xIndex: Int = 8): List<Image> =
+            col.mapIndexed { index, it -> index to it }
+                    .filterNot { it.second == TileType.Space }
+                    .map { (index, _) ->
+                        Image(asset<Texture>("tile.png")).apply {
+                            x = 52f + xIndex * tileSize
+                            y = index * tileSize + 10f
+                        }
+                    }
 
-    fun newCol(xIndex: Int) =
-            (0..6).map { yIndex ->
-                Image(asset<Texture>("tile.png")).apply {
-                    x = xIndex * tileSize
-                    y = yIndex * tileSize + 10f
-                }
-            }
-
-    fun newStars(xIndex: Int) =
-            (0..MathUtils.random(1)).map {
-                MathUtils.random(6)
-            }.toSet().map { yIndex ->
-                Image(asset<Texture>("star.png")).apply {
-                    x = xIndex * tileSize + 6
-                    y = yIndex * tileSize + 16f
-                }
-            }
+    fun newStars(col: List<TileType>, xIndex: Int = 8) =
+            col.mapIndexed { index, it -> index to it }
+                    .filter { it.second == TileType.Star }
+                    .map { (yIndex, _) ->
+                        Image(asset<Texture>("star.png")).apply {
+                            x = 52f + xIndex * tileSize + 6
+                            y = yIndex * tileSize + 16f
+                        }
+                    }
 }

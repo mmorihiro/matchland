@@ -18,7 +18,7 @@ class BarView(private var turns: Int) : Stage() {
         y = -5f
     }
     val turnLabel = Label("$turns", Scene2DSkin.defaultSkin).apply {
-        x = life.x + 35f
+        x = life.x + 37f
         y = -2f
         color = Color(200f / 255f, 62f / 255f, 62f / 255f, 0.8f)
     }
@@ -29,7 +29,7 @@ class BarView(private var turns: Int) : Stage() {
     }
 
     val starLabel = Label("$stars", Scene2DSkin.defaultSkin).apply {
-        x = star.x + 40f
+        x = star.x + 41f
         y = -2f
         color = Color(255f / 255f, 204f / 255f, 0f, 0.7f)
     }
@@ -37,6 +37,9 @@ class BarView(private var turns: Int) : Stage() {
     fun onTurnEnd() {
         turnLabel + (Actions.fadeOut(0.2f) then Actions.run {
             turns -= 1
+            if (turns == 9) {
+                turnLabel.x += 5
+            }
             turnLabel.setText("$turns")
         } then Actions.alpha(0.8f, 0.2f))
     }
@@ -44,6 +47,9 @@ class BarView(private var turns: Int) : Stage() {
     fun onGet() {
         starLabel + (Actions.fadeOut(0.2f) then Actions.run {
             stars += 1
+            if (stars == 10) {
+                starLabel.x -= 5
+            }
             starLabel.setText("$stars")
         } then Actions.alpha(0.7f, 0.2f))
     }
