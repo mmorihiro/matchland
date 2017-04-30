@@ -6,6 +6,7 @@
 - https://opengameart.org/content/platformer-art-request-pack
 - https://opengameart.org/content/platformer-art-deluxe
 - https://opengameart.org/content/puzzle-theme-jewels
+- https://opengameart.org/content/free-game-gui
 ## Kenney
 - https://kenney.nl/assets/abstract-platformer
 - https://kenney.nl/assets/puzzle-pack

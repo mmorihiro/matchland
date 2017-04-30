@@ -22,7 +22,7 @@ class MainListener : ApplicationAdapter() {
     override fun create() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("ui/uiskin.json")
-        val barView = BarController(1, this::record).view
+        val barView = BarController(30, this::record).view
         val mapController = MapController(barView::onTurnEnd, barView::onGet)
         val puzzleView = PuzzleController(mapController::onHit).view
         val mapView = mapController.view
@@ -53,6 +53,8 @@ class MainListener : ApplicationAdapter() {
     fun record(star: Int) {
         load<Texture>("recordBack.png")
         load<Texture>("window.png")
+        load<Texture>("starFrame.png")
+        load<Texture>("recordStar.png")
         Assets.manager.finishLoading()
         currentViews += RecordController(star, {
             currentViews.dropLast(1).forEach { it.pause = true }
@@ -77,5 +79,9 @@ class MainListener : ApplicationAdapter() {
         unload("starBar.png")
         unload("lifeBar.png")
         unload("ui/uiskin.json")
+        unload("recordBack.png")
+        unload("window.png")
+        unload("starFrame.png")
+        unload("recordStar.png")
     }
 }
