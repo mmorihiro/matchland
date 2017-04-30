@@ -10,18 +10,19 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import ktx.assets.Assets
 import ktx.assets.asset
-import ktx.assets.dispose
 import ktx.assets.load
+import ktx.assets.unload
 import ktx.scene2d.Scene2DSkin
+import mmorihiro.larger_circle.view.View
 
 
 class MainListener : ApplicationAdapter() {
-    var currentViews: List<Stage> = listOf()
+    private var currentViews: List<View> = listOf()
 
     override fun create() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("ui/uiskin.json")
-        val barView = BarController(turns = 30).view
+        val barView = BarController(1, this::record).view
         val mapController = MapController(barView::onTurnEnd, barView::onGet)
         val puzzleView = PuzzleController(mapController::onHit).view
         val mapView = mapController.view
@@ -30,7 +31,7 @@ class MainListener : ApplicationAdapter() {
             addProcessor(mapView)
             Gdx.input.inputProcessor = this
         }
-        currentViews = listOf(puzzleView, mapView, barView)
+        currentViews = listOf(puzzleView, barView, mapView)
     }
 
     private fun loadAssets() {
@@ -49,6 +50,15 @@ class MainListener : ApplicationAdapter() {
         Assets.manager.finishLoading()
     }
 
+    fun record(star: Int) {
+        load<Texture>("recordBack.png")
+        load<Texture>("window.png")
+        Assets.manager.finishLoading()
+        currentViews += RecordController(star, {
+            currentViews.dropLast(1).forEach { it.pause = true }
+        }).view
+    }
+
     override fun render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         currentViews.forEach { it.act(Gdx.graphics.deltaTime) }
@@ -56,6 +66,16 @@ class MainListener : ApplicationAdapter() {
     }
 
     override fun dispose() {
-        currentViews.dispose()
+        unload("upBackground.png")
+        unload("background.png")
+        unload("cover.png")
+        unload("bar.png")
+        unload("bubbles.png")
+        unload("pointer.png")
+        unload("tile.png")
+        unload("star.png")
+        unload("starBar.png")
+        unload("lifeBar.png")
+        unload("ui/uiskin.json")
     }
 }

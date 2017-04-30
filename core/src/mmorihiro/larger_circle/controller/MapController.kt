@@ -41,7 +41,8 @@ class MapController(val onTurnEnd: () -> Unit,
             }
             if (tiles.children.none { it.rectAngle().overlaps(rectangle) }) {
                 pointer.clearActions()
-                pointer + (delay(0.5f) then Actions.run { resume() })
+                pointer + (Actions.run { onTurnEnd() }
+                        then delay(0.5f) then Actions.run { resume() })
             }
         } then addBubbleAction(type, x, y) then delay(0.3f) then when (type) {
             BubbleType.RED.position -> moveAction(-tileSize)
@@ -95,7 +96,13 @@ class MapController(val onTurnEnd: () -> Unit,
                         startY = it.second
                     }
                 }
-                newCol(col = nextMap.first()).forEach { tiles + it }
+                newCol(col = nextMap.first()).forEach { tile ->
+                    tiles.children.filter {
+                        val rect = it.rectAngle()
+                        rect.x == tile.x && rect.y == tile.y
+                    }.forEach { it.remove() }
+                    tiles + tile
+                }
                 newStars(col = nextMap.first()).forEach { stars + it }
                 nextMap = nextMap.drop(1)
             }
