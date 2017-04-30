@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import ktx.actors.alpha
 import ktx.actors.centerPosition
 import ktx.actors.plus
 import ktx.assets.asset
@@ -14,7 +15,16 @@ class PuzzleView : View() {
     val backGround = Image(asset<Texture>("upBackground.png"))
     val puzzleBackGround = Image(asset<Texture>("background.png"))
     val loader = LoadBubbles(32, "bubbles.png")
-    var bubbles = (0..4).map { createRow(it) }
+    var bubbles = (0..4).map { index ->
+        createRow(index).map {
+            it.apply {
+                if (index != 4) {
+                    alpha = 0f
+                    y += tileSize * 4f
+                }
+            }
+        }
+    }
         private set
     var bubbleGroup = Group()
     val bar = Image(asset<Texture>("bar.png")).apply {

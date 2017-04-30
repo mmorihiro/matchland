@@ -1,5 +1,6 @@
 package mmorihiro.larger_circle.controller
 
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import ktx.actors.*
@@ -13,15 +14,33 @@ class PuzzleController(
     override val view = PuzzleView().apply {
         this + backGround
         this + puzzleBackGround
-        bubbles.forEach { row ->
-            moveAction(this, row)
-            touchAction(this, row)
+        bubbles.forEachIndexed { index, row ->
+            row.forEach {
+                bubbleGroup += it
+                if (index != 4)
+                    it + (delay(index * 0.9f)
+                            then parallel(
+                            moveBy(0f, -tileSize * 4f, 0.9f,
+                                    Interpolation.bounceOut),
+                            forever(Actions.run {
+                                if (it.y <= tileSize * 4) it.alpha = 1f
+                            })))
+            }
+
+            row.first() + (delay(3.7f) then Actions.run {
+                row.forEach { it.clearActions() }
+                moveAction(this, row)
+                touchAction(this, row)
+            })
         }
         this + bubbleGroup
         this + bar
+        this + cover
+        cover + (delay(3.8f) then Actions.run { this - cover })
         onEveryAct {
             if (bubbles.first().isEmpty()) {
                 nextRow().let {
+                    it.forEach { bubble -> bubbleGroup += bubble }
                     moveAction(this, it)
                     touchAction(this, it)
                 }
@@ -79,7 +98,7 @@ class PuzzleController(
 
     private fun moveAction(view: PuzzleView, row: List<Bubble>) = view.run {
         row.forEach { bubble ->
-            bubbleGroup += bubble
+            //  bubbleGroup += bubble
             bubble + forever(delay(1.2f) then Actions.run {
                 if (cover !in this) {
                     bubble.y -= 48f
