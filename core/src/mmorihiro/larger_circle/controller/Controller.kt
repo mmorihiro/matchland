@@ -1,8 +1,8 @@
 package mmorihiro.larger_circle.controller
 
-import com.badlogic.gdx.scenes.scene2d.Stage
+import mmorihiro.larger_circle.view.View
 
 
 interface Controller {
-    val view: Stage
+    val view: View
 }

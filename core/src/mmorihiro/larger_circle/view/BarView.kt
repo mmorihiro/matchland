@@ -2,7 +2,6 @@ package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -12,7 +11,7 @@ import ktx.assets.asset
 import ktx.scene2d.Scene2DSkin
 
 
-class BarView(private var turns: Int) : Stage() {
+class BarView(private var turns: Int, val onFinish: (Int) -> Unit) : View() {
     val life = Image(asset<Texture>("lifeBar.png")).apply {
         x = 4f
         y = -5f
@@ -41,7 +40,9 @@ class BarView(private var turns: Int) : Stage() {
                 turnLabel.x += 5
             }
             turnLabel.setText("$turns")
-        } then Actions.alpha(0.8f, 0.2f))
+        } then Actions.alpha(0.8f, 0.2f) then Actions.run {
+            if (turns == 0) onFinish(stars)
+        })
     }
 
     fun onGet() {

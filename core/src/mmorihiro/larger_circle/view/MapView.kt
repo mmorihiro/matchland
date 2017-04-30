@@ -1,6 +1,7 @@
 package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.plus
@@ -26,7 +27,12 @@ class MapView : View() {
     init {
         CreateMap().nextMap(
                 List(8, { List(7, { TileType.Space }) }), 2 to startY).let {
-            it.first.mapIndexed { xIndex, col ->
+            (List(4, {
+                List(7, {
+                    if (MathUtils.random(3) == 0) TileType.Star
+                    else TileType.Tile
+                })
+            }) + it.first.drop(4)).mapIndexed { xIndex, col ->
                 newCol(col, xIndex).forEach { tile -> tiles + tile }
                 newStars(col, xIndex).forEach { star -> stars + star }
             }

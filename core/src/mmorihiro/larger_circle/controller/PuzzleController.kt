@@ -46,7 +46,9 @@ class PuzzleController(
                         it.contains(((bubble.x - 8) / tileSize).toInt()
                                 to ((bubble.y - 8) / tileSize).toInt())
                     }!!.filter { (x, y) -> bubbles[y][x].alpha != 0f }.toSet()
-                    group.forEach { (x, y) -> bubbles[y][x].alpha = 0f }
+                    group.forEach { (x, y) ->
+                        bubbles[y][x] + fadeOut(0.2f)
+                    }
                     showAction(view, bubble.type, group.size)
                 }
             }
@@ -55,22 +57,25 @@ class PuzzleController(
 
     private fun showAction(view: PuzzleView,
                            type: Pair<Int, Int>, size: Int) = view.run {
+        cover.alpha = 0f
         this + cover
-        val label = createLabel(size)
-        val bubble = createBubble(type)
-        bubble + (fadeAction() then Actions.run {
-            this - bubble
+        cover + (delay(0.2f) then fadeIn(0.2f) then Actions.run {
+            val label = createLabel(size)
+            val bubble = createBubble(type)
+            bubble + (fadeAction() then Actions.run {
+                this - bubble
+            })
+            label + (fadeAction() then Actions.run {
+                this - label
+                onHit(size, type, this@PuzzleController::resume)
+            })
+            this + bubble
+            this + label
         })
-        label + (fadeAction() then Actions.run {
-            this - label
-            onHit(size, type, this@PuzzleController::resume)
-        })
-        this + bubble
-        this + label
     }
 
     private fun fadeAction() =
-            delay(1.0f) then parallel(fadeOut(0.3f), moveBy(0f, 10f, 0.3f))
+            delay(0.7f) then parallel(fadeOut(0.3f), moveBy(0f, 10f, 0.3f))
 
     private fun moveAction(view: PuzzleView, row: List<Bubble>) = view.run {
         row.forEach { bubble ->
