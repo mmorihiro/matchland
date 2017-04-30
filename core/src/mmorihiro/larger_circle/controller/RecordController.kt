@@ -19,7 +19,15 @@ class RecordController(star: Int, stop: () -> Unit) : Controller {
             group + window
             group + starBar
             group + starLabel
+            frames.forEach { group + it }
+            stars.forEach { group + it }
             group + Actions.moveBy(0f, -288f, 0.2f)
+            window + (Actions.delay(0.3f) then Actions.run {
+                stars.forEachIndexed { index, image ->
+                    image + (Actions.delay(0.5f + index * 0.5f)
+                            then Actions.fadeIn(0.4f))
+                }
+            })
         })
         this + backGround
     }
