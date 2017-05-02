@@ -87,38 +87,37 @@ class MapController(val onTurnEnd: () -> Unit,
 
     private fun moveAction(x: Float) = view.run {
         Actions.run {
-            if (x < 0) {
-                if (nextMap.isEmpty()) {
-                    CreateMap().nextMap(
-                            List(8, { List(7, { TileType.Space }) }),
-                            0 to startY).let {
-                        nextMap = it.first
-                        startY = it.second
-                    }
-                }
-                newCol(col = nextMap.first()).forEach { tile ->
-                    tiles.children.filter {
-                        val rect = it.rectAngle()
-                        rect.x == tile.x && rect.y == tile.y
-                    }.forEach { it.remove() }
-                    tiles + tile
-                }
-                newStars(col = nextMap.first()).forEach { stars + it }
-                nextMap = nextMap.drop(1)
+            if (x < 0 &&
+                    tiles.children.none { it.x > 52 + 8 * tileSize - 5 }) {
+                addNewCol()
             }
             bubbles.children.forEach {
-                it + (moveBy(x, 0f, 0.15f) then
+                it + (moveBy(x, 0f, 0.20f) then
                         Actions.run { if (it.x < -288f) it.remove() })
             }
             tiles.children.forEach {
-                it + (moveBy(x, 0f, 0.15f) then
+                it + (moveBy(x, 0f, 0.20f) then
                         Actions.run { if (it.x < -290f) it.remove() })
             }
             stars.children.forEach {
-                it + (moveBy(x, 0f, 0.15f) then
+                it + (moveBy(x, 0f, 0.20f) then
                         Actions.run { if (it.x < -288f) it.remove() })
             }
         }
+    }
+
+    private fun addNewCol() = view.run {
+        if (nextMap.isEmpty()) {
+            CreateMap().nextMap(
+                    List(8, { List(7, { TileType.Space }) }),
+                    0 to startY).let {
+                nextMap = it.first
+                startY = it.second
+            }
+        }
+        newCol(col = nextMap.first()).forEach { tile -> tiles + tile }
+        newStars(col = nextMap.first()).forEach { stars + it }
+        nextMap = nextMap.drop(1)
     }
 
     private fun movePointerAction(y: Float) = moveBy(0f, y, 0.1f)

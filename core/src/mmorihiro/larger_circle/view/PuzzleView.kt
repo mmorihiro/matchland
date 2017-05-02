@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import ktx.actors.alpha
 import ktx.actors.centerPosition
-import ktx.actors.plus
 import ktx.assets.asset
 import ktx.scene2d.Scene2DSkin
 
@@ -42,10 +41,7 @@ class PuzzleView : View() {
 
     fun nextRow(): List<Bubble> =
             createRow(bubbles.lastIndex).also { row ->
-                bubbles = bubbles.drop(1) + listOf(row.map {
-                    this + it
-                    it
-                })
+                bubbles = bubbles.drop(1) + listOf(row)
             }
 
     fun removeBubble(bubble: Bubble) {

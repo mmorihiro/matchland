@@ -27,12 +27,12 @@ class MapView : View() {
     init {
         CreateMap().nextMap(
                 List(8, { List(7, { TileType.Space }) }), 2 to startY).let {
-            (List(4, {
+            (List(5, {
                 List(7, {
                     if (MathUtils.random(3) == 0) TileType.Star
                     else TileType.Tile
                 })
-            }) + it.first.drop(4)).mapIndexed { xIndex, col ->
+            }) + it.first.drop(5)).mapIndexed { xIndex, col ->
                 newCol(col, xIndex).forEach { tile -> tiles + tile }
                 newStars(col, xIndex).forEach { star -> stars + star }
             }
