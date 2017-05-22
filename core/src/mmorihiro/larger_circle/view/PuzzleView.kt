@@ -3,13 +3,11 @@ package mmorihiro.larger_circle.view
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import ktx.actors.alpha
-import ktx.actors.centerPosition
 import ktx.assets.asset
-import ktx.scene2d.Scene2DSkin
+import mmorihiro.larger_circle.model.Values
 
-class PuzzleView : View() {
+class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit) : View() {
     val tileSize = 48f
     val backGround = Image(asset<Texture>("upBackground.png"))
     val puzzleBackGround = Image(asset<Texture>("background.png"))
@@ -39,24 +37,30 @@ class PuzzleView : View() {
                 }
             }
 
-    fun nextRow(): List<Bubble> =
+    /*fun nextRow(): List<Bubble> =
             createRow(bubbles.lastIndex).also { row ->
                 bubbles = bubbles.drop(1) + listOf(row)
             }
 
-    fun removeBubble(bubble: Bubble) {
-        bubbles = bubbles.map { row -> row - bubble }
-    }
+     fun removeBubble(bubble: Bubble) {
+         bubbles = bubbles.map { row -> row - bubble }
+     }
+ 
+     fun createLabel(number: Int) =
+             Label(" x $number", Scene2DSkin.defaultSkin).apply {
+                 centerPosition(288f, 192f)
+                 x += 10f
+             }
+ 
+     fun createBubble(type: Pair<Int, Int>) = loader.load(type).apply {
+         centerPosition(288f, 192f)
+         x -= 25f
+     }*/
 
-    fun createLabel(number: Int) =
-            Label(" x $number", Scene2DSkin.defaultSkin).apply {
-                centerPosition(288f, 192f)
-                x += 10f
-            }
-
-    fun createBubble(type: Pair<Int, Int>) = loader.load(type).apply {
-        centerPosition(288f, 192f)
-        x -= 25f
+    override fun touchDown(screenX: Int, screenY: Int,
+                           pointer: Int, button: Int): Boolean {
+        onTouchDown(this, screenX, Values.height.toInt() - screenY)
+        return true
     }
 }
 
