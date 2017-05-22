@@ -44,13 +44,13 @@ class MapController(val onTurnEnd: () -> Unit,
                 pointer + (Actions.run { onTurnEnd() }
                         then delay(0.5f) then Actions.run { resume() })
             }
-        } then addBubbleAction(type, x, y) then delay(0.3f) then when (type) {
+        } then addBubbleAction(type, x, y) then when (type) {
             BubbleType.RED.position -> moveAction(-tileSize)
             BubbleType.BLUE.position -> moveAction(tileSize)
             BubbleType.GREEN.position -> movePointerAction(tileSize)
             BubbleType.Purple.position -> movePointerAction(-tileSize)
             else -> error("")
-        } then delay(0.4f)
+        } then delay(0.2f)
         pointer + (delay(if (pointer.hasActions()) 0.2f else 0f)
                 then repeat(size, repeatAction)
                 then Actions.run { onTurnEnd() } then delay(0.5f)
@@ -87,7 +87,7 @@ class MapController(val onTurnEnd: () -> Unit,
 
     private fun moveAction(x: Float) = view.run {
         Actions.run {
-            if (x < 0 &&
+            if (x < 0 && 
                     tiles.children.none { it.x > 52 + 8 * tileSize - 5 }) {
                 addNewCol()
             }
