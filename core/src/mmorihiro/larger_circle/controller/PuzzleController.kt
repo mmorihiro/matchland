@@ -2,19 +2,20 @@ package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.Actions.delay
-import com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import ktx.actors.alpha
 import ktx.actors.minus
 import ktx.actors.plus
 import ktx.actors.then
-import mmorihiro.larger_circle.model.PuzzleModel
 import mmorihiro.larger_circle.view.PuzzleView
 
 
 class PuzzleController(
         val onHit: (Int, Pair<Int, Int>, () -> Unit) -> Unit) : Controller {
-    override val view = PuzzleView(this::touchAction).apply {
+    override val view = PuzzleView(
+            ::touchAction,
+            ::onTouchDragged,
+            { view -> onTouchUp(view, this::showAction) }).apply {
         this + backGround
         this + puzzleBackGround
         this + bubbleGroup
@@ -39,29 +40,12 @@ class PuzzleController(
         }
     }
 
-    private fun touchAction(view: PuzzleView, x: Int, y: Int) = view.run {
-        val bubble = bubbles[y / tileSize.toInt()][x / tileSize.toInt()]
-        val points = bubbles.mapIndexed { yIndex, row ->
-            row.mapIndexed {
-                xIndex, bubble ->
-                (xIndex to yIndex) to bubble.type
-            }
-                    .filter { it.second == bubble.type }
-                    .filterNot { it.first.second == 4 }
-                    .map { it.first }
-        }.flatten()
-        bubbles.forEach { it.forEach { it.alpha = 0.6f } }
-        PuzzleModel().sameTypeGroup(points).find {
-            it.contains(((bubble.x + 8) / tileSize).toInt()
-                    to ((bubble.y + 8) / tileSize).toInt())
-        }!!.forEach { (x, y) -> bubbles[y][x].alpha = 1.0f }
-    }
-
-    /*private fun showAction(view: PuzzleView,
-                           type: Pair<Int, Int>, size: Int) = view.run {
+    private fun showAction(view: PuzzleView,
+                           type: Pair<Int, Int>, size: Int): Unit = view.run {
         cover.alpha = 0f
         this + cover
         cover + (delay(0.2f) then fadeIn(0.2f) then Actions.run {
+            resetBubbles()
             val label = createLabel(size)
             val bubble = createBubble(type)
             bubble + (fadeAction() then Actions.run {
@@ -81,5 +65,5 @@ class PuzzleController(
 
     fun resume() {
         view - view.cover
-    }*/
+    }
 }
