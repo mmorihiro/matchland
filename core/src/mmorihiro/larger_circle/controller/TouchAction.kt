@@ -59,14 +59,25 @@ fun onTouchDragged(view: PuzzleView, x: Int, y: Int): Unit = view.run {
     connectEvent?.let {
         val point = coordinateToPoint(x, y)
         val bubble = getBubbleFromPoint(point)
-        if (it.sameTypeGroup.contains(point)
-                && !it.connectedBubbles.contains(point)
-                && PuzzleModel().getAround(point,
-                listOf(it.connectedBubbles.last())).isNotEmpty()
-                && bubble.circle().contains(x.toFloat(), y.toFloat())) {
+        if (it.connectedBubbles.size >= 2 && point ==
+                it.connectedBubbles[it.connectedBubbles.lastIndex - 1]) {
+            getBubbleFromPoint(it.connectedBubbles.last()).alpha = 0.6f
+            connectEvent =
+                    it.copy(connectedBubbles = it.connectedBubbles.dropLast(1))
+        }
+        if (canConnect(it, point, bubble, x, y)) {
             bubble.alpha = 1.0f
             connectEvent =
                     it.copy(connectedBubbles = it.connectedBubbles + point)
         }
     }
 }
+
+private fun canConnect(event: ConnectEvent, point: Point,
+                       bubble: Bubble, x: Int, y: Int): Boolean =
+        event.sameTypeGroup.contains(point)
+                && !event.connectedBubbles.contains(point)
+                && PuzzleModel().getAround(point,
+                listOf(event.connectedBubbles.last())).isNotEmpty()
+                && bubble.circle().contains(x.toFloat(), y.toFloat())
+
