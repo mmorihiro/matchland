@@ -11,9 +11,9 @@ import mmorihiro.larger_circle.view.PuzzleView
 fun touchAction(view: PuzzleView, x: Int, y: Int) = view.run {
     val touchedPoint = coordinateToPoint(x, y)
     val touchedBubble = getBubbleFromPoint(touchedPoint)
-    val points = bubbles.mapIndexed { yIndex, row ->
+    val points = bubbles.mapIndexed { xIndex, row ->
         row.mapIndexed {
-            xIndex, bubble ->
+            yIndex, bubble ->
             (xIndex to yIndex) to bubble.type
         }
                 .filter { it.second == touchedBubble.type }
@@ -38,8 +38,8 @@ private fun touchEffect(view: PuzzleView, sameTypeGroup: Set<Point>,
         }
     }
     sameTypeGroup.forEach { (x, y) ->
-        bubbles[y][x].color = Color.WHITE
-        bubbles[y][x].alpha = 0.7f
+        bubbles[x][y].color = Color.WHITE
+        bubbles[x][y].alpha = 0.7f
     }
     touchedBubble.alpha = 1.0f
 }
@@ -80,4 +80,3 @@ private fun canConnect(event: ConnectEvent, point: Point,
                 && PuzzleModel().getAround(point,
                 listOf(event.connectedBubbles.last())).isNotEmpty()
                 && bubble.circle().contains(x.toFloat(), y.toFloat())
-
