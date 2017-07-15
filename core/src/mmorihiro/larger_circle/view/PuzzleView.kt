@@ -17,7 +17,6 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
     val puzzleBackGround = Image(asset<Texture>("background.png"))
     val loader = LoadBubbles(32, "bubbles.png")
     var bubbles = (0..5).map { index -> createRow(index) }
-        private set
     var bubbleGroup = Group()
     var connectEvent: ConnectEvent? = null
 

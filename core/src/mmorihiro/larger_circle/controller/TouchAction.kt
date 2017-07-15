@@ -1,7 +1,6 @@
 package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.graphics.Color
-import ktx.actors.alpha
 import mmorihiro.larger_circle.model.Point
 import mmorihiro.larger_circle.model.PuzzleModel
 import mmorihiro.larger_circle.view.Bubble
@@ -25,23 +24,11 @@ fun touchAction(view: PuzzleView, x: Int, y: Int) = view.run {
                 to ((touchedBubble.y + 8) / tileSize).toInt())
     }!!
     view.connectEvent = ConnectEvent(listOf(touchedPoint), sameTypeGroup)
-    touchEffect(view, sameTypeGroup, touchedBubble)
+    touchEffect(touchedBubble)
 }
 
-private fun touchEffect(view: PuzzleView, sameTypeGroup: Set<Point>,
-                        touchedBubble: Bubble) = view.run {
-    val color = Color(0.4f, 0.4f, 0.4f, 0.7f)
-    bubbles.forEach {
-        it.forEach {
-            it.color = color
-            it.alpha = 0.6f
-        }
-    }
-    sameTypeGroup.forEach { (x, y) ->
-        bubbles[x][y].color = Color.WHITE
-        bubbles[x][y].alpha = 0.7f
-    }
-    touchedBubble.alpha = 1.0f
+private fun touchEffect(bubble: Bubble) {
+    bubble.color = Color(0.4f, 0.4f, 0.4f, 0.7f)
 }
 
 fun onTouchUp(view: PuzzleView,
@@ -50,8 +37,11 @@ fun onTouchUp(view: PuzzleView,
         view.connectEvent = null
         val size = connectedBubbles.size
         if (size == 1) view.resetBubbles()
-        else onHit(view, view.getBubbleFromPoint(
-                connectedBubbles.first()).type, size)
+        else {
+            connectedBubbles.forEach { view.getBubbleFromPoint(it).remove() }
+            onHit(view, view.getBubbleFromPoint(
+                    connectedBubbles.first()).type, size)
+        }
     }
 }
 
@@ -59,14 +49,15 @@ fun onTouchDragged(view: PuzzleView, x: Int, y: Int): Unit = view.run {
     connectEvent?.let {
         val point = coordinateToPoint(x, y)
         val bubble = getBubbleFromPoint(point)
+        // やり直す時
         if (it.connectedBubbles.size >= 2 && point ==
                 it.connectedBubbles[it.connectedBubbles.lastIndex - 1]) {
-            getBubbleFromPoint(it.connectedBubbles.last()).alpha = 0.6f
+            getBubbleFromPoint(it.connectedBubbles.last()).color = Color.WHITE
             connectEvent =
                     it.copy(connectedBubbles = it.connectedBubbles.dropLast(1))
         }
         if (canConnect(it, point, bubble, x, y)) {
-            bubble.alpha = 1.0f
+            touchEffect(bubble)
             connectEvent =
                     it.copy(connectedBubbles = it.connectedBubbles + point)
         }
