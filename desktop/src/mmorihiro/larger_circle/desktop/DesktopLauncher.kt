@@ -14,7 +14,6 @@ object DesktopLauncher {
             height = Values.height.toInt()
             title = "BubbleRoad"
             initialBackgroundColor = Color.WHITE
-            resizable = false
         }
         
         LwjglApplication(MainListener(), config)

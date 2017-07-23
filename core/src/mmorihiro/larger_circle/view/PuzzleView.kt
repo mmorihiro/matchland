@@ -70,15 +70,15 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
 
     override fun touchDragged(screenX: Int, screenY: Int,
                               pointer: Int): Boolean {
-        val y = Values.height.toInt() - screenY
-        if (y < tileSize * 4) onTouchDragged(this, screenX, y)
+        val pos = screenPosToWorldPos(screenX, screenY)
+        onTouchDragged(this, pos.first, pos.second)
         return false
     }
 
     override fun touchDown(screenX: Int, screenY: Int,
                            pointer: Int, button: Int): Boolean {
-        val y = Values.height.toInt() - screenY
-        if (y < tileSize * 4) onTouchDown(this, screenX, y)
+        val pos = screenPosToWorldPos(screenX, screenY)
+        onTouchDown(this, pos.first, pos.second)
         return true
     }
 }
