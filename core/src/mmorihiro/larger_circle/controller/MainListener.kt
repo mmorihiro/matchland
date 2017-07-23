@@ -67,6 +67,10 @@ class MainListener : ApplicationAdapter() {
         currentViews.forEach(Stage::draw)
     }
 
+    override fun resize(width: Int, height: Int) {
+        currentViews.forEach { it.vp.update(width, height) }
+    }
+
     override fun dispose() {
         unload("upBackground.png")
         unload("background.png")

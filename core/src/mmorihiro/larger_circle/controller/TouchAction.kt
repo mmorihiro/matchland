@@ -9,7 +9,13 @@ import mmorihiro.larger_circle.view.PuzzleView
 
 fun touchAction(view: PuzzleView, x: Int, y: Int) = view.run {
     val touchedPoint = coordinateToPoint(x, y)
-    val touchedBubble = getBubbleFromPoint(touchedPoint)
+
+    val touchedBubble = try {
+        getBubbleFromPoint(touchedPoint)
+    } catch (e : java.lang.IndexOutOfBoundsException) {
+        return
+    }
+
     val points = bubbles.mapIndexed { xIndex, row ->
         row.mapIndexed {
             yIndex, bubble ->
