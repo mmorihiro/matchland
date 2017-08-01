@@ -13,28 +13,32 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
                  val onTouchDragged: (PuzzleView, Int, Int) -> Unit,
                  val onTouchUp: (PuzzleView) -> Unit) : View() {
     val tileSize = 48f
-    val backGround = Image(asset<Texture>("upBackground.png"))
-    val puzzleBackGround = Image(asset<Texture>("background.png"))
-    val loader = LoadBubbles(32, "bubbles.png")
-    var bubbles = (0..5).map { index -> createRow(index) }
-    var bubbleGroup = Group()
+    val bottom = 40
+    val rowSize = 6
+    val colSize = 8
+    val padding = 6
+    val backGround = Image(asset<Texture>("background.png"))
+    val loader = ItemLoader(32, "items.png")
+    var items = (0..rowSize - 1).map { index -> createRow(index) }
+    var itemLayer = Group()
     var connectEvent: ConnectEvent? = null
 
-    private fun createRow(xIndex: Int): List<Bubble> =
-            (0..3).map { yIndex ->
-                loader.loadRandom().apply {
-                    x = xIndex * tileSize + 8
-                    y = yIndex * tileSize + 8
-                }
+    private fun createRow(xIndex: Int): List<Item> {
+        return (0..colSize - 1).map { yIndex ->
+            loader.loadRandom().apply {
+                x = xIndex * tileSize + padding
+                y = yIndex * tileSize + padding + bottom
             }
+        }
+    }
 
     fun coordinateToPoint(x: Int, y: Int): Point =
-            x / tileSize.toInt() to y / tileSize.toInt()
+            x / tileSize.toInt() to (y - bottom) / tileSize.toInt()
 
-    fun getBubbleFromPoint(point: Point) = bubbles[point.first][point.second]
+    fun getBubbleFromPoint(point: Point) = items[point.first][point.second]
 
     fun resetBubbles() {
-        bubbles.forEach {
+        items.forEach {
             it.forEach {
                 it.color = Color.WHITE
                 it.alpha = 1.0f
@@ -42,13 +46,13 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
         }
     }
 
-    /*fun nextRow(): List<Bubble> =
-            createRow(bubbles.lastIndex).also { row ->
-                bubbles = bubbles.drop(1) + listOf(row)
+    /*fun nextRow(): List<Item> =
+            createRow(items.lastIndex).also { row ->
+                items = items.drop(1) + listOf(row)
             }
 
-     fun removeBubble(bubble: Bubble) {
-         bubbles = bubbles.map { row -> row - bubble }
+     fun removeBubble(bubble: Item) {
+         items = items.map { row -> row - bubble }
      }
  
      fun createLabel(number: Int) =

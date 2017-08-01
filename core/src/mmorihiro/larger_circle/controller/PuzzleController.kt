@@ -8,16 +8,14 @@ import ktx.actors.plus
 import mmorihiro.larger_circle.view.PuzzleView
 
 
-class PuzzleController(
-        val onHit: (Int, Pair<Int, Int>, () -> Unit) -> Unit) : Controller {
+class PuzzleController : Controller {
     override val view = PuzzleView(
             ::touchAction,
             ::onTouchDragged,
-            { view -> onTouchUp(view, { _, _, _ -> addNewBubbles() }) }).apply {
+            { view -> onTouchUp(view, { _, _, _ -> addNewItems() }) }).apply {
         this + backGround
-        this + puzzleBackGround
-        this + bubbleGroup
-        bubbles.forEach { it.forEach { bubbleGroup + it } }
+        this + itemLayer
+        items.forEach { it.forEach { itemLayer + it } }
     }
 
     /*private fun showAction(view: PuzzleView,
@@ -43,17 +41,17 @@ class PuzzleController(
     private fun fadeAction() =
             delay(0.7f) then parallel(fadeOut(0.3f), moveBy(0f, 10f, 0.3f))*/
 
-    fun addNewBubbles(): Unit = view.run {
-        bubbles = bubbles.mapIndexed { xIndex, it ->
+    fun addNewItems(): Unit = view.run {
+        items = items.mapIndexed { xIndex, it ->
             val remains = it.filter { it.color == Color.WHITE }
-            if (remains.size == 4) remains
-            else remains + (0..3 - remains.size).map {
+            if (remains.size == colSize) remains
+            else remains + (0..colSize - 1 - remains.size).map {
                 loader.loadRandom().apply {
-                    x = xIndex * tileSize + 8
-                    y = tileSize * (4 + it)
+                    x = xIndex * tileSize + padding
+                    y = tileSize * (colSize + it) + bottom
                     alpha = 0f
                     this + Actions.fadeIn(0.15f)
-                    bubbleGroup + this
+                    itemLayer + this
                 }
             }
         }
@@ -61,17 +59,13 @@ class PuzzleController(
     }
 
     private fun moveToRightPoint() = view.run {
-        bubbles.forEach {
-            it.forEachIndexed { index, bubble ->
-                val toY = index * tileSize + 8
-                bubble + Actions.moveTo(bubble.x, toY,
-                        0.3f * Math.abs(bubble.y - toY) / tileSize,
-                        Interpolation.swingOut)
+        items.forEach {
+            it.forEachIndexed { index, item ->
+                val toY = index * tileSize + padding + bottom
+                item + Actions.moveTo(item.x, toY,
+                        0.2f * Math.abs(item.y - toY) / tileSize,
+                        Interpolation.circleOut)
             }
         }
-    }
-
-    fun resume() {
-
     }
 }
