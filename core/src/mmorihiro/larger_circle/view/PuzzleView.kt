@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.alpha
 import ktx.assets.asset
 import mmorihiro.larger_circle.model.Point
-import mmorihiro.larger_circle.model.Values
 
 class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
                  val onTouchDragged: (PuzzleView, Int, Int) -> Unit,
@@ -16,26 +15,33 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
     val bottom = 40
     val rowSize = 6
     val colSize = 8
-    val padding = 6
+    val padding = 8
     val backGround = Image(asset<Texture>("background.png"))
     val loader = ItemLoader(32, "items.png")
-    var items = (0..rowSize - 1).map { index -> createRow(index) }
+    var items = (0..colSize - 1).map { index -> createRow(index) }
     var itemLayer = Group()
     var connectEvent: ConnectEvent? = null
 
-    private fun createRow(xIndex: Int): List<Item> {
-        return (0..colSize - 1).map { yIndex ->
+    private fun createRow(yIndex: Int): List<Item> {
+        val size = if (yIndex % 2 == 0) rowSize - 2 else rowSize - 1
+        return (0..size).map { xIndex ->
             loader.loadRandom().apply {
-                x = xIndex * tileSize + padding
+                x = xIndex * tileSize + padding +
+                        if (yIndex % 2 == 0) tileSize / 2 else 0f
                 y = yIndex * tileSize + padding + bottom
             }
         }
     }
 
-    fun coordinateToPoint(x: Int, y: Int): Point =
-            x / tileSize.toInt() to (y - bottom) / tileSize.toInt()
+    fun coordinateToPoint(x: Int, y: Int): Point {
+        val yPoint = (y - bottom) / tileSize.toInt()
+        val xPoint =
+                (if (yPoint % 2 == 0) x - tileSize.toInt() / 2 else x) /
+                        tileSize.toInt()
+        return xPoint to yPoint
+    }
 
-    fun getBubbleFromPoint(point: Point) = items[point.first][point.second]
+    fun getItemFromPoint(point: Point) = items[point.second][point.first]
 
     fun resetBubbles() {
         items.forEach {

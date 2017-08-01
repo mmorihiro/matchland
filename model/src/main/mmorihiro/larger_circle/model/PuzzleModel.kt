@@ -16,10 +16,16 @@ class PuzzleModel {
 
     fun getAround(point: Point, others: List<Point>): Set<Point> =
             others.filter {
-                setOf(1 to 0, 1 to 1, 0 to 1, -1 to 1, 0 to -1,
-                        -1 to 0, -1 to -1, -1 to 0, 1 to -1).any { (x, y) ->
+                val pattern = setOf(1 to 0, 0 to 1, 0 to -1, -1 to 0) +
+                        (if (point.second % 2 == 1) setOf(-1 to 1, -1 to -1)
+                        else setOf(1 to 1, 1 to -1))
+                pattern.any { (x, y) ->
                     point.first + x to point.second + y == it
                 }
-            }.toSet()
+            }.toSet().apply {
+                if (others.size == 1 && this.isEmpty()) {
+                    println(point to others.first())
+                }
+            }
 }
 
