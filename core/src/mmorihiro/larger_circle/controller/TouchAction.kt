@@ -54,7 +54,13 @@ fun onTouchUp(view: PuzzleView,
 fun onTouchDragged(view: PuzzleView, x: Int, y: Int): Unit = view.run {
     connectEvent?.let {
         val point = coordinateToPoint(x, y)
-        val bubble = getBubbleFromPoint(point)
+
+        val bubble = try { 
+            getBubbleFromPoint(point) 
+        } catch (e : java.lang.IndexOutOfBoundsException) { 
+            return 
+        }
+
         // やり直す時
         if (it.connectedBubbles.size >= 2 && point ==
                 it.connectedBubbles[it.connectedBubbles.lastIndex - 1]) {
