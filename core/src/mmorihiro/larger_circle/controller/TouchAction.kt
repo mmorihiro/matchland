@@ -11,15 +11,15 @@ fun touchAction(view: PuzzleView, x: Int, y: Int) = view.run {
     val touchedPoint = coordinateToPoint(x, y)
 
     val touchedItem = try {
-        getBubbleFromPoint(touchedPoint)
-    } catch (e: java.lang.IndexOutOfBoundsException) {
+        getItemFromPoint(touchedPoint)
+    } catch (e: IndexOutOfBoundsException) {
         return
     }
 
     // 同じ種類のアイテムの座標のリスト
-    val points = items.mapIndexed { xIndex, row ->
+    val points = items.mapIndexed { yIndex, row ->
         row.mapIndexed {
-            yIndex, item ->
+            xIndex, item ->
             (xIndex to yIndex) to item.type
         }
                 .filter { it.second == touchedItem.type }
@@ -43,8 +43,8 @@ fun onTouchUp(view: PuzzleView,
         val size = connectedBubbles.size
         if (size == 1) view.resetBubbles()
         else {
-            connectedBubbles.forEach { view.getBubbleFromPoint(it).remove() }
-            onHit(view, view.getBubbleFromPoint(
+            connectedBubbles.forEach { view.getItemFromPoint(it).remove() }
+            onHit(view, view.getItemFromPoint(
                     connectedBubbles.first()).type, size)
         }
     }
@@ -53,16 +53,16 @@ fun onTouchUp(view: PuzzleView,
 fun onTouchDragged(view: PuzzleView, x: Int, y: Int): Unit = view.run {
     connectEvent?.let {
         val point = coordinateToPoint(x, y)
-        val bubble = getBubbleFromPoint(point)
+        val item = getItemFromPoint(point)
         // やり直す時
         if (it.connectedBubbles.size >= 2 && point ==
                 it.connectedBubbles[it.connectedBubbles.lastIndex - 1]) {
-            getBubbleFromPoint(it.connectedBubbles.last()).color = Color.WHITE
+            getItemFromPoint(it.connectedBubbles.last()).color = Color.WHITE
             connectEvent =
                     it.copy(connectedBubbles = it.connectedBubbles.dropLast(1))
         }
-        if (canConnect(it, point, bubble, x, y)) {
-            touchEffect(bubble)
+        if (canConnect(it, point, item, x, y)) {
+            touchEffect(item)
             connectEvent =
                     it.copy(connectedBubbles = it.connectedBubbles + point)
         }
@@ -73,6 +73,7 @@ private fun canConnect(event: ConnectEvent, point: Point,
                        item: Item, x: Int, y: Int): Boolean =
         event.sameTypeGroup.contains(point)
                 && !event.connectedBubbles.contains(point)
-                && PuzzleModel().getAround(point,
-                listOf(event.connectedBubbles.last())).isNotEmpty()
+                // 接しているかどうか
+                && PuzzleModel().getAround(event.connectedBubbles.last(),
+                listOf(point)).isNotEmpty()
                 && item.circle().contains(x.toFloat(), y.toFloat())
