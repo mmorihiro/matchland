@@ -3,38 +3,37 @@ package mmorihiro.larger_circle.controller
 import com.badlogic.gdx.graphics.Color
 import mmorihiro.larger_circle.model.Point
 import mmorihiro.larger_circle.model.PuzzleModel
-import mmorihiro.larger_circle.view.Bubble
 import mmorihiro.larger_circle.view.ConnectEvent
+import mmorihiro.larger_circle.view.Item
 import mmorihiro.larger_circle.view.PuzzleView
 
 fun touchAction(view: PuzzleView, x: Int, y: Int) = view.run {
     val touchedPoint = coordinateToPoint(x, y)
 
-    val touchedBubble = try {
+    val touchedItem = try {
         getBubbleFromPoint(touchedPoint)
-    } catch (e : java.lang.IndexOutOfBoundsException) {
+    } catch (e: java.lang.IndexOutOfBoundsException) {
         return
     }
 
-    val points = bubbles.mapIndexed { xIndex, row ->
+    // 同じ種類のアイテムの座標のリスト
+    val points = items.mapIndexed { xIndex, row ->
         row.mapIndexed {
-            yIndex, bubble ->
-            (xIndex to yIndex) to bubble.type
+            yIndex, item ->
+            (xIndex to yIndex) to item.type
         }
-                .filter { it.second == touchedBubble.type }
-                .filterNot { it.first.second == 4 }
+                .filter { it.second == touchedItem.type }
                 .map { it.first }
     }.flatten()
     val sameTypeGroup = PuzzleModel().sameTypeGroup(points).find {
-        it.contains(((touchedBubble.x + 8) / tileSize).toInt()
-                to ((touchedBubble.y + 8) / tileSize).toInt())
+        it.contains(touchedPoint)
     }!!
     view.connectEvent = ConnectEvent(listOf(touchedPoint), sameTypeGroup)
-    touchEffect(touchedBubble)
+    touchEffect(touchedItem)
 }
 
-private fun touchEffect(bubble: Bubble) {
-    bubble.color = Color(0.4f, 0.4f, 0.4f, 0.7f)
+private fun touchEffect(item: Item) {
+    item.color = Color(0.5f, 0.5f, 0.5f, 0.7f)
 }
 
 fun onTouchUp(view: PuzzleView,
@@ -71,9 +70,9 @@ fun onTouchDragged(view: PuzzleView, x: Int, y: Int): Unit = view.run {
 }
 
 private fun canConnect(event: ConnectEvent, point: Point,
-                       bubble: Bubble, x: Int, y: Int): Boolean =
+                       item: Item, x: Int, y: Int): Boolean =
         event.sameTypeGroup.contains(point)
                 && !event.connectedBubbles.contains(point)
                 && PuzzleModel().getAround(point,
                 listOf(event.connectedBubbles.last())).isNotEmpty()
-                && bubble.circle().contains(x.toFloat(), y.toFloat())
+                && item.circle().contains(x.toFloat(), y.toFloat())

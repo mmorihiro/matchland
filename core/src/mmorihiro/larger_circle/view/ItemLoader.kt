@@ -6,26 +6,26 @@ import com.badlogic.gdx.math.MathUtils
 import ktx.assets.asset
 
 
-class LoadBubbles(val bubbleSize: Int, filePath: String) {
+class ItemLoader(val size: Int, filePath: String) {
     val sheet = asset<Texture>(filePath)
     val tiles: Array<Array<TextureRegion>> =
-            TextureRegion.split(sheet, bubbleSize, bubbleSize)
+            TextureRegion.split(sheet, size, size)
 
-    fun load(positions: List<Pair<Int, Int>>, size: Int): List<Bubble> {
+    fun load(positions: List<Pair<Int, Int>>, size: Int): List<Item> {
         assert(positions.size == size)
         return (0..(size - 1)).map {
             load(positions[it])
         }
     }
 
-    fun load(position: Pair<Int, Int>): Bubble {
+    fun load(position: Pair<Int, Int>): Item {
         val (x, y) = position
-        return Bubble(tiles[x][y], x to y)
+        return Item(tiles[x][y], x to y)
     }
 
-    fun loadRandom(): Bubble {
-        val row = sheet.width / bubbleSize
-        val col = sheet.height / bubbleSize
+    fun loadRandom(): Item {
+        val row = sheet.width / size
+        val col = sheet.height / size
         return load(MathUtils.random(col - 1) to MathUtils.random(row - 1))
     }
 }

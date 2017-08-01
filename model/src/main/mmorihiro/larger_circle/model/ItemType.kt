@@ -1,7 +1,7 @@
 package mmorihiro.larger_circle.model
 
 
-enum class BubbleType {
+enum class ItemType {
     RED {
         override val position = 0 to 0
     },
