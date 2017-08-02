@@ -22,43 +22,24 @@ class MainListener : ApplicationAdapter() {
     override fun create() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("ui/uiskin.json")
-        val barView = BarController(30, this::record).view
-        val mapController = MapController(barView::onTurnEnd, barView::onGet)
-        val puzzleView = PuzzleController(mapController::onHit).view
-        val mapView = mapController.view
+        val puzzleView = PuzzleController().view
         InputMultiplexer().run {
             addProcessor(puzzleView)
-            addProcessor(mapView)
             Gdx.input.inputProcessor = this
         }
-        currentViews = listOf(puzzleView, barView, mapView)
+        currentViews = listOf(puzzleView)
     }
 
     private fun loadAssets() {
         Assets.manager = AssetManager()
-        load<Texture>("upBackground.png")
         load<Texture>("background.png")
-        load<Texture>("cover.png")
-        load<Texture>("bar.png")
-        load<Texture>("bubbles.png")
+        load<Texture>("items.png")
         load<Texture>("pointer.png")
-        load<Texture>("tile.png")
         load<Texture>("star.png")
         load<Texture>("starBar.png")
         load<Texture>("lifeBar.png")
         load<Skin>("ui/uiskin.json")
         Assets.manager.finishLoading()
-    }
-
-    fun record(star: Int) {
-        load<Texture>("recordBack.png")
-        load<Texture>("window.png")
-        load<Texture>("starFrame.png")
-        load<Texture>("recordStar.png")
-        Assets.manager.finishLoading()
-        currentViews += RecordController(star, {
-            currentViews.dropLast(1).forEach { it.pause = true }
-        }).view
     }
 
     override fun render() {
@@ -74,13 +55,9 @@ class MainListener : ApplicationAdapter() {
     }
 
     override fun dispose() {
-        unload("upBackground.png")
         unload("background.png")
-        unload("cover.png")
-        unload("bar.png")
-        unload("bubbles.png")
+        unload("items.png")
         unload("pointer.png")
-        unload("tile.png")
         unload("star.png")
         unload("starBar.png")
         unload("lifeBar.png")
