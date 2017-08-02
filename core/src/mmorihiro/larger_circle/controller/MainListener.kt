@@ -34,6 +34,7 @@ class MainListener : ApplicationAdapter() {
         Assets.manager = AssetManager()
         load<Texture>("background.png")
         load<Texture>("items.png")
+        load<Texture>("bubble.png")
         load<Texture>("pointer.png")
         load<Texture>("star.png")
         load<Texture>("starBar.png")
@@ -57,6 +58,7 @@ class MainListener : ApplicationAdapter() {
     override fun dispose() {
         unload("background.png")
         unload("items.png")
+        unload("bubble.png")
         unload("pointer.png")
         unload("star.png")
         unload("starBar.png")
