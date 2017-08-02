@@ -14,6 +14,7 @@ class PuzzleController : Controller {
             { view -> onTouchUp(view, { _, _, _ -> addNewItems() }) }).apply {
         this + backGround
         this + itemLayer
+        bubbles.forEach { it.forEach { itemLayer + it } }
         items.forEach { it.forEach { itemLayer + it } }
     }
 
@@ -22,7 +23,7 @@ class PuzzleController : Controller {
             row.map { existingItem ->
                 if (existingItem.color != Color.WHITE) {
                     existingItem.clear()
-                    loader.loadRandom().apply {
+                    itemLoader.loadRandom().apply {
                         x = existingItem.x
                         y = existingItem.y
                         alpha = 0f
@@ -32,5 +33,6 @@ class PuzzleController : Controller {
                 } else existingItem
             }
         }
+        resetBubbles()
     }
 }
