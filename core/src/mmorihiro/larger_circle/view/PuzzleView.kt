@@ -10,10 +10,10 @@ import mmorihiro.larger_circle.model.Point
 class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
                  val onTouchDragged: (PuzzleView, Int, Int) -> Unit,
                  val onTouchUp: (PuzzleView) -> Unit) : View() {
-    val tileSize = 48f
-    val bottom = 53
-    val rowSize = 6
-    val colSize = 8
+    val tileSize = 51f
+    val bottom = 55
+    val rowSize = 5
+    val colSize = 7
     val padding = 8
     val backGround = Image(asset<Texture>("background.png"))
     val itemLoader = ImageLoader(32, "items.png")
@@ -29,27 +29,18 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
     var itemLayer = Group()
     var connectEvent: ConnectEvent? = null
 
-    private fun createRow(yIndex: Int): List<MyImage> {
-        val size = if (yIndex % 2 == 0) rowSize - 2 else rowSize - 1
-        return (0..size).map { xIndex ->
-            MyImage(Image(asset<Texture>("bubble.png")), 0 to 0).apply {
-                x = xIndex * tileSize +
-                        if (yIndex % 2 == 0) tileSize / 2 else 0f
-                y = yIndex * tileSize + bottom - 7 * yIndex
-                color = if (yIndex < 4) Color.GREEN else Color.GOLD
-            }
+    private fun createRow(yIndex: Int) = (0..rowSize - 1).map { xIndex ->
+        MyImage(Image(asset<Texture>("tile.png")), 0 to 0).apply {
+            x = 17 + xIndex * tileSize
+            y = yIndex * tileSize + bottom
+            color = if (yIndex < 3)
+                Color(127 / 255f, 255 / 255f, 127 / 255f, 1f)
+            else Color(255 / 255f, 193 / 255f, 132 / 255f, 1f)
         }
     }
 
-    fun coordinateToPoint(x: Int, y: Int): Point {
-        val yPoint = ((y - bottom) / (tileSize - 7)).let {
-            if (it > 0) it.toInt() else -1
-        }
-        val xPoint =
-                (if (yPoint % 2 == 0) x - tileSize.toInt() / 2 else x) /
-                        tileSize.toInt()
-        return xPoint to yPoint
-    }
+    fun coordinateToPoint(x: Int, y: Int): Point =
+            x / tileSize.toInt() to (y - bottom) / tileSize.toInt()
 
     fun resetBubbles() {
         items.forEach { it.forEach { it.color = Color.WHITE } }

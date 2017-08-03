@@ -2,17 +2,14 @@ package mmorihiro.larger_circle.model
 
 
 enum class ItemType {
-    RED {
+    FIRE {
         override val position = 0 to 0
     },
-    GREEN {
+    THUNDER {
         override val position = 0 to 1
     },
-    BLUE {
+    WATER {
         override val position = 0 to 2
-    },
-    Purple {
-        override val position = 0 to 3
     };
 
     abstract val position: Pair<Int, Int>
