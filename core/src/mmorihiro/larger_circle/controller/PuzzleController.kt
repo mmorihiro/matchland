@@ -11,10 +11,17 @@ class PuzzleController : Controller {
     override val view = PuzzleView(
             ::touchAction,
             ::onTouchDragged,
-            { view -> onTouchUp(view, { _, _, _ -> addNewItems() }) }).apply {
+            { view ->
+                onTouchUp(view, { event ->
+                    iconReaction(view, event)
+                    addNewItems()
+                })
+            }).apply {
         this + backGround
         this + itemLayer
-        bubbles.forEach { it.forEach { itemLayer + it } }
+        bubbles.forEach {
+            it.forEach { itemLayer + it }
+        }
         items.forEach { it.forEach { itemLayer + it } }
     }
 

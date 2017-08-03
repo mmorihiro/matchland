@@ -36,15 +36,16 @@ private fun touchEffect(image: MyImage) {
 }
 
 fun onTouchUp(view: PuzzleView,
-              onHit: (PuzzleView, Pair<Int, Int>, Int) -> Unit) {
-    view.connectEvent?.let { (connectedBubbles) ->
+              onHit: (ConnectEvent) -> Unit) {
+    view.connectEvent?.let {
         view.connectEvent = null
-        val size = connectedBubbles.size
-        if (size == 1) view.resetBubbles()
+        val size = it.connectedItems.size
+        if (size <= 2) view.resetBubbles()
         else {
-            connectedBubbles.forEach { view.items[it.second][it.first].remove() }
-            val point = connectedBubbles.first()
-            onHit(view, view.items[point.second][point.first].type, size)
+            it.connectedItems.forEach {
+                view.items[it.second][it.first].remove()
+            }
+            onHit(it)
         }
     }
 }
@@ -54,22 +55,22 @@ fun onTouchDragged(view: PuzzleView, x: Int, y: Int): Unit = view.run {
         val point = coordinateToPoint(x, y)
         val item = try {
             items[point.second][point.first]
-        } catch (e: IndexOutOfBoundsException) { 
-            return 
+        } catch (e: IndexOutOfBoundsException) {
+            return
         }
-      
+
         // やり直す時
-        if (it.connectedBubbles.size >= 2 && point ==
-                it.connectedBubbles[it.connectedBubbles.lastIndex - 1]) {
-            val point1 = it.connectedBubbles.last()
+        if (it.connectedItems.size >= 2 && point ==
+                it.connectedItems[it.connectedItems.lastIndex - 1]) {
+            val point1 = it.connectedItems.last()
             items[point1.second][point1.first].color = Color.WHITE
             connectEvent =
-                    it.copy(connectedBubbles = it.connectedBubbles.dropLast(1))
+                    it.copy(connectedItems = it.connectedItems.dropLast(1))
         }
         if (canConnect(it, point, item, x, y)) {
             touchEffect(item)
             connectEvent =
-                    it.copy(connectedBubbles = it.connectedBubbles + point)
+                    it.copy(connectedItems = it.connectedItems + point)
         }
     }
 }
@@ -77,8 +78,9 @@ fun onTouchDragged(view: PuzzleView, x: Int, y: Int): Unit = view.run {
 private fun canConnect(event: ConnectEvent, point: Point,
                        item: MyImage, x: Int, y: Int): Boolean =
         event.sameTypeGroup.contains(point)
-                && !event.connectedBubbles.contains(point)
+                && !event.connectedItems.contains(point)
                 // 接しているかどうか
-                && PuzzleModel().getAround(event.connectedBubbles.last(),
-                listOf(point)).isNotEmpty()
+                && PuzzleModel()
+                .getAround(event.connectedItems.last(), listOf(point))
+                .isNotEmpty()
                 && item.circle().contains(x.toFloat(), y.toFloat())
