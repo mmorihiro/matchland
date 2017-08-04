@@ -44,7 +44,7 @@ class MainListener : ApplicationAdapter() {
     }
 
     override fun render() {
-        Gdx.gl.glClearColor(203 / 255f, 250 / 255f, 255 / 255f, 1f)
+        Gdx.gl.glClearColor(0 / 255f, 136 / 255f, 170 / 255f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         currentViews.forEach { it.act(Gdx.graphics.deltaTime) }
