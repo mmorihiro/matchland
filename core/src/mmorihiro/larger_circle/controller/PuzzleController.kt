@@ -19,7 +19,7 @@ class PuzzleController : Controller {
             }).apply {
         this + backGround
         this + itemLayer
-        bubbles.forEach {
+        tiles.forEach {
             it.forEach { itemLayer + it }
         }
         items.forEach { it.forEach { itemLayer + it } }
