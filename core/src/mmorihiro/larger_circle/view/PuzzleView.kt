@@ -15,10 +15,13 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
     val rowSize = 5
     val colSize = 7
     val padding = 8
+    val fireColor = Color(255 / 255f, 193 / 255f, 132 / 255f, 1f)
+    val thunderColor = Color(255 / 255f, 255 / 255f, 188 / 255f, 1f)
+    val waterColor = Color(147 / 255f, 255 / 255f, 255 / 255f, 0.5f)
     val backGround = Image(asset<Texture>("background.png"))
     val itemLoader = ImageLoader(32, "items.png")
-    var bubbles = (0..colSize - 1).map { index -> createRow(index) }
-    var items = bubbles.map {
+    var tiles = (0..colSize - 1).map { index -> createRow(index) }
+    var items = tiles.map {
         it.map {
             itemLoader.loadRandom().apply {
                 x = it.x + padding
@@ -33,9 +36,11 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
         MyImage(Image(asset<Texture>("tile.png")), 0 to 0).apply {
             x = 17 + xIndex * tileSize
             y = yIndex * tileSize + bottom
-            color = if (yIndex < 3)
-                Color(127 / 255f, 255 / 255f, 127 / 255f, 1f)
-            else Color(255 / 255f, 193 / 255f, 132 / 255f, 1f)
+            color = when (yIndex) {
+                0 -> fireColor
+                colSize - 1 -> thunderColor
+                else -> waterColor
+            }
         }
     }
 
