@@ -36,17 +36,12 @@ private fun touchEffect(image: MyImage) {
 }
 
 fun onTouchUp(view: PuzzleView,
-              onHit: (ConnectEvent) -> Unit) {
+              touchUp: (ConnectEvent) -> Unit) {
     view.connectEvent?.let {
         view.connectEvent = null
         val size = it.connectedItems.size
         if (size <= 2) view.resetBubbles()
-        else {
-            it.connectedItems.forEach {
-                view.items[it.second][it.first].remove()
-            }
-            onHit(it)
-        }
+        else touchUp(it)
     }
 }
 

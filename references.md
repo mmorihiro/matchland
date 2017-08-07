@@ -14,6 +14,9 @@
 - https://sites.google.com/site/closetvx/picture/09
 ## Icon
 - http://icooon-mono.com/
+- https://www.flaticon.com/free-icon/fire_488605#term=fire&page=1&position=24
+- https://www.flaticon.com/free-icon/wave_433541#term=waves&page=1&position=35
+- https://www.flaticon.com/free-icon/flash_222506#term=thunder&page=1&position=1
 ## Freepik
 - http://fr.freepik.com/vecteurs-libre/conception-de-fond-texture_919043.htm#term=textures&page=1&position=13
 - http://www.freepik.com/free-vector/colored-buttons-pack_849231.htm#term=button circle&page=1&position=3
