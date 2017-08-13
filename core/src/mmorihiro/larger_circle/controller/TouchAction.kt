@@ -1,6 +1,8 @@
 package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.MathUtils.random
+import mmorihiro.larger_circle.model.ItemType
 import mmorihiro.larger_circle.model.Point
 import mmorihiro.larger_circle.model.PuzzleModel
 import mmorihiro.larger_circle.view.ConnectEvent
@@ -15,20 +17,43 @@ fun touchAction(view: PuzzleView, x: Int, y: Int) = view.run {
         return
     }
 
+    val sameTypeGroup = sameTypeGroup(view, touchedItem.type, touchedPoint)
+    val point = enemyPoint(view, sameTypeGroup)
+
+    view.connectEvent = ConnectEvent(
+            listOf(touchedPoint), sameTypeGroup,
+            // 敵のアイコン
+            sameTypeGroup(view, try {
+                items[point.second][point.first].type
+            } catch (e: IndexOutOfBoundsException) {
+                return
+            }, point).take(4).toList())
+    touchEffect(touchedItem)
+}
+
+private fun enemyPoint(view: PuzzleView, sameTypeGroup: Set<Point>): Point = view.run {
+    val point = random(rowSize - 1) to random(colSize - 1)
+    if (sameTypeGroup.contains(point) ||
+            items[point.second][point.first].type == ItemType.FIRE.position)
+        enemyPoint(view, sameTypeGroup)
+    else point
+}
+
+private fun sameTypeGroup(view: PuzzleView,
+                          type: Point,
+                          point: Point): Set<Point> = view.run {
     // 同じ種類のアイテムの座標のリスト
     val points = items.mapIndexed { yIndex, row ->
         row.mapIndexed {
             xIndex, item ->
             (xIndex to yIndex) to item.type
         }
-                .filter { it.second == touchedItem.type }
+                .filter { it.second == type }
                 .map { it.first }
     }.flatten()
-    val sameTypeGroup = PuzzleModel().sameTypeGroup(points).find {
-        it.contains(touchedPoint)
+    return PuzzleModel().sameTypeGroup(points).find {
+        it.contains(point)
     }!!
-    view.connectEvent = ConnectEvent(listOf(touchedPoint), sameTypeGroup)
-    touchEffect(touchedItem)
 }
 
 private fun touchEffect(image: MyImage) {

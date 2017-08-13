@@ -8,6 +8,7 @@ import ktx.actors.alpha
 import ktx.actors.plus
 import ktx.actors.then
 import mmorihiro.larger_circle.view.ConnectEvent
+import mmorihiro.larger_circle.view.MyImage
 import mmorihiro.larger_circle.view.PuzzleView
 
 
@@ -17,7 +18,8 @@ class PuzzleController : Controller {
             ::onTouchDragged,
             { view ->
                 onTouchUp(view, { event ->
-                    iconReaction(view, event)
+                    iconReaction(view, event.connectedItems)
+                    iconReaction(view, event.enemy)
                     addNewItems(event)
                 })
             }).apply {
@@ -30,25 +32,45 @@ class PuzzleController : Controller {
     private fun addNewItems(event: ConnectEvent): Unit = view.run {
         val last = event.connectedItems.last()
         val item = items[last.second][last.first]
-        items = items.map { row ->
-            row.map { existingItem ->
-                if (existingItem.color != Color.WHITE) {
-                    val action = moveTo(item.x, item.y, 0.2f) then
-                            Actions.run {
-                                existingItem.remove()
-                            }
-                    existingItem.color = Color.WHITE
-                    existingItem + action
-                    itemLoader.loadRandom().apply {
-                        x = existingItem.x
-                        y = existingItem.y
-                        alpha = 0f
-                        this + fadeIn(0.15f)
-                        itemLayer + this
+        items.forEach { row ->
+            row.filter { it.color != Color.WHITE }
+                    .forEach { existingItem ->
+                        val action = moveTo(item.x, item.y, 0.2f) then
+                                Actions.run {
+                                    existingItem.remove()
+                                }
+                        existingItem.color = Color.WHITE
+                        existingItem + action
+                        val point = coordinateToPoint(
+                                existingItem.x.toInt(), existingItem.y.toInt())
+                        view.items[point.second][point.first] = newItem(existingItem)
                     }
-                } else existingItem
-            }
         }
         resetBubbles()
+        enemyAction(event)
     }
+
+    private fun enemyAction(event: ConnectEvent) {
+        val center = event.enemyPoint.let {
+            view.items[it.second][it.first]
+        }
+        event.enemy.forEach {
+            val item = view.items[it.second][it.first]
+            val action = moveTo(center.x, center.y, 0.2f) then
+                    Actions.run {
+                        item.remove()
+                    }
+            item + action
+            view.items[it.second][it.first] = newItem(item)
+        }
+    }
+
+    private fun newItem(existingItem: MyImage): MyImage =
+            view.itemLoader.loadRandom().apply {
+                x = existingItem.x
+                y = existingItem.y
+                alpha = 0f
+                this + fadeIn(0.15f)
+                view.itemLayer + this
+            }
 }
