@@ -7,12 +7,11 @@ import ktx.actors.then
 import mmorihiro.larger_circle.model.ItemType
 import mmorihiro.larger_circle.model.Point
 import mmorihiro.larger_circle.model.PuzzleModel
-import mmorihiro.larger_circle.view.ConnectEvent
 import mmorihiro.larger_circle.view.PuzzleView
 
 
-fun iconReaction(view: PuzzleView, event: ConnectEvent): Unit = view.run {
-    val last = event.connectedItems.last()
+fun iconReaction(view: PuzzleView, connected: List<Point>): Unit = view.run {
+    val last = connected.last()
     val list = listOf(last) + getAroundPoints(view, last)
     // つなげた数だけプレイヤーの色を増やす
     val lastItem = items[last.second][last.first]
@@ -26,7 +25,7 @@ fun iconReaction(view: PuzzleView, event: ConnectEvent): Unit = view.run {
         val tileColor = tiles[it.second][it.first].color
         if (color == waterColor) tileColor != waterColor
         else tileColor == waterColor
-    }.take(event.size).forEach {
+    }.take(connected.size).forEach {
         val tile = tiles[it.second][it.first]
         val icon = itemLoader.load(lastItem.type).apply {
             x = lastItem.x

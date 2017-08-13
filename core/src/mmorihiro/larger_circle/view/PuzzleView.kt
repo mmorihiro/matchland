@@ -27,8 +27,8 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
                 x = it.x + padding
                 y = it.y + padding
             }
-        }
-    }
+        }.toMutableList()
+    }.toMutableList()
     var itemLayer = Group()
     var connectEvent: ConnectEvent? = null
 
