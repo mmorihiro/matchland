@@ -8,7 +8,7 @@ import mmorihiro.larger_circle.view.BarView
 import mmorihiro.larger_circle.view.StarType
 
 
-class BarController(val onClear: () -> Unit) : Controller {
+class BarController(private val onClear: () -> Unit) : Controller {
     override val view = BarView().apply {
         this + bar
         stars.forEach { this + it }

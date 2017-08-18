@@ -33,6 +33,7 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("star.png")
         load<Texture>("grayStar.png")
         load<Texture>("bar.png")
+        load<Texture>("clear.png")
         load<Skin>("ui/uiskin.json")
         Assets.manager.finishLoading()
     }
@@ -56,7 +57,7 @@ class MainListener : ApplicationAdapter() {
         unload("star.png")
         unload("grayStar.png")
         unload("bar.png")
+        unload("clear.png")
         unload("ui/uiskin.json")
-        unload("window.png")
     }
 }
