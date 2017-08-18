@@ -2,17 +2,17 @@ package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn
-import com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import ktx.actors.alpha
 import ktx.actors.plus
 import ktx.actors.then
+import mmorihiro.larger_circle.view.Colors
 import mmorihiro.larger_circle.view.ConnectEvent
 import mmorihiro.larger_circle.view.MyImage
 import mmorihiro.larger_circle.view.PuzzleView
 
 
-class PuzzleController : Controller {
+class PuzzleController(onTurnEnd: (Int) -> Unit) : Controller {
     override val view = PuzzleView(
             ::touchAction,
             ::onTouchDragged,
@@ -21,6 +21,11 @@ class PuzzleController : Controller {
                     iconReaction(view, event.connectedItems)
                     iconReaction(view, event.enemy)
                     addNewItems(event)
+                    view + (delay(1f) then Actions.run {
+                        onTurnEnd(view.tiles.map {
+                            it.filter { it.color == Colors.fire }.size
+                        }.sum())
+                    })
                 })
             }).apply {
         this + backGround

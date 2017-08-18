@@ -7,6 +7,7 @@ import ktx.actors.then
 import mmorihiro.larger_circle.model.ItemType
 import mmorihiro.larger_circle.model.Point
 import mmorihiro.larger_circle.model.PuzzleModel
+import mmorihiro.larger_circle.view.Colors
 import mmorihiro.larger_circle.view.PuzzleView
 
 
@@ -16,15 +17,15 @@ fun iconReaction(view: PuzzleView, connected: List<Point>): Unit = view.run {
     // つなげた数だけプレイヤーの色を増やす
     val lastItem = items[last.second][last.first]
     val color = when (lastItem.type) {
-        ItemType.FIRE.position -> fireColor
-        ItemType.THUNDER.position -> thunderColor
-        ItemType.WATER.position -> waterColor
+        ItemType.FIRE.position -> Colors.fire
+        ItemType.THUNDER.position -> Colors.thunder
+        ItemType.WATER.position -> Colors.water
         else -> error("")
     }
     list.filter {
         val tileColor = tiles[it.second][it.first].color
-        if (color == waterColor) tileColor != waterColor
-        else tileColor == waterColor
+        if (color == Colors.water) tileColor != Colors.water
+        else tileColor == Colors.water
     }.take(connected.size).forEach {
         val tile = tiles[it.second][it.first]
         val icon = itemLoader.load(lastItem.type).apply {
