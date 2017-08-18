@@ -2,7 +2,6 @@ package mmorihiro.larger_circle.controller
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
@@ -13,6 +12,7 @@ import ktx.assets.asset
 import ktx.assets.load
 import ktx.assets.unload
 import ktx.scene2d.Scene2DSkin
+import mmorihiro.larger_circle.view.StageView
 import mmorihiro.larger_circle.view.View
 
 
@@ -22,16 +22,7 @@ class MainListener : ApplicationAdapter() {
     override fun create() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("ui/uiskin.json")
-        val barController = BarController()
-        val barView = barController.view
-        val puzzleView =
-                PuzzleController(barController::percentEffect).view
-        InputMultiplexer().run {
-            addProcessor(puzzleView)
-            addProcessor(barView)
-            Gdx.input.inputProcessor = this
-        }
-        currentViews = listOf(puzzleView, barView)
+        currentViews = listOf(StageView())
     }
 
     private fun loadAssets() {

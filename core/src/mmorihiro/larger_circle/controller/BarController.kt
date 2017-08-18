@@ -8,7 +8,7 @@ import mmorihiro.larger_circle.view.BarView
 import mmorihiro.larger_circle.view.StarType
 
 
-class BarController : Controller {
+class BarController(val onClear: () -> Unit) : Controller {
     override val view = BarView().apply {
         this + bar
         stars.forEach { this + it }
@@ -18,6 +18,9 @@ class BarController : Controller {
     fun percentEffect(value: Int): Unit = view.run {
         val target = getPercentWidth(value)
         barAction(target, view)
+        if (stars.count { it.type == StarType.GET.position } == 3) {
+            onClear()
+        }
         bar + object : TemporalAction(0.3f) {
             val start = bar.width
             val change = target - start
