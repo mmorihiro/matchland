@@ -25,7 +25,7 @@ class MainListener : ApplicationAdapter() {
         val barController = BarController()
         val barView = barController.view
         val puzzleView =
-                PuzzleController(barController::setPercent).view
+                PuzzleController(barController::percentEffect).view
         InputMultiplexer().run {
             addProcessor(puzzleView)
             addProcessor(barView)
@@ -40,6 +40,7 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("items.png")
         load<Texture>("tile.png")
         load<Texture>("star.png")
+        load<Texture>("grayStar.png")
         load<Texture>("bar.png")
         load<Skin>("ui/uiskin.json")
         Assets.manager.finishLoading()
@@ -62,6 +63,7 @@ class MainListener : ApplicationAdapter() {
         unload("items.png")
         unload("tile.png")
         unload("star.png")
+        unload("grayStar.png")
         unload("bar.png")
         unload("ui/uiskin.json")
         unload("window.png")
