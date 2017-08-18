@@ -22,12 +22,16 @@ class MainListener : ApplicationAdapter() {
     override fun create() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset<Skin>("ui/uiskin.json")
-        val puzzleView = PuzzleController().view
+        val barController = BarController()
+        val barView = barController.view
+        val puzzleView =
+                PuzzleController(barController::setPercent).view
         InputMultiplexer().run {
             addProcessor(puzzleView)
+            addProcessor(barView)
             Gdx.input.inputProcessor = this
         }
-        currentViews = listOf(puzzleView)
+        currentViews = listOf(puzzleView, barView)
     }
 
     private fun loadAssets() {
@@ -35,10 +39,8 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("background.png")
         load<Texture>("items.png")
         load<Texture>("tile.png")
-        load<Texture>("pointer.png")
         load<Texture>("star.png")
-        load<Texture>("starBar.png")
-        load<Texture>("lifeBar.png")
+        load<Texture>("bar.png")
         load<Skin>("ui/uiskin.json")
         Assets.manager.finishLoading()
     }
@@ -59,14 +61,9 @@ class MainListener : ApplicationAdapter() {
         unload("background.png")
         unload("items.png")
         unload("tile.png")
-        unload("pointer.png")
         unload("star.png")
-        unload("starBar.png")
-        unload("lifeBar.png")
+        unload("bar.png")
         unload("ui/uiskin.json")
-        unload("recordBack.png")
         unload("window.png")
-        unload("starFrame.png")
-        unload("recordStar.png")
     }
 }
