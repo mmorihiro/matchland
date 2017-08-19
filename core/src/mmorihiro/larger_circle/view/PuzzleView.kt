@@ -17,7 +17,7 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
     val padding = 8
     val backGround = Image(asset<Texture>("background.png"))
     val itemLoader = ImageLoader(32, "items.png")
-    var tiles = (0..colSize - 1).map { index -> createRow(index) }
+    var tiles = (0 until colSize).map { index -> createRow(index) }
     var items = tiles.map {
         it.map {
             itemLoader.loadRandom().apply {
@@ -29,7 +29,7 @@ class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
     var itemLayer = Group()
     var connectEvent: ConnectEvent? = null
 
-    private fun createRow(yIndex: Int) = (0..rowSize - 1).map { xIndex ->
+    private fun createRow(yIndex: Int) = (0 until rowSize).map { xIndex ->
         MyImage(Image(asset<Texture>("tile.png")), 0 to 0).apply {
             x = 19 + xIndex * tileSize
             y = yIndex * tileSize + bottom
