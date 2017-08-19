@@ -1,26 +1,23 @@
 package mmorihiro.larger_circle.view
 
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
-import com.badlogic.gdx.scenes.scene2d.ui.Image
-import ktx.actors.alpha
+import com.badlogic.gdx.graphics.Color
 import ktx.actors.centerPosition
-import ktx.actors.plus
-import ktx.actors.then
-import ktx.assets.asset
+import ktx.scene2d.KTextButton
+import ktx.scene2d.textButton
+import ktx.scene2d.window
 import mmorihiro.larger_circle.model.Values
+import kotlin.properties.Delegates
 
 
-class StageChangeView(onFinish: () -> Unit) : View() {
-    val label = Image(asset<Texture>("clear.png")).apply {
+class StageChangeView : View() {
+    var button by Delegates.notNull<KTextButton>()
+        private set
+    val window = window(title = "Stage Completed!") {
+        defaults().pad(20f)
+        button = textButton("continue") {
+            color = Color.GREEN
+        }
+        pack()
         centerPosition(Values.width, Values.height)
-        y -= 15
-        alpha = 0f
-        this + (parallel(
-                fadeIn(0.5f),
-                moveBy(0f, 15f, 0.5f))
-                then delay(1f)
-                then Actions.run { onFinish() })
     }
 }
