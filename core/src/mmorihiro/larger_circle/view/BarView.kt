@@ -10,14 +10,14 @@ import mmorihiro.larger_circle.model.Values
 class BarView : View() {
     val bar = Image(asset<Texture>("bar.png")).apply {
         x = (Values.width - width) / 2
-        y = 14f
+        y = 16f
         color = Colors.fire
     }
-    val barWidth = bar.width
+    private val barWidth = bar.width
     var stars = listOf(50, 100, 140).map {
         getStar(StarType.GRAY).apply {
             x = it.toFloat() + bar.x
-            y = 8f
+            y = 9f
         }
     }
 
