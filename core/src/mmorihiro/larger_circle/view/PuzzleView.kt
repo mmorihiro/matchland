@@ -2,41 +2,53 @@ package mmorihiro.larger_circle.view
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.assets.asset
+import mmorihiro.larger_circle.model.ItemType
+import mmorihiro.larger_circle.model.ItemType.WATER
 import mmorihiro.larger_circle.model.Point
 
-class PuzzleView(val onTouchDown: (PuzzleView, Int, Int) -> Unit,
-                 val onTouchDragged: (PuzzleView, Int, Int) -> Unit,
-                 val onTouchUp: (PuzzleView) -> Unit) : View() {
+class PuzzleView(private val onTouchDown: (PuzzleView, Int, Int) -> Unit,
+                 private val onTouchDragged: (PuzzleView, Int, Int) -> Unit,
+                 private val onTouchUp: (PuzzleView) -> Unit,
+                 val playerType: ItemType,
+                 val enemyType: ItemType) : View() {
     val rowSize = 5
     val colSize = 7
-    val tileSize = 51f
-    val bottom = 55
-    val padding = 8
+    private val tileSize = 51f
+    private val bottom = 55
+    private val padding = 8
     val backGround = Image(asset<Texture>("background.png"))
     val itemLoader = ImageLoader(32, "items.png")
     var tiles = (0 until colSize).map { index -> createRow(index) }
-    var items = tiles.map {
-        it.map {
-            itemLoader.loadRandom().apply {
-                x = it.x + padding
-                y = it.y + padding
-            }
-        }.toMutableList()
-    }.toMutableList()
+    var items = createItems()
     var itemLayer = Group()
     var connectEvent: ConnectEvent? = null
 
+    private fun createItems(): MutableList<MutableList<MyImage>> {
+        return tiles.map {
+            it.map {
+                loadItem().apply {
+                    x = it.x + padding
+                    y = it.y + padding
+                }
+            }.toMutableList()
+        }.toMutableList()
+    }
+
+    fun loadItem() =
+            itemLoader.load(listOf(playerType, enemyType, WATER)[MathUtils.random(2)].position)
+
     private fun createRow(yIndex: Int) = (0 until rowSize).map { xIndex ->
-        MyImage(Image(asset<Texture>("tile.png")), 0 to 0).apply {
+        Image(asset<Texture>("tile.png")).apply {
             x = 19 + xIndex * tileSize
             y = yIndex * tileSize + bottom
             color = when (yIndex) {
-                0 -> Colors.fire
-                colSize - 1 -> Colors.thunder
-                else -> Colors.water
+                0 -> playerType.color
+                colSize - 1 -> enemyType.color
+                else -> WATER.color
             }
         }
     }

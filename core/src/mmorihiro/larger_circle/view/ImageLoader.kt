@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.assets.asset
 
 
-class ImageLoader(val size: Int, filePath: String) {
-    val sheet = asset<Texture>(filePath)
-    val tiles: Array<Array<TextureRegion>> =
+class ImageLoader(private val size: Int, filePath: String) {
+    private val sheet = asset<Texture>(filePath)
+    private val tiles: Array<Array<TextureRegion>> =
             TextureRegion.split(sheet, size, size)
 
     fun load(position: Pair<Int, Int>): MyImage {
