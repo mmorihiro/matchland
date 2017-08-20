@@ -18,16 +18,17 @@ fun iconReaction(view: PuzzleView, connected: List<Point>): Unit = view.run {
     val lastItem = items[last.second][last.first]
     val itemType = ItemType.values().first { it.position == lastItem.type }
     list.filter {
-        val tileColor = tiles[it.second][it.first].color
-        if (itemType == WATER) tileColor == enemyType.color
-        else tileColor == WATER.color
+        val tileType = tiles[it.second][it.first].type
+        if (itemType == WATER) tileType == enemyType.position
+        else tileType == WATER.position
     }.take(connected.size).forEach {
-        val tile = tiles[it.second][it.first]
         val icon = itemLoader.load(lastItem.type).apply {
             x = lastItem.x
             y = lastItem.y
             view + this
         }
+        val tile = tiles[it.second][it.first]
+        tile.type = itemType.position
         icon + (delay(0.2f)
                 then moveTo(tile.x, tile.y, 0.1f) then Actions.run {
             icon.remove()

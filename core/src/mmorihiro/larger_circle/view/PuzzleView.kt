@@ -42,14 +42,15 @@ class PuzzleView(private val onTouchDown: (PuzzleView, Int, Int) -> Unit,
             itemLoader.load(listOf(playerType, enemyType, WATER)[MathUtils.random(2)].position)
 
     private fun createRow(yIndex: Int) = (0 until rowSize).map { xIndex ->
-        Image(asset<Texture>("tile.png")).apply {
+        val itemType = when (yIndex) {
+            0 -> playerType
+            colSize - 1 -> enemyType
+            else -> WATER
+        }
+        MyImage(Image(asset<Texture>("tile.png")), itemType.position).apply {
             x = 19 + xIndex * tileSize
             y = yIndex * tileSize + bottom
-            color = when (yIndex) {
-                0 -> playerType.color
-                colSize - 1 -> enemyType.color
-                else -> WATER.color
-            }
+            color = itemType.color
         }
     }
 

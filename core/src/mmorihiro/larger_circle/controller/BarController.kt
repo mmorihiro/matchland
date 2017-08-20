@@ -42,7 +42,7 @@ class BarController(private val onClear: () -> Unit) : Controller {
                 bar.width = start + change * percent
             }
         }
-        if (stars.count { it.type == StarType.GET.position } == 0) onClear()
+        if (stars.count { it.type == StarType.GET.position } == 3) onClear()
     }
 
     private fun barAction(target: Float, view: BarView) = view.run {
