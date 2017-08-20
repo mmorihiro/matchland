@@ -8,9 +8,10 @@ import java.io.File
 
 object ConfigModel {
     private val file = File("config.conf")
-    private var config =
+    var config =
             if (file.exists()) ConfigFactory.parseFile(file).extract("config")
             else Config(1)
+        private set
 
     fun onStageChange() {
         config = config.copy(stageNumber = config.stageNumber + 1)
