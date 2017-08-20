@@ -9,6 +9,7 @@ import mmorihiro.larger_circle.controller.BarController
 import mmorihiro.larger_circle.controller.PuzzleController
 import mmorihiro.larger_circle.controller.StageChangeController
 import mmorihiro.larger_circle.controller.StageChangeEffect
+import mmorihiro.larger_circle.model.ConfigModel
 
 
 class StageView : View() {
@@ -19,6 +20,7 @@ class StageView : View() {
             val clearView = StageChangeController({
                 StageChangeEffect().addEffect(this)
                 this + (Actions.delay(0.9f) then Actions.run {
+                    ConfigModel.onStageChange()
                     currentViews = createView()
                 })
             }).view

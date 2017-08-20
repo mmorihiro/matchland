@@ -99,6 +99,7 @@ project(":model") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        compile 'io.github.config4k:config4k:0.3.0'
         testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
     }
