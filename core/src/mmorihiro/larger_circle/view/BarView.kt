@@ -13,7 +13,7 @@ class BarView : View() {
         y = 16f
         color = Colors.fire
     }
-    private val barWidth = bar.width
+    val barWidth = bar.width
     var stars = listOf(50, 100, 140).map {
         getStar(StarType.GRAY).apply {
             x = it.toFloat() + bar.x
