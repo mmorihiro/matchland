@@ -18,9 +18,9 @@ import mmorihiro.larger_circle.model.Values
 
 class StageView : View() {
     private var currentViews: List<View> = createView()
-    private val label = Label("Stage ${ConfigModel.config.stageNumber}",
-            Scene2DSkin.defaultSkin, "bold-font", Color.WHITE).apply {
-        x = 50f
+    private val label = Label("Lv ${ConfigModel.config.stageNumber}",
+            Scene2DSkin.defaultSkin, "default-font", Color.WHITE).apply {
+        x = 53f
         y = Values.height - 37f
         this@StageView + this
     }
@@ -32,7 +32,7 @@ class StageView : View() {
                 StageChangeEffect().addEffect(this)
                 this + (Actions.delay(0.9f) then Actions.run {
                     ConfigModel.onStageChange()
-                    label.setText("Stage ${ConfigModel.config.stageNumber}")
+                    label.setText("Lv ${ConfigModel.config.stageNumber}")
                     currentViews = createView()
                 })
             }).view

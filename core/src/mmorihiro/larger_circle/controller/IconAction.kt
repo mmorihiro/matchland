@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import ktx.actors.plus
 import ktx.actors.then
+import mmorihiro.larger_circle.model.ItemType
 import mmorihiro.larger_circle.model.ItemType.WATER
 import mmorihiro.larger_circle.model.Point
 import mmorihiro.larger_circle.model.PuzzleModel
@@ -15,15 +16,10 @@ fun iconReaction(view: PuzzleView, connected: List<Point>): Unit = view.run {
     val list = listOf(last) + getAroundPoints(view, last)
     // つなげた数だけプレイヤーの色を増やす
     val lastItem = items[last.second][last.first]
-    val color = when (lastItem.type) {
-        playerType.position -> playerType
-        enemyType.position -> enemyType
-        WATER.position -> WATER
-        else -> error("")
-    }.color
+    val itemType = ItemType.values().first { it.position == lastItem.type }
     list.filter {
         val tileColor = tiles[it.second][it.first].color
-        if (color == WATER.color) tileColor != WATER.color
+        if (itemType == WATER) tileColor == enemyType.color
         else tileColor == WATER.color
     }.take(connected.size).forEach {
         val tile = tiles[it.second][it.first]
@@ -36,7 +32,7 @@ fun iconReaction(view: PuzzleView, connected: List<Point>): Unit = view.run {
                 then moveTo(tile.x, tile.y, 0.1f) then Actions.run {
             icon.remove()
             tile + (parallel(scaleTo(1.3f, 1.3f, 0.1f)
-                    then scaleTo(1f, 1f, 0.1f), color(color, 0.1f)))
+                    then scaleTo(1f, 1f, 0.1f), color(itemType.color, 0.1f)))
         })
     }
 }
