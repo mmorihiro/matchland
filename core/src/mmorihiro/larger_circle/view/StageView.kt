@@ -13,6 +13,7 @@ import mmorihiro.larger_circle.controller.PuzzleController
 import mmorihiro.larger_circle.controller.StageChangeController
 import mmorihiro.larger_circle.controller.StageChangeEffect
 import mmorihiro.larger_circle.model.ConfigModel
+import mmorihiro.larger_circle.model.ItemType
 import mmorihiro.larger_circle.model.Values
 
 
@@ -40,8 +41,12 @@ class StageView : View() {
             currentViews += clearView
         })
         val barView = barController.view
+        val lv = ConfigModel.config.stageNumber
+        val enemyType = ItemType.values()
+                .filterNot { it == ItemType.FIRE || it == ItemType.WATER }
+                .let { it[lv % 3] }
         val puzzleView =
-                PuzzleController(barController::percentEffect).view
+                PuzzleController(barController::percentEffect, ItemType.FIRE, enemyType, lv).view
         Gdx.input.inputProcessor = puzzleView
         return listOf(puzzleView, barView)
     }

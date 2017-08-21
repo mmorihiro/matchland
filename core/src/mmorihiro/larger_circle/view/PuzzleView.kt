@@ -14,7 +14,8 @@ class PuzzleView(private val onTouchDown: (PuzzleView, Int, Int) -> Unit,
                  private val onTouchDragged: (PuzzleView, Int, Int) -> Unit,
                  private val onTouchUp: (PuzzleView) -> Unit,
                  val playerType: ItemType,
-                 val enemyType: ItemType) : View() {
+                 val enemyType: ItemType,
+                 val level: Int) : View() {
     val rowSize = 5
     val colSize = 7
     private val tileSize = 51f

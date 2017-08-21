@@ -11,7 +11,7 @@ import mmorihiro.larger_circle.model.PuzzleModel
 import mmorihiro.larger_circle.view.PuzzleView
 
 
-fun iconReaction(view: PuzzleView, connected: List<Point>): Unit = view.run {
+fun iconReaction(view: PuzzleView, connected: List<Point>, isPlayer: Boolean): Unit = view.run {
     val last = connected.last()
     val list = listOf(last) + getAroundPoints(view, last)
     // つなげた数だけプレイヤーの色を増やす
@@ -19,7 +19,7 @@ fun iconReaction(view: PuzzleView, connected: List<Point>): Unit = view.run {
     val itemType = ItemType.values().first { it.position == lastItem.type }
     list.filter {
         val tileType = tiles[it.second][it.first].type
-        if (itemType == WATER) tileType == enemyType.position
+        if (itemType == WATER) tileType == (if (isPlayer) enemyType else playerType).position
         else tileType == WATER.position
     }.take(connected.size).forEach {
         val icon = itemLoader.load(lastItem.type).apply {

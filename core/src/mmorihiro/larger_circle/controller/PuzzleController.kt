@@ -6,27 +6,30 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import ktx.actors.alpha
 import ktx.actors.plus
 import ktx.actors.then
+import mmorihiro.larger_circle.model.ItemType
 import mmorihiro.larger_circle.model.ItemType.FIRE
-import mmorihiro.larger_circle.model.ItemType.THUNDER
 import mmorihiro.larger_circle.view.ConnectEvent
 import mmorihiro.larger_circle.view.MyImage
 import mmorihiro.larger_circle.view.PuzzleView
 
 
-class PuzzleController(onTurnEnd: (Int) -> Unit) : Controller {
+class PuzzleController(onTurnEnd: (Int) -> Unit,
+                       playerType: ItemType,
+                       enemyType: ItemType,
+                       lv: Int) : Controller {
     override val view = PuzzleView(
             ::touchAction,
             ::onTouchDragged,
             { view ->
                 onTouchUp(view, { event ->
-                    iconReaction(view, event.connectedItems)
-                    iconReaction(view, event.enemy)
+                    iconReaction(view, event.connectedItems, true)
+                    iconReaction(view, event.enemy, false)
                     addNewItems(event)
                     view + (delay(1f) then Actions.run {
                         onTurnEnd(view.tiles.map { it.filter { it.color == FIRE.color }.size }.sum())
                     })
                 })
-            }, FIRE, THUNDER).apply {
+            }, playerType, enemyType, lv).apply {
         this + backGround
         this + itemLayer
         tiles.forEach { it.forEach { itemLayer + it } }

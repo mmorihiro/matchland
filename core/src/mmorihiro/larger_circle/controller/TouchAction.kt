@@ -23,20 +23,23 @@ fun touchAction(view: PuzzleView, x: Int, y: Int) = view.run {
     view.connectEvent = ConnectEvent(
             listOf(touchedPoint), sameTypeGroup,
             // 敵のアイコン
-            sameTypeGroup(view, try {
-                items[point.second][point.first].type
-            } catch (e: IndexOutOfBoundsException) {
-                return
-            }, point).take(4).toList())
+            sameTypeGroup(view, items[point.second][point.first].type, point).take(3 + level).toList())
     touchEffect(touchedItem)
 }
 
-private fun enemyPoint(view: PuzzleView, sameTypeGroup: Set<Point>): Point = view.run {
+private fun enemyPoint(view: PuzzleView, sameTypeGroup: Set<Point>,
+                       count: Int = 1): Point = view.run {
     val point = random(rowSize - 1) to random(colSize - 1)
-    if (sameTypeGroup.contains(point) ||
-            items[point.second][point.first].type == ItemType.FIRE.position)
-        enemyPoint(view, sameTypeGroup)
-    else point
+    val itemType = items[point.second][point.first].type
+    val tileType = tiles[point.second][point.first].type
+    when {
+        count >= 20 -> true
+        sameTypeGroup.contains(point) || itemType == ItemType.FIRE.position -> false
+        level >= 3 && sameTypeGroup(view, itemType, point).size < 3 -> false
+        level >= 6 && itemType == enemyType.position && tileType == playerType.position -> false
+        level >= 9 && itemType == ItemType.WATER.position && tileType != playerType.position -> false
+        else -> true
+    }.let { if (it) point else enemyPoint(view, sameTypeGroup, count + 1) }
 }
 
 private fun sameTypeGroup(view: PuzzleView,
