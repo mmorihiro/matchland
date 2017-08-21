@@ -21,21 +21,25 @@ class MainListener : ApplicationAdapter() {
 
     override fun create() {
         loadAssets()
-        Scene2DSkin.defaultSkin = asset<Skin>("ui/uiskin.json")
-        currentViews = listOf(StageView())
+        Scene2DSkin.defaultSkin = asset("ui/uiskin.json")
+        currentViews = listOf(HomeController({
+            currentViews = listOf(StageView()) + currentViews
+        }, { currentViews = currentViews.dropLast(1) }).view)
     }
 
     private fun loadAssets() {
         Assets.manager = AssetManager()
-        load<Texture>("background.png")
+        load<Skin>("ui/uiskin.json")
+        load<Texture>("homeBackground.png")
+        load<Texture>("play.png")
         load<Texture>("items.png")
         load<Texture>("tile.png")
+        Assets.manager.finishLoading()
+        load<Texture>("background.png")
         load<Texture>("star.png")
         load<Texture>("grayStar.png")
         load<Texture>("bar.png")
         load<Texture>("white.png")
-        load<Skin>("ui/uiskin.json")
-        Assets.manager.finishLoading()
     }
 
     override fun render() {
@@ -51,6 +55,7 @@ class MainListener : ApplicationAdapter() {
     }
 
     override fun dispose() {
+        unload("homeBackground.png")
         unload("background.png")
         unload("items.png")
         unload("tile.png")

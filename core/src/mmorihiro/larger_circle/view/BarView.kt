@@ -3,7 +3,7 @@ package mmorihiro.larger_circle.view
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.assets.asset
-import mmorihiro.larger_circle.model.ItemType
+import mmorihiro.larger_circle.model.ConfigModel
 import mmorihiro.larger_circle.model.Point
 import mmorihiro.larger_circle.model.Values
 
@@ -12,7 +12,7 @@ class BarView : View() {
     val bar = Image(asset<Texture>("bar.png")).apply {
         x = (Values.width - width) / 2
         y = 16f
-        color = ItemType.FIRE.color
+        color = ConfigModel.config.itemType.color
     }
     val barWidth = bar.width
     var stars = listOf(30, 80, 120).map {

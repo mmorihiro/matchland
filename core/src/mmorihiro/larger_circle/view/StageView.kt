@@ -41,12 +41,12 @@ class StageView : View() {
             currentViews += clearView
         })
         val barView = barController.view
-        val lv = ConfigModel.config.stageNumber
+        val config = ConfigModel.config
         val enemyType = ItemType.values()
-                .filterNot { it == ItemType.FIRE || it == ItemType.WATER }
-                .let { it[lv % 3] }
+                .filterNot { it == config.itemType || it == ItemType.WATER }
+                .let { it[config.stageNumber % 3] }
         val puzzleView =
-                PuzzleController(barController::percentEffect, ItemType.FIRE, enemyType).view
+                PuzzleController(barController::percentEffect, config.itemType, enemyType).view
         Gdx.input.inputProcessor = puzzleView
         return listOf(puzzleView, barView)
     }

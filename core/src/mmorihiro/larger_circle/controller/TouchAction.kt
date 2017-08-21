@@ -34,7 +34,7 @@ private fun enemyPoint(view: PuzzleView, sameTypeGroup: Set<Point>,
     val tileType = tiles[point.second][point.first].type
     when {
         count >= 20 -> true
-        sameTypeGroup.contains(point) || itemType == ItemType.FIRE.position -> false
+        sameTypeGroup.contains(point) || itemType == playerType.position -> false
         level >= 3 && sameTypeGroup(view, itemType, point).size < 3 -> false
         level >= 6 && itemType == enemyType.position && tileType == playerType.position -> false
         level >= 9 && itemType == ItemType.WATER.position && tileType != playerType.position -> false

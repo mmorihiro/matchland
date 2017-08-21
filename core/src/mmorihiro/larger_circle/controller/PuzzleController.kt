@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import ktx.actors.alpha
 import ktx.actors.plus
 import ktx.actors.then
+import mmorihiro.larger_circle.model.ConfigModel
 import mmorihiro.larger_circle.model.ItemType
-import mmorihiro.larger_circle.model.ItemType.FIRE
 import mmorihiro.larger_circle.view.ConnectEvent
 import mmorihiro.larger_circle.view.MyImage
 import mmorihiro.larger_circle.view.PuzzleView
@@ -25,7 +25,9 @@ class PuzzleController(onTurnEnd: (Int) -> Unit,
                     iconReaction(view, event.enemy, false)
                     addNewItems(event)
                     view + (delay(1f) then Actions.run {
-                        onTurnEnd(view.tiles.map { it.filter { it.color == FIRE.color }.size }.sum())
+                        onTurnEnd(view.tiles.map {
+                            it.filter { it.color == ConfigModel.config.itemType.color }.size
+                        }.sum())
                     })
                 })
             }, playerType, enemyType).apply {

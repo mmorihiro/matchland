@@ -10,7 +10,6 @@ import ktx.actors.plus
 import ktx.actors.then
 import ktx.scene2d.Scene2DSkin
 import mmorihiro.larger_circle.model.ConfigModel
-import mmorihiro.larger_circle.model.ItemType.FIRE
 import mmorihiro.larger_circle.view.BarView
 import mmorihiro.larger_circle.view.StarType
 
@@ -30,7 +29,8 @@ class BarController(private val onClear: () -> Unit) : Controller {
         val amount = value - (bar.width / barWidth * 35).toInt()
         val target = getPercentWidth(value)
         Label(if (amount >= 0) "+$amount" else "$amount",
-                Scene2DSkin.defaultSkin, "default-font", FIRE.color).apply {
+                Scene2DSkin.defaultSkin, "default-font",
+                ConfigModel.config.itemType.color).apply {
             x = bar.x + bar.width
             y = 25f
             this + (fadeIn(0.4f)
