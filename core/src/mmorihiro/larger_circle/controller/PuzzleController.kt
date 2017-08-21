@@ -15,8 +15,7 @@ import mmorihiro.larger_circle.view.PuzzleView
 
 class PuzzleController(onTurnEnd: (Int) -> Unit,
                        playerType: ItemType,
-                       enemyType: ItemType,
-                       lv: Int) : Controller {
+                       enemyType: ItemType) : Controller {
     override val view = PuzzleView(
             ::touchAction,
             ::onTouchDragged,
@@ -29,7 +28,7 @@ class PuzzleController(onTurnEnd: (Int) -> Unit,
                         onTurnEnd(view.tiles.map { it.filter { it.color == FIRE.color }.size }.sum())
                     })
                 })
-            }, playerType, enemyType, lv).apply {
+            }, playerType, enemyType).apply {
         this + backGround
         this + itemLayer
         tiles.forEach { it.forEach { itemLayer + it } }

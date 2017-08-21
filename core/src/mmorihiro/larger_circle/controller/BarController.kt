@@ -9,6 +9,7 @@ import ktx.actors.alpha
 import ktx.actors.plus
 import ktx.actors.then
 import ktx.scene2d.Scene2DSkin
+import mmorihiro.larger_circle.model.ConfigModel
 import mmorihiro.larger_circle.model.ItemType.FIRE
 import mmorihiro.larger_circle.view.BarView
 import mmorihiro.larger_circle.view.StarType
@@ -17,7 +18,11 @@ import mmorihiro.larger_circle.view.StarType
 class BarController(private val onClear: () -> Unit) : Controller {
     override val view = BarView().apply {
         this + bar
-        stars.forEach { this + it }
+        val level = ConfigModel.config.stageNumber
+        stars.forEach {
+            it.x += if (level <= 10) 2 * level else 20
+            this + it
+        }
         bar.width = getPercentWidth(5)
     }
 

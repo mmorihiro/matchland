@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.assets.asset
+import mmorihiro.larger_circle.model.ConfigModel
 import mmorihiro.larger_circle.model.ItemType
 import mmorihiro.larger_circle.model.ItemType.WATER
 import mmorihiro.larger_circle.model.Point
@@ -14,13 +15,13 @@ class PuzzleView(private val onTouchDown: (PuzzleView, Int, Int) -> Unit,
                  private val onTouchDragged: (PuzzleView, Int, Int) -> Unit,
                  private val onTouchUp: (PuzzleView) -> Unit,
                  val playerType: ItemType,
-                 val enemyType: ItemType,
-                 val level: Int) : View() {
+                 val enemyType: ItemType) : View() {
     val rowSize = 5
     val colSize = 7
     private val tileSize = 51f
     private val bottom = 55
     private val padding = 8
+    val level = ConfigModel.config.stageNumber
     val backGround = Image(asset<Texture>("background.png"))
     val itemLoader = ImageLoader(32, "items.png")
     var tiles = (0 until colSize).map { index -> createRow(index) }
@@ -46,8 +47,12 @@ class PuzzleView(private val onTouchDown: (PuzzleView, Int, Int) -> Unit,
         val itemType = when (yIndex) {
             0 -> playerType
             colSize - 1 -> enemyType
-            else -> WATER
+            else ->
+                if (yIndex < 2) WATER
+                else if (yIndex >= colSize - level / 2 && MathUtils.randomBoolean()) enemyType
+                else WATER
         }
+
         MyImage(Image(asset<Texture>("tile.png")), itemType.position).apply {
             x = 19 + xIndex * tileSize
             y = yIndex * tileSize + bottom
