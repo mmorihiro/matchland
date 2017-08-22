@@ -22,7 +22,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "largerCircle"
+        appName = "matchland"
         gdxVersion = '1.9.6'
         ktxVersion = '1.9.5-b1'
         kotlintestVersion = '2.0.0'
