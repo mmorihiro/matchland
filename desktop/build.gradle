@@ -3,7 +3,7 @@ apply plugin: "kotlin"
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-project.ext.mainClassName = "mmorihiro.larger_circle.desktop.DesktopLauncher"
+project.ext.mainClassName = "mmorihiro.matchland.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
 
 task run(dependsOn: classes, type: JavaExec) {
