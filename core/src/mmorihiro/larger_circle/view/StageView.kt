@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import ktx.actors.onClick
 import ktx.actors.plus
 import ktx.actors.then
 import ktx.scene2d.Scene2DSkin
@@ -17,7 +18,7 @@ import mmorihiro.larger_circle.model.ItemType
 import mmorihiro.larger_circle.model.Values
 
 
-class StageView : View() {
+class StageView(private val onHome: () -> Unit, val top: View) : View() {
     private var currentViews: List<View> = createView()
     private val label = Label("Lv ${ConfigModel.config.stageNumber}",
             Scene2DSkin.defaultSkin, "default-font", Color.WHITE).apply {
@@ -46,10 +47,34 @@ class StageView : View() {
                 .filterNot { it == config.itemType || it == ItemType.WATER }
                 .let { it[config.stageNumber % 3] }
         val puzzleView =
-                PuzzleController(barController::percentEffect, config.itemType, enemyType).view
+                PuzzleController(barController::percentEffect, {
+                    val pauseView = getPauseView()
+                    Gdx.input.inputProcessor = pauseView
+                    currentViews += pauseView
+                }, config.itemType, enemyType).view
         Gdx.input.inputProcessor = puzzleView
         return listOf(puzzleView, barView)
     }
+
+    private fun getPauseView(): PauseView =
+            PauseView().apply {
+                resumeButton.onClick { _, _ ->
+                    currentViews -= currentViews.last()
+                    Gdx.input.inputProcessor = currentViews.first()
+                }
+                resetButton.onClick { _, _ ->
+                    Gdx.input.inputProcessor = null
+                    StageChangeEffect().addEffect(this@StageView)
+                    this@StageView + (Actions.delay(0.9f) then Actions.run {
+                        currentViews = createView()
+                    })
+                }
+                homeButton.onClick { _, _ ->
+                    Gdx.input.inputProcessor = null
+                    StageChangeEffect().addEffect(top)
+                    top + (Actions.delay(0.9f) then Actions.run { onHome() })
+                }
+            }
 
     override fun draw() {
         currentViews.forEach(Stage::draw)

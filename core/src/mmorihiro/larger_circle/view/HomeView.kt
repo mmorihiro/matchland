@@ -27,7 +27,7 @@ class HomeView : View() {
                 } to item
             }
 
-    var button = Button(Image(asset<Texture>("play.png")).drawable).apply {
+    val button = Button(Image(asset<Texture>("play.png")).drawable).apply {
         centerPosition(Values.width, Values.height)
     }
 }

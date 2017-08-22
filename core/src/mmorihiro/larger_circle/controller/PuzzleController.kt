@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import ktx.actors.alpha
+import ktx.actors.onClick
 import ktx.actors.plus
 import ktx.actors.then
 import mmorihiro.larger_circle.model.ConfigModel
@@ -14,6 +15,7 @@ import mmorihiro.larger_circle.view.PuzzleView
 
 
 class PuzzleController(onTurnEnd: (Int) -> Unit,
+                       onPause: () -> Unit,
                        playerType: ItemType,
                        enemyType: ItemType) : Controller {
     override val view = PuzzleView(
@@ -35,6 +37,8 @@ class PuzzleController(onTurnEnd: (Int) -> Unit,
         this + itemLayer
         tiles.forEach { it.forEach { itemLayer + it } }
         items.forEach { it.forEach { itemLayer + it } }
+        this + pauseButton
+        pauseButton.onClick { _, _ -> onPause() }
     }
 
     private fun addNewItems(event: ConnectEvent): Unit = view.run {

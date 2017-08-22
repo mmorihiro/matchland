@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.assets.asset
 import mmorihiro.larger_circle.model.ConfigModel
 import mmorihiro.larger_circle.model.ItemType
 import mmorihiro.larger_circle.model.ItemType.WATER
 import mmorihiro.larger_circle.model.Point
+import mmorihiro.larger_circle.model.Values
 
 class PuzzleView(private val onTouchDown: (PuzzleView, Int, Int) -> Unit,
                  private val onTouchDragged: (PuzzleView, Int, Int) -> Unit,
@@ -21,6 +23,10 @@ class PuzzleView(private val onTouchDown: (PuzzleView, Int, Int) -> Unit,
     private val tileSize = 51f
     private val bottom = 55
     private val padding = 8
+    val pauseButton = Button(Image(asset<Texture>("pause.png")).drawable).apply { 
+        x = Values.width - width - 8
+        y = Values.height - height - 8
+    }
     val level = ConfigModel.config.stageNumber
     val backGround = Image(asset<Texture>("background.png"))
     val itemLoader = ImageLoader(32, "items.png")
@@ -70,7 +76,7 @@ class PuzzleView(private val onTouchDown: (PuzzleView, Int, Int) -> Unit,
     override fun touchUp(screenX: Int, screenY: Int,
                          pointer: Int, button: Int): Boolean {
         onTouchUp(this)
-        return true
+        return super.touchUp(screenX, screenY, pointer, button)
     }
 
     override fun touchDragged(screenX: Int, screenY: Int,
@@ -86,6 +92,6 @@ class PuzzleView(private val onTouchDown: (PuzzleView, Int, Int) -> Unit,
         val pos = screenPosToWorldPos(screenX, screenY)
         if (pos.first > padding && pos.second > bottom)
             onTouchDown(this, pos.first, pos.second)
-        return true
+        return super.touchDown(screenX, screenY, pointer, button)
     }
 }

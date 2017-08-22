@@ -12,20 +12,27 @@ import ktx.assets.asset
 import ktx.assets.load
 import ktx.assets.unload
 import ktx.scene2d.Scene2DSkin
+import mmorihiro.larger_circle.view.HomeView
 import mmorihiro.larger_circle.view.StageView
 import mmorihiro.larger_circle.view.View
 
 
 class MainListener : ApplicationAdapter() {
+    private val topView by lazy { View() }
     private var currentViews: List<View> = listOf()
 
     override fun create() {
         loadAssets()
         Scene2DSkin.defaultSkin = asset("ui/uiskin.json")
-        currentViews = listOf(HomeController({
-            currentViews = listOf(StageView()) + currentViews
-        }, { currentViews = currentViews.dropLast(1) }).view)
+        currentViews = listOf(homeView(), topView)
     }
+
+    private fun homeView(): HomeView =
+            HomeController({
+                currentViews = listOf(
+                        StageView({ currentViews = listOf(homeView(), topView) }, topView), topView)
+            }, topView).view
+
 
     private fun loadAssets() {
         Assets.manager = AssetManager()
@@ -40,6 +47,7 @@ class MainListener : ApplicationAdapter() {
         load<Texture>("grayStar.png")
         load<Texture>("bar.png")
         load<Texture>("white.png")
+        load<Texture>("pause.png")
     }
 
     override fun render() {

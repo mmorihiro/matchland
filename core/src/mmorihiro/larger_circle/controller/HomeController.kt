@@ -11,9 +11,10 @@ import ktx.assets.Assets
 import mmorihiro.larger_circle.model.ConfigModel
 import mmorihiro.larger_circle.view.HomeView
 import mmorihiro.larger_circle.view.MyImage
+import mmorihiro.larger_circle.view.View
 
 
-class HomeController(onPlay: () -> Unit, onFinish: () -> Unit) : Controller {
+class HomeController(onPlay: () -> Unit, top: View) : Controller {
     override val view = HomeView().apply {
         Gdx.input.inputProcessor = this
         this + backGround
@@ -33,16 +34,8 @@ class HomeController(onPlay: () -> Unit, onFinish: () -> Unit) : Controller {
             button + Actions.color(Color.WHITE, 0.2f)
             Gdx.input.inputProcessor = null
             Assets.manager.finishLoading()
-            StageChangeEffect().addEffect(this)
-            this + (Actions.delay(0.9f) then Actions.run {
-                backGround.remove()
-                button.remove()
-                icons.forEach {
-                    it.first.remove()
-                    it.second.remove()
-                }
-                onPlay()
-            } then Actions.delay(2.9f) then Actions.run { onFinish() })
+            StageChangeEffect().addEffect(top)
+            top + (Actions.delay(0.9f) then Actions.run { onPlay() })
         }
     }
 
