@@ -18,7 +18,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "mmorihiro.larger_circle"
+        applicationId "mmorihiro.matchland"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
@@ -76,7 +76,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'mmorihiro.larger_circle/mmorihiro.larger_circle.android.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'mmorihiro.matchland/mmorihiro.matchland.android.AndroidLauncher'
 }
 // sets up the Android Eclipse project, using the old Ant based build.
 eclipse {
