@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.assets.asset
+import mmorihiro.matchland.controller.loadItem
 import mmorihiro.matchland.model.ConfigModel
 import mmorihiro.matchland.model.ItemType.WATER
 import mmorihiro.matchland.model.Values
@@ -23,16 +24,13 @@ class PuzzleView(override val onTouchDown: (Puzzle, Int, Int) -> Unit,
     private fun createItems(): MutableList<MutableList<MyImage>> {
         return tiles.map {
             it.map {
-                loadItem().apply {
+                loadItem(this).apply {
                     x = it.x + padding
                     y = it.y + padding
                 }
             }.toMutableList()
         }.toMutableList()
     }
-
-    fun loadItem() =
-            itemLoader.load(listOf(playerType, enemyType, WATER)[MathUtils.random(2)].position)
 
     private fun createRow(yIndex: Int) = (0 until rowSize).map { xIndex ->
         val itemType = when (yIndex) {

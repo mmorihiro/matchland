@@ -7,6 +7,7 @@ import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent
 import com.shephertz.app42.gaming.multiplayer.client.listener.RoomRequestListener
 import com.typesafe.config.ConfigRenderOptions
 import io.github.config4k.toConfig
+import mmorihiro.matchland.model.ConfigModel
 
 
 class RoomListener(private val controller: WarpController) : RoomRequestListener {
@@ -19,9 +20,9 @@ class RoomListener(private val controller: WarpController) : RoomRequestListener
                 val pair = "iconList" to
                         controller.getIconList().toConfig("list").root()
                                 .render(ConfigRenderOptions.concise())
-                println(pair.second)
+                val type0 = "type0" to ConfigModel.config.itemType.name
                 controller.warpClient.createRoom("matchland", "shephertz",
-                        2, hashMapOf(pair))
+                        2, hashMapOf(pair, type0))
             }
             else -> {
                 controller.warpClient.disconnect()
@@ -35,7 +36,8 @@ class RoomListener(private val controller: WarpController) : RoomRequestListener
     }
 
     override fun onGetLiveRoomInfoDone(event: LiveRoomInfoEvent?) {
-        /* if (event!!.joinedUsers.size == 2)*/ controller.startGame(event!!)
+        if (event!!.joinedUsers.size == 2) controller.startGame(event!!)
+        else controller.warpClient.subscribeRoom(event.data.id)
     }
 
     override fun onUnSubscribeRoomDone(p0: RoomEvent?) {

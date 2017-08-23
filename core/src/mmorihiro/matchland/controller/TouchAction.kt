@@ -10,7 +10,8 @@ import mmorihiro.matchland.view.MyImage
 import mmorihiro.matchland.view.Puzzle
 import mmorihiro.matchland.view.PuzzleView
 
-fun touchAction(view: Puzzle, x: Int, y: Int) = (view as PuzzleView).run {
+fun touchAction(view: Puzzle, x: Int, y: Int) = view.run {
+    if (connectEvent != null) return
     val touchedPoint = coordinateToPoint(x, y)
     val touchedItem = try {
         items[touchedPoint.second][touchedPoint.first]
@@ -19,12 +20,15 @@ fun touchAction(view: Puzzle, x: Int, y: Int) = (view as PuzzleView).run {
     }
 
     val sameTypeGroup = sameTypeGroup(view, touchedItem.type, touchedPoint)
-    val point = enemyPoint(view, sameTypeGroup)
-
-    view.connectEvent = ConnectEvent(
-            listOf(touchedPoint), sameTypeGroup,
-            // 敵のアイコン
-            sameTypeGroup(view, items[point.second][point.first].type, point).take(3 + level).toList())
+    connectEvent = if (view is PuzzleView) {
+        val point = enemyPoint(view, sameTypeGroup)
+        ConnectEvent(
+                listOf(touchedPoint), sameTypeGroup,
+                // 敵のアイコン
+                sameTypeGroup(view, items[point.second][point.first].type, point)
+                        .take(3 + view.level).toList())
+    } else ConnectEvent(listOf(touchedPoint), sameTypeGroup, listOf())
+    
     touchEffect(touchedItem)
 }
 
@@ -43,7 +47,7 @@ private fun enemyPoint(view: PuzzleView, sameTypeGroup: Set<Point>,
     }.let { if (it) point else enemyPoint(view, sameTypeGroup, count + 1) }
 }
 
-private fun sameTypeGroup(view: PuzzleView,
+private fun sameTypeGroup(view: Puzzle,
                           type: Point,
                           point: Point): Set<Point> = view.run {
     // 同じ種類のアイテムの座標のリスト
@@ -73,7 +77,9 @@ fun onTouchUp(view: Puzzle, touchUp: (ConnectEvent) -> Unit) {
     }
 }
 
-fun onTouchDragged(view: Puzzle, x: Int, y: Int): Unit = view.run {
+fun onTouchDragged(view: Puzzle, x: Int, y: Int,
+                   onConnect: () -> Unit = {},
+                   onNotConnect: () -> Unit = {}): Unit = view.run {
     connectEvent?.let {
         val point = coordinateToPoint(x, y)
         val item = try {
@@ -89,11 +95,13 @@ fun onTouchDragged(view: Puzzle, x: Int, y: Int): Unit = view.run {
             items[point1.second][point1.first].color = Color.WHITE
             connectEvent =
                     it.copy(connectedItems = it.connectedItems.dropLast(1))
+            onNotConnect()
         }
         if (canConnect(it, point, item, x, y)) {
             touchEffect(item)
             connectEvent =
                     it.copy(connectedItems = it.connectedItems + point)
+            onConnect()
         }
     }
 }

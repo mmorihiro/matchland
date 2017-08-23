@@ -1,13 +1,18 @@
 package mmorihiro.matchland.controller
 
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
+import ktx.actors.alpha
 import ktx.actors.plus
 import ktx.actors.then
 import mmorihiro.matchland.model.ItemType
 import mmorihiro.matchland.model.ItemType.WATER
 import mmorihiro.matchland.model.Point
 import mmorihiro.matchland.model.PuzzleModel
+import mmorihiro.matchland.view.ConnectEvent
+import mmorihiro.matchland.view.MyImage
 import mmorihiro.matchland.view.Puzzle
 
 
@@ -43,5 +48,55 @@ private fun getAroundPoints(view: Puzzle, point: Point) = view.run {
         // 配列の範囲外でないか
         x >= 0 && y >= 0 && y < colSize && x < rowSize
     }
+}
+
+fun addNewItems(view: Puzzle, event: ConnectEvent): Unit = view.run {
+    val last = event.connectedItems.last()
+    val item = items[last.second][last.first]
+    items.forEach { row ->
+        row.filter { it.color != Color.WHITE }
+                .forEach { existingItem ->
+                    val action = moveTo(item.x, item.y, 0.2f) then
+                            Actions.run {
+                                existingItem.remove()
+                            }
+                    existingItem.color = Color.WHITE
+                    existingItem + action
+                    val point = coordinateToPoint(
+                            existingItem.x.toInt(), existingItem.y.toInt())
+                    view.items[point.second][point.first] = newItem(view, existingItem)
+                }
+    }
+    resetIcons()
+    enemyAction(view, event)
+}
+
+private fun enemyAction(view: Puzzle, event: ConnectEvent) {
+    val center = event.enemyPoint.let {
+        view.items[it.second][it.first]
+    }
+    event.enemy.forEach {
+        val item = view.items[it.second][it.first]
+        val action = moveTo(center.x, center.y, 0.2f) then
+                Actions.run {
+                    item.remove()
+                }
+        item + action
+        view.items[it.second][it.first] = newItem(view, item)
+    }
+}
+
+private fun newItem(view: Puzzle, existingItem: MyImage): MyImage =
+        loadItem(view).apply {
+            x = existingItem.x
+            y = existingItem.y
+            alpha = 0f
+            this + fadeIn(0.15f)
+            view.itemLayer + this
+        }
+
+fun loadItem(view: Puzzle) = view.run {
+    itemLoader.load(listOf(playerType, enemyType, WATER)[MathUtils.random
+    (2)].position)
 }
 

@@ -10,5 +10,5 @@ data class ConnectEvent(val connectedItems: List<Point>,
         require(sameTypeGroup.isNotEmpty())
     }
 
-    val enemyPoint = enemy.last()
+    val enemyPoint get() = enemy.last()
 }
