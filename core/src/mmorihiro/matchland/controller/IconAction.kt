@@ -8,10 +8,10 @@ import mmorihiro.matchland.model.ItemType
 import mmorihiro.matchland.model.ItemType.WATER
 import mmorihiro.matchland.model.Point
 import mmorihiro.matchland.model.PuzzleModel
-import mmorihiro.matchland.view.PuzzleView
+import mmorihiro.matchland.view.Puzzle
 
 
-fun iconReaction(view: PuzzleView, connected: List<Point>, isPlayer: Boolean): Unit = view.run {
+fun iconReaction(view: Puzzle, connected: List<Point>, isPlayer: Boolean): Unit = view.run {
     val last = connected.last()
     val list = listOf(last) + getAroundPoints(view, last)
     // つなげた数だけプレイヤーの色を増やす
@@ -38,7 +38,7 @@ fun iconReaction(view: PuzzleView, connected: List<Point>, isPlayer: Boolean): U
     }
 }
 
-private fun getAroundPoints(view: PuzzleView, point: Point) = view.run {
+private fun getAroundPoints(view: Puzzle, point: Point) = view.run {
     PuzzleModel().getAroundPoints(point).filter { (x, y) ->
         // 配列の範囲外でないか
         x >= 0 && y >= 0 && y < colSize && x < rowSize

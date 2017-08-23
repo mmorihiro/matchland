@@ -3,6 +3,7 @@ package mmorihiro.matchland.controller
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.onClick
 import ktx.actors.plus
@@ -14,11 +15,14 @@ import mmorihiro.matchland.view.MyImage
 import mmorihiro.matchland.view.View
 
 
-class HomeController(onPlay: () -> Unit, top: View) : Controller {
+class HomeController(onPlay: () -> Unit,
+                     onBattle: () -> Unit,
+                     private val top: View) : Controller {
     override val view = HomeView().apply {
         Gdx.input.inputProcessor = this
         this + backGround
-        this + button
+        this + playButton
+        this + battleButton
         icons.forEach {
             this + it.first
             this + it.second
@@ -29,14 +33,17 @@ class HomeController(onPlay: () -> Unit, top: View) : Controller {
             it.first.onClick { _, tile -> onClick(this, it.second, tile) }
             it.second.onClick { _, icon -> onClick(this, icon, it.first) }
         }
-        button.onClick { _, button ->
-            button.color = Color(0.5f, 0.5f, 0.5f, 1f)
-            button + Actions.color(Color.WHITE, 0.2f)
-            Gdx.input.inputProcessor = null
-            Assets.manager.finishLoading()
-            StageChangeEffect().addEffect(top)
-            top + (Actions.delay(0.9f) then Actions.run { onPlay() })
-        }
+        playButton.onClick { _, button -> buttonOnClick(button, onPlay) }
+        battleButton.onClick { _, button -> buttonOnClick(button, onBattle) }
+    }
+
+    private fun buttonOnClick(button: Button, f: () -> Unit) {
+        button.color = Color(0.5f, 0.5f, 0.5f, 1f)
+        button + Actions.color(Color.WHITE, 0.2f)
+        Gdx.input.inputProcessor = null
+        Assets.manager.finishLoading()
+        StageChangeEffect().addEffect(top)
+        top + (Actions.delay(0.9f) then Actions.run { f() })
     }
 
     private fun onClick(view: HomeView, icon: MyImage, tile: Image) {

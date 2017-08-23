@@ -12,6 +12,7 @@ import ktx.assets.asset
 import ktx.assets.load
 import ktx.assets.unload
 import ktx.scene2d.Scene2DSkin
+import mmorihiro.matchland.controller.appwarp.WarpController
 import mmorihiro.matchland.view.HomeView
 import mmorihiro.matchland.view.StageView
 import mmorihiro.matchland.view.View
@@ -30,7 +31,10 @@ class MainListener : ApplicationAdapter() {
     private fun homeView(): HomeView =
             HomeController({
                 currentViews = listOf(
-                        StageView({ currentViews = listOf(homeView(), topView) }, topView), topView)
+                        StageView({ currentViews = listOf(homeView(), topView) }, topView),
+                        topView)
+            }, {
+                currentViews = listOf(WarpController().view, topView)
             }, topView).view
 
 

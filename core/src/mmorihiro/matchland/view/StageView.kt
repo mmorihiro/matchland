@@ -51,7 +51,7 @@ class StageView(private val onHome: () -> Unit, val top: View) : View() {
                     val pauseView = getPauseView()
                     Gdx.input.inputProcessor = pauseView
                     currentViews += pauseView
-                }, config.itemType, enemyType).view
+                }, enemyType).view
         Gdx.input.inputProcessor = puzzleView
         return listOf(puzzleView, barView)
     }

@@ -17,8 +17,8 @@ class HomeView : View() {
             .filterNot { it == ItemType.WATER }
             .mapIndexed { index, it ->
                 val item = itemLoader.load(it.position).apply {
-                    x = 50 + 51f * index
-                    y = 50f
+                    x = 55 + 51f * index
+                    y = 55f
                     color = Color.BLACK
                 }
                 Image(asset<Texture>("tile.png")).apply {
@@ -27,7 +27,11 @@ class HomeView : View() {
                 } to item
             }
 
-    val button = Button(Image(asset<Texture>("play.png")).drawable).apply {
+    val playButton = Button(Image(asset<Texture>("play.png")).drawable).apply {
         centerPosition(Values.width, Values.height)
+    }
+    val battleButton = Button(Image(asset<Texture>("play.png")).drawable).apply {
+        x = playButton.x
+        y = playButton.y - height - 32
     }
 }

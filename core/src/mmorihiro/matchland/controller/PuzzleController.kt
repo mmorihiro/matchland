@@ -16,7 +16,6 @@ import mmorihiro.matchland.view.PuzzleView
 
 class PuzzleController(onTurnEnd: (Int) -> Unit,
                        onPause: () -> Unit,
-                       playerType: ItemType,
                        enemyType: ItemType) : Controller {
     override val view = PuzzleView(
             ::touchAction,
@@ -32,7 +31,8 @@ class PuzzleController(onTurnEnd: (Int) -> Unit,
                         }.sum())
                     })
                 })
-            }, playerType, enemyType).apply {
+            }).apply {
+        this.enemyType = enemyType
         this + backGround
         this + itemLayer
         tiles.forEach { it.forEach { itemLayer + it } }
@@ -58,7 +58,7 @@ class PuzzleController(onTurnEnd: (Int) -> Unit,
                         view.items[point.second][point.first] = newItem(existingItem)
                     }
         }
-        resetBubbles()
+        resetIcons()
         enemyAction(event)
     }
 

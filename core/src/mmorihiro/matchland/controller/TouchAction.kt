@@ -7,9 +7,10 @@ import mmorihiro.matchland.model.Point
 import mmorihiro.matchland.model.PuzzleModel
 import mmorihiro.matchland.view.ConnectEvent
 import mmorihiro.matchland.view.MyImage
+import mmorihiro.matchland.view.Puzzle
 import mmorihiro.matchland.view.PuzzleView
 
-fun touchAction(view: PuzzleView, x: Int, y: Int) = view.run {
+fun touchAction(view: Puzzle, x: Int, y: Int) = (view as PuzzleView).run {
     val touchedPoint = coordinateToPoint(x, y)
     val touchedItem = try {
         items[touchedPoint.second][touchedPoint.first]
@@ -63,17 +64,16 @@ private fun touchEffect(image: MyImage) {
     image.color = Color(0.5f, 0.5f, 0.5f, 0.7f)
 }
 
-fun onTouchUp(view: PuzzleView,
-              touchUp: (ConnectEvent) -> Unit) {
+fun onTouchUp(view: Puzzle, touchUp: (ConnectEvent) -> Unit) {
     view.connectEvent?.let {
         view.connectEvent = null
         val size = it.connectedItems.size
-        if (size <= 2) view.resetBubbles()
+        if (size <= 2) view.resetIcons()
         else touchUp(it)
     }
 }
 
-fun onTouchDragged(view: PuzzleView, x: Int, y: Int): Unit = view.run {
+fun onTouchDragged(view: Puzzle, x: Int, y: Int): Unit = view.run {
     connectEvent?.let {
         val point = coordinateToPoint(x, y)
         val item = try {

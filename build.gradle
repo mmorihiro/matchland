@@ -77,6 +77,8 @@ project(":core") {
         compile "com.github.czyzby:ktx-assets:$ktxVersion"
         compile "com.github.czyzby:ktx-scene2d:$ktxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        compile files('./AppWarp.jar')
+        compile files('./json-org.jar')
     }
 }
 
