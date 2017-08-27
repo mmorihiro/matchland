@@ -2,6 +2,8 @@ package mmorihiro.matchland.controller
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils.random
+import ktx.actors.alpha
+import mmorihiro.matchland.controller.appwarp.WarpPuzzleView
 import mmorihiro.matchland.model.ItemType
 import mmorihiro.matchland.model.Point
 import mmorihiro.matchland.model.PuzzleModel
@@ -13,6 +15,8 @@ import mmorihiro.matchland.view.PuzzleView
 fun touchAction(view: Puzzle, x: Int, y: Int) = view.run {
     if (connectEvent != null) return
     val touchedPoint = coordinateToPoint(x, y)
+    if (view is WarpPuzzleView && view.enemyConnected.contains(touchedPoint))
+        return
     val touchedItem = try {
         items[touchedPoint.second][touchedPoint.first]
     } catch (e: IndexOutOfBoundsException) {
@@ -68,18 +72,22 @@ private fun touchEffect(image: MyImage) {
     image.color = Color(0.5f, 0.5f, 0.5f, 0.7f)
 }
 
-fun onTouchUp(view: Puzzle, touchUp: (ConnectEvent) -> Unit) {
+fun onTouchUp(view: Puzzle, touchUp: (ConnectEvent) -> Unit,
+              notEnough: () -> Unit = {}) {
     view.connectEvent?.let {
         view.connectEvent = null
         val size = it.connectedItems.size
-        if (size <= 2) view.resetIcons()
+        if (size <= 2) {
+            view.resetIcons(it.connectedItems)
+            notEnough()
+        }
         else touchUp(it)
     }
 }
 
 fun onTouchDragged(view: Puzzle, x: Int, y: Int,
                    onConnect: () -> Unit = {},
-                   onNotConnect: () -> Unit = {}): Unit = view.run {
+                   onNotConnect: (Float, Float) -> Unit = { _, _ -> }): Unit = view.run {
     connectEvent?.let {
         val point = coordinateToPoint(x, y)
         val item = try {
@@ -87,20 +95,21 @@ fun onTouchDragged(view: Puzzle, x: Int, y: Int,
         } catch (e: IndexOutOfBoundsException) {
             return
         }
+        if (item.alpha == 0f) return
 
         // やり直す時
         if (it.connectedItems.size >= 2 && point ==
                 it.connectedItems[it.connectedItems.lastIndex - 1]) {
             val point1 = it.connectedItems.last()
-            items[point1.second][point1.first].color = Color.WHITE
             connectEvent =
                     it.copy(connectedItems = it.connectedItems.dropLast(1))
-            onNotConnect()
+            val item1 = items[point1.second][point1.first]
+            item1.color = Color.WHITE
+            onNotConnect(item1.x, item1.y)
         }
         if (canConnect(it, point, item, x, y)) {
             touchEffect(item)
-            connectEvent =
-                    it.copy(connectedItems = it.connectedItems + point)
+            connectEvent = it.copy(connectedItems = it.connectedItems + point)
             onConnect()
         }
     }

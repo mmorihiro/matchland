@@ -36,8 +36,7 @@ class RoomListener(private val controller: WarpController) : RoomRequestListener
     }
 
     override fun onGetLiveRoomInfoDone(event: LiveRoomInfoEvent?) {
-        if (event!!.joinedUsers.size == 2) controller.startGame(event!!)
-        else controller.warpClient.subscribeRoom(event.data.id)
+        if (event!!.joinedUsers.size == 2) controller.startGame(event)
     }
 
     override fun onUnSubscribeRoomDone(p0: RoomEvent?) {

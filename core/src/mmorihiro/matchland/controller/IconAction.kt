@@ -50,7 +50,8 @@ private fun getAroundPoints(view: Puzzle, point: Point) = view.run {
     }
 }
 
-fun addNewItems(view: Puzzle, event: ConnectEvent): Unit = view.run {
+fun addNewItems(view: Puzzle, event: ConnectEvent,
+                canAddNew: Boolean = true): Unit = view.run {
     val last = event.connectedItems.last()
     val item = items[last.second][last.first]
     items.forEach { row ->
@@ -64,14 +65,15 @@ fun addNewItems(view: Puzzle, event: ConnectEvent): Unit = view.run {
                     existingItem + action
                     val point = coordinateToPoint(
                             existingItem.x.toInt(), existingItem.y.toInt())
-                    view.items[point.second][point.first] = newItem(view, existingItem)
+                    if (canAddNew)
+                        view.items[point.second][point.first] = newItem(view, existingItem)
                 }
     }
-    resetIcons()
-    enemyAction(view, event)
+    resetIcons(event.connectedItems)
+    enemyAction(view, event, canAddNew)
 }
 
-private fun enemyAction(view: Puzzle, event: ConnectEvent) {
+private fun enemyAction(view: Puzzle, event: ConnectEvent, canAddNew: Boolean) {
     val center = event.enemyPoint.let {
         view.items[it.second][it.first]
     }
@@ -82,7 +84,7 @@ private fun enemyAction(view: Puzzle, event: ConnectEvent) {
                     item.remove()
                 }
         item + action
-        view.items[it.second][it.first] = newItem(view, item)
+        if (canAddNew) view.items[it.second][it.first] = newItem(view, item)
     }
 }
 
@@ -96,7 +98,6 @@ private fun newItem(view: Puzzle, existingItem: MyImage): MyImage =
         }
 
 fun loadItem(view: Puzzle) = view.run {
-    itemLoader.load(listOf(playerType, enemyType, WATER)[MathUtils.random
-    (2)].position)
+    itemLoader.load(listOf(playerType, enemyType, WATER)[MathUtils.random(2)].position)
 }
 

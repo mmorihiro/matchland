@@ -16,7 +16,6 @@ abstract class Puzzle : View() {
     val colSize = 7
     val tileSize = 51f
     val bottom = 55
-
     val padding = 8
     val backGround = Image(asset<Texture>("background.png"))
     val itemLoader = ImageLoader(32, "items.png")
@@ -33,8 +32,11 @@ abstract class Puzzle : View() {
     fun coordinateToPoint(x: Int, y: Int): Point =
             x / tileSize.toInt() to (y - bottom) / tileSize.toInt()
 
-    fun resetIcons() {
-        items.forEach { it.forEach { it.color = Color.WHITE } }
+    fun resetIcons(connectedItems: List<Point>) {
+        connectedItems.forEach {
+            val item = items[it.second][it.first]
+            item.color = Color.WHITE
+        }
     }
 
     override fun touchUp(screenX: Int, screenY: Int,

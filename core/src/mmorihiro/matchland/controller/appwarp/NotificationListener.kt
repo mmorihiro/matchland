@@ -4,6 +4,7 @@ import com.shephertz.app42.gaming.multiplayer.client.events.*
 import com.shephertz.app42.gaming.multiplayer.client.listener.NotifyListener
 import com.typesafe.config.ConfigFactory
 import io.github.config4k.extract
+import ktx.actors.alpha
 import mmorihiro.matchland.model.ConfigModel
 import mmorihiro.matchland.model.MessageType
 import java.util.*
@@ -25,6 +26,21 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
                         config.extract("y"), false)
             }
             MessageType.TouchUp -> controller.onEnemyTouchUp()
+            MessageType.NotEnough -> {
+                controller.view.run {
+                    items.forEach {
+                        it.filter { it.alpha == 0f }.forEach { it.alpha = 1f }
+                    }
+                    enemyConnected = listOf()
+                    connectEvent?.let {
+                        connectEvent = it.copy(enemy = listOf())
+                    }
+                }
+            }
+            MessageType.NewItem -> {
+                val config = ConfigFactory.parseString(list[2])
+                controller.onNewItem(config.extract("items"))
+            }
         }
     }
 
@@ -35,7 +51,8 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
     override fun onGameStopped(p0: String?, p1: String?) {
     }
 
-    override fun onUserJoinedRoom(p0: RoomData?, p1: String?) {
+    override fun onUserJoinedRoom(data: RoomData?, p1: String?) {
+        controller.warpClient.subscribeRoom(data!!.id)
     }
 
     override fun onPrivateChatReceived(p0: String?, p1: String?) {
