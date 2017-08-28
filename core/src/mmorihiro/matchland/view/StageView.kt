@@ -18,7 +18,7 @@ import mmorihiro.matchland.model.ItemType
 import mmorihiro.matchland.model.Values
 
 
-class StageView(private val onHome: () -> Unit, val top: View) : View() {
+class StageView(private val onHome: () -> Unit, private val top: View) : View() {
     private var currentViews: List<View> = createView()
     private val label = Label("Lv ${ConfigModel.config.stageNumber}",
             Scene2DSkin.defaultSkin, "default-font", Color.WHITE).apply {
@@ -28,8 +28,9 @@ class StageView(private val onHome: () -> Unit, val top: View) : View() {
     }
 
     private fun createView(): List<View> {
+        val config = ConfigModel.config
         val barController = BarController({
-            val clearView = StageChangeController({
+            val clearView = StageChangeController("Stage Completed!") {
                 Gdx.input.inputProcessor = null
                 StageChangeEffect().addEffect(this)
                 this + (Actions.delay(0.9f) then Actions.run {
@@ -37,18 +38,17 @@ class StageView(private val onHome: () -> Unit, val top: View) : View() {
                     label.setText("Lv ${ConfigModel.config.stageNumber}")
                     currentViews = createView()
                 })
-            }).view
+            }.view
             Gdx.input.inputProcessor = clearView
             currentViews += clearView
-        })
+        }, config.stageNumber)
         val barView = barController.view
-        val config = ConfigModel.config
         val enemyType = ItemType.values()
                 .filterNot { it == config.itemType || it == ItemType.WATER }
                 .let { it[config.stageNumber % 3] }
         val puzzleView =
                 PuzzleController(barController::percentEffect, {
-                    val pauseView = getPauseView()
+                    val pauseView = buildPauseView()
                     Gdx.input.inputProcessor = pauseView
                     currentViews += pauseView
                 }, enemyType).view
@@ -56,7 +56,7 @@ class StageView(private val onHome: () -> Unit, val top: View) : View() {
         return listOf(puzzleView, barView)
     }
 
-    private fun getPauseView(): PauseView =
+    private fun buildPauseView(): PauseView =
             PauseView().apply {
                 resumeButton.onClick { _, _ ->
                     currentViews -= currentViews.last()

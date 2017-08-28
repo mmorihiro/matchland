@@ -18,7 +18,7 @@ class RoomListener(private val controller: WarpController) : RoomRequestListener
             }
             RESOURCE_NOT_FOUND -> {
                 val pair = "iconList" to
-                        controller.getIconList().toConfig("list").root()
+                        getIconList(controller.view).toConfig("list").root()
                                 .render(ConfigRenderOptions.concise())
                 val type0 = "type0" to ConfigModel.config.itemType.name
                 controller.warpClient.createRoom("matchland", "shephertz",

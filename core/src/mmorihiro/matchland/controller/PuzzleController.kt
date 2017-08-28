@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions.delay
 import ktx.actors.onClick
 import ktx.actors.plus
 import ktx.actors.then
-import mmorihiro.matchland.model.ConfigModel
 import mmorihiro.matchland.model.ItemType
 import mmorihiro.matchland.view.PuzzleView
 
@@ -22,9 +21,7 @@ class PuzzleController(onTurnEnd: (Int) -> Unit,
                     iconReaction(view, event.enemy, false)
                     addNewItems(view, event)
                     view + (delay(1f) then Actions.run {
-                        onTurnEnd(view.tiles.map {
-                            it.filter { it.color == ConfigModel.config.itemType.color }.size
-                        }.sum())
+                        onTurnEnd(view.getColorValue())
                     })
                 })
             }).apply {

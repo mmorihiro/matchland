@@ -39,6 +39,9 @@ abstract class Puzzle : View() {
         }
     }
 
+    fun getColorValue(color: Color = playerType.color) =
+            tiles.map { it.count { it.color == color } }.sum()
+
     override fun touchUp(screenX: Int, screenY: Int,
                          pointer: Int, button: Int): Boolean {
         onTouchUp(this)

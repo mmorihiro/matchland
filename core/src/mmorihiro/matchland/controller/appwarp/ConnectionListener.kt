@@ -13,7 +13,6 @@ class ConnectionListener(val warpClient: WarpClient) : ConnectionRequestListener
 
     override fun onConnectDone(event: ConnectEvent?) {
         if (event!!.result == WarpResponseResultCode.SUCCESS) {
-            warpClient.initUDP()
             warpClient.joinRoomInRange(1, 1, false)
         } else error("connectionError")
     }

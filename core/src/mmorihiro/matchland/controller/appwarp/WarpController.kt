@@ -2,8 +2,6 @@ package mmorihiro.matchland.controller.appwarp
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient
 import com.shephertz.app42.gaming.multiplayer.client.events.LiveRoomInfoEvent
@@ -11,7 +9,6 @@ import com.typesafe.config.ConfigFactory
 import com.typesafe.config.ConfigRenderOptions
 import io.github.config4k.extract
 import io.github.config4k.toConfig
-import ktx.actors.alpha
 import ktx.actors.plus
 import ktx.assets.asset
 import mmorihiro.matchland.controller.*
@@ -21,11 +18,13 @@ import mmorihiro.matchland.model.MessageType
 import mmorihiro.matchland.view.ConnectEvent
 import mmorihiro.matchland.view.MyImage
 import mmorihiro.matchland.view.Puzzle
+import mmorihiro.matchland.view.View
 
-class WarpController : Controller {
+class WarpController(onHome: () -> Unit, top: View) : Controller {
     val warpClient: WarpClient by lazy { WarpClient.getInstance() }
+    lateinit var roomID: String
     override val view = WarpPuzzleView(
-            { view, x, y ->
+            onTouchDown = { view, x, y ->
                 touchAction(view, x, y)
                 view.connectEvent?.let {
                     sendMessage(MessageType.CONNECT, x, y)
@@ -33,36 +32,40 @@ class WarpController : Controller {
                             enemy = (view as WarpPuzzleView).enemyConnected)
                 }
             },
-            { view, x, y ->
+            onTouchDragged = { view, x, y ->
                 onTouchDragged(view, x, y,
                         { sendMessage(MessageType.CONNECT, x, y) },
                         { bx, by ->
                             sendMessage(MessageType.NotConnect, bx.toInt(), by.toInt())
                         })
-            }, { view ->
+            }, onTouchUp = { view ->
         val warpView = view as WarpPuzzleView
         if (warpView.connectEvent == null) return@WarpPuzzleView
         val connectEvent = warpView.connectEvent!!
         onTouchUp(view, { event ->
             sendMessage(MessageType.TouchUp)
-            if (warpView.isEnemyTouchUp) {
-                warpView.enemyConnected = listOf()
+            if (view.isEnemyTouchUp) {
+                view.enemyConnected = listOf()
                 iconReaction(view, event.enemy, false)
                 iconReaction(view, event.connectedItems, true)
                 addNewItems(view, event)
                 sendNewItems(view, event)
-                warpView.isEnemyTouchUp = false
+                view.isEnemyTouchUp = false
+                changeBarValue(view)
             } else {
-                warpView.isPlayerTouchUp = true
-                warpView.connectEvent = connectEvent
+                view.isPlayerTouchUp = true
+                view.connectEvent = connectEvent
             }
         }, { sendMessage(MessageType.NotEnough) })
-    })
+    }, onFinish = {
+        warpClient.leaveRoom(roomID)
+        warpClient.disconnect()
+    }, onHome = onHome, top = top)
 
     init {
         WarpClient.initialize(
-                "7e6b26f67a247caf422e4740a615b2eb319556979966657807e348746375c9bb",
-                "d76b818c1efaa7d447cbf692518095caf040198c3ab1912d5f24eefafe0d7932")
+                "37e334f70df6e1984fc390d2a52939f75f8e546584c20ef3a31b87efec76d11f",
+                "ef2760dcfdbbff89c6d081934e985c26cc05e16dc026146b972ca1a1ad3fc9fc")
         warpClient.addConnectionRequestListener(ConnectionListener(warpClient))
         warpClient.addRoomRequestListener(RoomListener(this))
         warpClient.addZoneRequestListener(ZoneListener(warpClient))
@@ -71,6 +74,7 @@ class WarpController : Controller {
     }
 
     fun startGame(event: LiveRoomInfoEvent) = view.run {
+        roomID = event.data.id
         enemyType = event.joinedUsers.first { it != playerType.name }.let { typeName ->
             ItemType.values().first { it.name == typeName }
         }
@@ -127,52 +131,5 @@ class WarpController : Controller {
 
         warpClient.sendUpdatePeers("${ConfigModel.config.itemType
                 .name}@${MessageType.NewItem.name}@$str".toByteArray())
-    }
-
-    fun getIconList() = view.run {
-        (0 until colSize).map { (0 until rowSize).map { MathUtils.random(2) } }
-    }
-
-    fun onEnemyConnect(x: Int, y: Int, isConnected: Boolean) = view.run {
-        val (xIndex, yIndex) = coordinateToPoint(x, y)
-        val icon = items[yIndex][xIndex]
-        if (isConnected) {
-            icon.alpha = 0f
-            connectEvent?.let {
-                connectEvent = it.copy(enemy = it.enemy + (xIndex to yIndex))
-            }
-            enemyConnected += (xIndex to yIndex)
-        } else {
-            icon.alpha = 1f
-            connectEvent?.let {
-                connectEvent = it.copy(enemy = it.enemy - (xIndex to yIndex))
-            }
-            enemyConnected -= (xIndex to yIndex)
-        }
-    }
-
-    fun onEnemyTouchUp() = view.run {
-        if (isPlayerTouchUp) {
-            enemyConnected = listOf()
-            iconReaction(view, connectEvent!!.connectedItems, true)
-            iconReaction(view, connectEvent!!.enemy, false)
-            addNewItems(view, connectEvent!!, false)
-            connectEvent = null
-            isPlayerTouchUp = false
-        } else isEnemyTouchUp = true
-    }
-
-    fun onNewItem(newItems: List<NewItem>) = view.run {
-        newItems.forEach {
-            val tile = tiles[it.y][it.x]
-            itemLoader.load(it.item.position).run {
-                x = tile.x + padding
-                y = tile.y + padding
-                items[it.y][it.x] = this
-                alpha = 0f
-                this + Actions.fadeIn(0.15f)
-                itemLayer + this
-            }
-        }
     }
 }

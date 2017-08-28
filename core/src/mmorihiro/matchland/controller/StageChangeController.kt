@@ -7,8 +7,8 @@ import ktx.actors.plus
 import mmorihiro.matchland.view.StageChangeView
 
 
-class StageChangeController(onFinish: () -> Unit) : Controller {
-    override val view = StageChangeView().apply {
+class StageChangeController(title: String, onFinish: () -> Unit) : Controller {
+    override val view = StageChangeView(title).apply {
         this + window
         window.y -= 15f
         window.alpha = 0f

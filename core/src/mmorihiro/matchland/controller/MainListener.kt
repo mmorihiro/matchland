@@ -29,13 +29,18 @@ class MainListener : ApplicationAdapter() {
     }
 
     private fun homeView(): HomeView =
-            HomeController({
+            HomeController(onPlay = {
                 currentViews = listOf(
-                        StageView({ currentViews = listOf(homeView(), topView) }, topView),
+                        StageView({ backHome() }, topView),
                         topView)
-            }, {
-                currentViews = listOf(WarpController().view, topView)
-            }, topView).view
+            }, onBattle = {
+                currentViews = listOf(
+                        WarpController({ backHome() }, topView).view, topView)
+            }, top = topView).view
+
+    private fun backHome() {
+        currentViews = listOf(homeView(), topView)
+    }
 
 
     private fun loadAssets() {

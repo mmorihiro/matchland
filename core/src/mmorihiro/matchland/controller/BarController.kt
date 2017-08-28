@@ -14,15 +14,19 @@ import mmorihiro.matchland.view.BarView
 import mmorihiro.matchland.view.StarType
 
 
-class BarController(private val onClear: () -> Unit) : Controller {
+class BarController(private val onClear: () -> Unit, level: Int) : Controller {
     override val view = BarView().apply {
         this + bar
-        val level = ConfigModel.config.stageNumber
         stars.forEach {
-            it.x += if (level <= 10) 2 * level else 20
+            it.x += if (level <= 15) 2 * level else 30
             this + it
         }
         bar.width = getPercentWidth(5)
+    }
+
+    fun isClear(value: Int): Boolean = view.run {
+        val star = stars.last()
+        barWidth * value / 35 >= star.x + star.width / 2 - bar.x
     }
 
     fun percentEffect(value: Int): Unit = view.run {

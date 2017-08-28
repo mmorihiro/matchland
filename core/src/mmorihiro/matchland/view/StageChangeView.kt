@@ -9,10 +9,10 @@ import mmorihiro.matchland.model.Values
 import kotlin.properties.Delegates
 
 
-class StageChangeView : View() {
+class StageChangeView(title: String) : View() {
     var button by Delegates.notNull<KTextButton>()
         private set
-    val window = window(title = "Stage Completed!") {
+    val window = window(title) {
         defaults().pad(20f)
         button = textButton("continue") {
             color = Color.GREEN

@@ -15,7 +15,7 @@ class BarView : View() {
         color = ConfigModel.config.itemType.color
     }
     val barWidth = bar.width
-    var stars = listOf(30, 80, 120).map {
+    var stars = listOf(30, 70, 110).map {
         getStar(StarType.GRAY).apply {
             x = it.toFloat() + bar.x
             y = 9f

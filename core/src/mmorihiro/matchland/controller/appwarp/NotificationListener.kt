@@ -17,15 +17,15 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
         when (MessageType.values().first { it.name == list[1] }) {
             MessageType.CONNECT -> {
                 val config = ConfigFactory.parseString(list[2])
-                controller.onEnemyConnect(config.extract("x"),
+                onEnemyConnect(controller.view, config.extract("x"),
                         config.extract("y"), true)
             }
             MessageType.NotConnect -> {
                 val config = ConfigFactory.parseString(list[2])
-                controller.onEnemyConnect(config.extract("x"),
+                onEnemyConnect(controller.view, config.extract("x"),
                         config.extract("y"), false)
             }
-            MessageType.TouchUp -> controller.onEnemyTouchUp()
+            MessageType.TouchUp -> onEnemyTouchUp(controller.view)
             MessageType.NotEnough -> {
                 controller.view.run {
                     items.forEach {
@@ -39,9 +39,23 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
             }
             MessageType.NewItem -> {
                 val config = ConfigFactory.parseString(list[2])
-                controller.onNewItem(config.extract("items"))
+                onNewItem(controller.view, config.extract("items"))
             }
         }
+    }
+
+    override fun onUserJoinedRoom(data: RoomData?, p1: String?) {
+        controller.warpClient.subscribeRoom(data!!.id)
+    }
+
+    override fun onUserLeftRoom(data: RoomData?, userName: String?) {
+        if (userName == ConfigModel.config.itemType.name) return
+        controller.warpClient.run {
+            leaveRoom(data!!.id)
+            deleteRoom(data.id)
+            disconnect()
+        }
+        controller.view.showWindow(if (isEnemyCleared(controller.view)) "Lose" else "Win")
     }
 
     override fun onRoomDestroyed(p0: RoomData?) {
@@ -49,10 +63,6 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
     }
 
     override fun onGameStopped(p0: String?, p1: String?) {
-    }
-
-    override fun onUserJoinedRoom(data: RoomData?, p1: String?) {
-        controller.warpClient.subscribeRoom(data!!.id)
     }
 
     override fun onPrivateChatReceived(p0: String?, p1: String?) {
@@ -68,9 +78,6 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
     }
 
     override fun onNextTurnRequest(p0: String?) {
-    }
-
-    override fun onUserLeftRoom(p0: RoomData?, p1: String?) {
     }
 
     override fun onGameStarted(p0: String?, p1: String?, p2: String?) {
