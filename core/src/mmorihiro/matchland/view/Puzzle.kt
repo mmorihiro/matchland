@@ -22,7 +22,7 @@ abstract class Puzzle : View() {
     var itemLayer = Group()
     var connectEvent: ConnectEvent? = null
     val playerType = ConfigModel.config.itemType
-    var enemyType by Delegates.notNull<ItemType>()
+    open var enemyType by Delegates.notNull<ItemType>()
     abstract var tiles: List<List<MyImage>>
     abstract var items: MutableList<MutableList<MyImage>>
     abstract val onTouchUp: (Puzzle) -> Unit

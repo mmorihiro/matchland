@@ -7,13 +7,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.assets.asset
 import mmorihiro.matchland.controller.loadItem
 import mmorihiro.matchland.model.ConfigModel
+import mmorihiro.matchland.model.ItemType
 import mmorihiro.matchland.model.ItemType.WATER
 import mmorihiro.matchland.model.Values
 
 class PuzzleView(override val onTouchDown: (Puzzle, Int, Int) -> Unit,
                  override val onTouchDragged: (Puzzle, Int, Int) -> Unit,
-                 override val onTouchUp: (Puzzle) -> Unit) : Puzzle() {
-    val pauseButton = Button(Image(asset<Texture>("pause.png")).drawable).apply { 
+                 override val onTouchUp: (Puzzle) -> Unit,
+                 override var enemyType: ItemType) : Puzzle() {
+    val pauseButton = Button(Image(asset<Texture>("pause.png")).drawable).apply {
         x = Values.width - width - 8
         y = Values.height - height - 8
     }

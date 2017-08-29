@@ -30,7 +30,7 @@ class HomeView : View() {
     val playButton = Button(Image(asset<Texture>("play.png")).drawable).apply {
         centerPosition(Values.width, Values.height)
     }
-    val battleButton = Button(Image(asset<Texture>("play.png")).drawable).apply {
+    val battleButton = Button(Image(asset<Texture>("online.png")).drawable).apply {
         x = playButton.x
         y = playButton.y - height - 32
     }

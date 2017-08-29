@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import ktx.actors.onClick
 import ktx.assets.Assets
 import ktx.assets.asset
 import ktx.assets.load
 import ktx.assets.unload
 import ktx.scene2d.Scene2DSkin
+import mmorihiro.matchland.controller.appwarp.WaitingView
 import mmorihiro.matchland.controller.appwarp.WarpController
 import mmorihiro.matchland.view.HomeView
 import mmorihiro.matchland.view.StageView
@@ -34,8 +36,16 @@ class MainListener : ApplicationAdapter() {
                         StageView({ backHome() }, topView),
                         topView)
             }, onBattle = {
-                currentViews = listOf(
-                        WarpController({ backHome() }, topView).view, topView)
+                val waitingView = WaitingView()
+                val warpController =
+                        WarpController({ currentViews -= waitingView }, { backHome() }, topView)
+                Gdx.input.inputProcessor = waitingView
+                waitingView.button.onClick { _, _ ->
+                    warpController.warpClient.disconnect()
+                    backHome()
+                    StageChangeEffect().resumeEffect(topView)
+                }
+                currentViews = listOf(warpController.view, topView, waitingView)
             }, top = topView).view
 
     private fun backHome() {
@@ -48,10 +58,12 @@ class MainListener : ApplicationAdapter() {
         load<Skin>("ui/uiskin.json")
         load<Texture>("homeBackground.png")
         load<Texture>("play.png")
+        load<Texture>("online.png")
         load<Texture>("items.png")
         load<Texture>("tile.png")
         Assets.manager.finishLoading()
         load<Texture>("background.png")
+        load<Texture>("backgroundTop.png")
         load<Texture>("star.png")
         load<Texture>("grayStar.png")
         load<Texture>("bar.png")

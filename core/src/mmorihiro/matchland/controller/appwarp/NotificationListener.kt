@@ -51,7 +51,8 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
     override fun onUserLeftRoom(data: RoomData?, userName: String?) {
         if (userName == ConfigModel.config.itemType.name) return
         controller.warpClient.run {
-            leaveRoom(data!!.id)
+            unsubscribeRoom(data!!.id)
+            leaveRoom(data.id)
             deleteRoom(data.id)
             disconnect()
         }

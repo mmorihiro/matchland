@@ -24,8 +24,7 @@ class PuzzleController(onTurnEnd: (Int) -> Unit,
                         onTurnEnd(view.getColorValue())
                     })
                 })
-            }).apply {
-        this.enemyType = enemyType
+            }, enemyType).apply {
         this + backGround
         this + itemLayer
         tiles.forEach { it.forEach { itemLayer + it } }

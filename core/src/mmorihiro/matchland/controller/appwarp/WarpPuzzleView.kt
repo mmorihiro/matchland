@@ -1,14 +1,18 @@
 package mmorihiro.matchland.controller.appwarp
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.plus
 import ktx.actors.then
+import ktx.assets.asset
 import mmorihiro.matchland.controller.BarController
 import mmorihiro.matchland.controller.StageChangeController
 import mmorihiro.matchland.controller.StageChangeEffect
 import mmorihiro.matchland.model.Point
+import mmorihiro.matchland.model.Values
 import mmorihiro.matchland.view.MyImage
 import mmorihiro.matchland.view.Puzzle
 import mmorihiro.matchland.view.View
@@ -25,6 +29,9 @@ class WarpPuzzleView(override val onTouchDown: (Puzzle, Int, Int) -> Unit,
     var enemyConnected: List<Point> = listOf()
     var isPlayerTouchUp = false
     var isEnemyTouchUp = false
+    val cover = Image(asset<Texture>("backgroundTop.png")).apply {
+        y = Values.height - height
+    }
     val barController = createBar()
     private var currentViews = listOf<View>(barController.view)
 

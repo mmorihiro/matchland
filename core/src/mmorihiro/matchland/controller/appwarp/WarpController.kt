@@ -20,7 +20,8 @@ import mmorihiro.matchland.view.MyImage
 import mmorihiro.matchland.view.Puzzle
 import mmorihiro.matchland.view.View
 
-class WarpController(onHome: () -> Unit, top: View) : Controller {
+class WarpController(private val onStart: () -> Unit,
+                     onHome: () -> Unit, top: View) : Controller {
     val warpClient: WarpClient by lazy { WarpClient.getInstance() }
     lateinit var roomID: String
     override val view = WarpPuzzleView(
@@ -58,6 +59,7 @@ class WarpController(onHome: () -> Unit, top: View) : Controller {
             }
         }, { sendMessage(MessageType.NotEnough) })
     }, onFinish = {
+        warpClient.unsubscribeRoom(roomID)
         warpClient.leaveRoom(roomID)
         warpClient.disconnect()
     }, onHome = onHome, top = top)
@@ -74,6 +76,9 @@ class WarpController(onHome: () -> Unit, top: View) : Controller {
     }
 
     fun startGame(event: LiveRoomInfoEvent) = view.run {
+        Gdx.input.inputProcessor = null
+        onStart()
+        StageChangeEffect().resumeEffect(top)
         roomID = event.data.id
         enemyType = event.joinedUsers.first { it != playerType.name }.let { typeName ->
             ItemType.values().first { it.name == typeName }
@@ -112,6 +117,7 @@ class WarpController(onHome: () -> Unit, top: View) : Controller {
         }.toMutableList()
         tiles.forEach { it.forEach { itemLayer + it } }
         items.forEach { it.forEach { itemLayer + it } }
+        this + cover
         Gdx.input.inputProcessor = this
     }
 

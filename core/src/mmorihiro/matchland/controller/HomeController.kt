@@ -33,16 +33,16 @@ class HomeController(onPlay: () -> Unit,
             it.first.onClick { _, tile -> onClick(this, it.second, tile) }
             it.second.onClick { _, icon -> onClick(this, icon, it.first) }
         }
-        playButton.onClick { _, button -> buttonOnClick(button, onPlay) }
-        battleButton.onClick { _, button -> buttonOnClick(button, onBattle) }
+        playButton.onClick { _, button -> buttonOnClick(button, onPlay, false) }
+        battleButton.onClick { _, button -> buttonOnClick(button, onBattle, true) }
     }
 
-    private fun buttonOnClick(button: Button, f: () -> Unit) {
+    private fun buttonOnClick(button: Button, f: () -> Unit, stop: Boolean) {
         button.color = Color(0.5f, 0.5f, 0.5f, 1f)
         button + Actions.color(Color.WHITE, 0.2f)
         Gdx.input.inputProcessor = null
         Assets.manager.finishLoading()
-        StageChangeEffect().addEffect(top)
+        StageChangeEffect().addEffect(top, stop)
         top + (Actions.delay(0.9f) then Actions.run { f() })
     }
 
