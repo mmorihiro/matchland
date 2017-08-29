@@ -57,6 +57,7 @@ project(":android") {
 
     dependencies {
         compile project(":core")
+        compile fileTree('../libs')
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
@@ -77,8 +78,7 @@ project(":core") {
         compile "com.github.czyzby:ktx-assets:$ktxVersion"
         compile "com.github.czyzby:ktx-scene2d:$ktxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        compile files('./AppWarp.jar')
-        compile files('./json-org.jar')
+        compile fileTree('../libs')
     }
 }
 
