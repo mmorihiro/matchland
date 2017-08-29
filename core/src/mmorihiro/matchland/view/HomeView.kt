@@ -24,6 +24,7 @@ class HomeView : View() {
                 Image(asset<Texture>("tile.png")).apply {
                     color = it.color
                     setPosition(item.x - 9, item.y - 9)
+                    setOrigin(width / 2, height / 2)
                 } to item
             }
 

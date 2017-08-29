@@ -21,7 +21,7 @@ import mmorihiro.matchland.model.Values
 class StageView(private val onHome: () -> Unit, private val top: View) : View() {
     private var currentViews: List<View> = createView()
     private val label = Label("Lv ${ConfigModel.config.stageNumber}",
-            Scene2DSkin.defaultSkin, "default-font", Color.WHITE).apply {
+            Scene2DSkin.defaultSkin, "default-font2", Color.WHITE).apply {
         x = 53f
         y = Values.height - 37f
         this@StageView + this

@@ -2,6 +2,9 @@
   com.badlogic.gdx.graphics.g2d.BitmapFont: {
     default-font: {
       file: default.fnt
+    },
+    default-font2: {
+      file: default2.fnt
     }
   },
   com.badlogic.gdx.graphics.Color: {
@@ -53,7 +56,7 @@
       down: apptheme_btn_default_pressed_holo_light,
       up: apptheme_btn_default_normal_holo_light,
       disabled: apptheme_btn_default_disabled_holo_light,
-      font: default-font,
+      font: default-font2,
       fontColor: default,
       downFontColor: inverse,
       disabledFontColor: grey
@@ -62,7 +65,7 @@
       down: apptheme_btn_colored_pressed_holo_light,
       up: apptheme_btn_colored_normal_holo_light,
       disabled: apptheme_btn_colored_disabled_holo_light,
-      font: default-font,
+      font: default-font2,
       fontColor: default,
       downFontColor: inverse,
       disabledFontColor: grey
@@ -149,7 +152,7 @@
   },
   com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
     default: {
-      titleFont: default-font,
+      titleFont: default-font2,
       background: dialog_holo_light,
       titleFontColor: ui
     },

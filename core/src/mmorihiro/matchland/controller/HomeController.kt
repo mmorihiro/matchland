@@ -3,6 +3,8 @@ package mmorihiro.matchland.controller
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.delay
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.scaleTo
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.onClick
@@ -43,13 +45,14 @@ class HomeController(onPlay: () -> Unit,
         Gdx.input.inputProcessor = null
         Assets.manager.finishLoading()
         StageChangeEffect().addEffect(top, stop)
-        top + (Actions.delay(0.9f) then Actions.run { f() })
+        top + (delay(0.9f) then Actions.run { f() })
     }
 
     private fun onClick(view: HomeView, icon: MyImage, tile: Image) {
         if (icon.color != Color.WHITE) {
             view.icons.forEach { it.second.color = Color.BLACK }
             icon.color = Color.WHITE
+            tile + (scaleTo(1.3f, 1.3f, 0.1f) then scaleTo(1.0f, 1.0f, 0.1f))
             ConfigModel.onItemTypeChange(tile.color)
         }
     }
