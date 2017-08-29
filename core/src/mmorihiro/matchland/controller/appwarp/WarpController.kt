@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient
 import com.shephertz.app42.gaming.multiplayer.client.events.LiveRoomInfoEvent
-import com.typesafe.config.ConfigFactory
-import com.typesafe.config.ConfigRenderOptions
-import io.github.config4k.extract
-import io.github.config4k.toConfig
+import com.squareup.moshi.Types
 import ktx.actors.plus
 import ktx.assets.asset
 import mmorihiro.matchland.controller.*
@@ -19,6 +16,7 @@ import mmorihiro.matchland.view.ConnectEvent
 import mmorihiro.matchland.view.MyImage
 import mmorihiro.matchland.view.Puzzle
 import mmorihiro.matchland.view.View
+import java.lang.reflect.Type
 
 class WarpController(private val onStart: () -> Unit,
                      onHome: () -> Unit, top: View) : Controller {
@@ -85,8 +83,9 @@ class WarpController(private val onStart: () -> Unit,
         }
         this + backGround
         this + itemLayer
-        val config = ConfigFactory.parseString(event.properties["iconList"].toString())
-        val list = config.extract<List<List<Int>>>("list")
+        val adapter = ConfigModel.moshi.adapter(IconList::class.java)
+        val list =
+                adapter.fromJson(event.properties["iconList"].toString())!!.list
         val type0 = event.properties["type0"].toString().let { colorName ->
             ItemType.values().first { it.name == colorName }
         }
@@ -122,8 +121,9 @@ class WarpController(private val onStart: () -> Unit,
     }
 
     private fun sendMessage(type: MessageType, x: Int = -1, y: Int = -1) {
-        val str = if (x >= 0 && y >= 0) "{\"x\":$x, \"y\" : $y}" else ""
-        warpClient.sendUpdatePeers("${ConfigModel.config.itemType.name}@${type.name}@$str"
+        val adapter = ConfigModel.moshi.adapter(Point::class.java)
+        val json = if (x >= 0 && y >= 0) adapter.toJson(Point(x, y)) else ""
+        warpClient.sendUpdatePeers("${ConfigModel.config.itemType.name}@${type.name}@$json"
                 .toByteArray())
     }
 
@@ -133,7 +133,10 @@ class WarpController(private val onStart: () -> Unit,
             val type = ItemType.values().first { it.position == position }
             NewItem(type, it.first, it.second)
         }
-        val str = items.toConfig("items").root().render(ConfigRenderOptions.concise())
+        val type: Type =
+                Types.newParameterizedType(List::class.java, NewItem::class.java)
+        val adapter = ConfigModel.moshi.adapter<List<NewItem>>(type)
+        val str = adapter.toJson(items)
 
         warpClient.sendUpdatePeers("${ConfigModel.config.itemType
                 .name}@${MessageType.NewItem.name}@$str".toByteArray())

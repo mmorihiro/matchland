@@ -49,7 +49,7 @@ project(":desktop") {
     }
 }
 
-project(":android") {
+/*project(":android") {
     apply plugin: "android"
     apply plugin: "kotlin-android"
 
@@ -66,7 +66,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     }
-}
+}*/
 
 project(":core") {
     apply plugin: "kotlin"
@@ -102,7 +102,7 @@ project(":model") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        compile 'io.github.config4k:config4k:0.3.0'
+        compile 'com.squareup.moshi:moshi:1.5.0'
         testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
     }

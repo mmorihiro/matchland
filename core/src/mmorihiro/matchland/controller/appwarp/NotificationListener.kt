@@ -2,11 +2,11 @@ package mmorihiro.matchland.controller.appwarp
 
 import com.shephertz.app42.gaming.multiplayer.client.events.*
 import com.shephertz.app42.gaming.multiplayer.client.listener.NotifyListener
-import com.typesafe.config.ConfigFactory
-import io.github.config4k.extract
+import com.squareup.moshi.Types
 import ktx.actors.alpha
 import mmorihiro.matchland.model.ConfigModel
 import mmorihiro.matchland.model.MessageType
+import java.lang.reflect.Type
 import java.util.*
 
 
@@ -16,14 +16,14 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
         if (list[0] == ConfigModel.config.itemType.name) return
         when (MessageType.values().first { it.name == list[1] }) {
             MessageType.CONNECT -> {
-                val config = ConfigFactory.parseString(list[2])
-                onEnemyConnect(controller.view, config.extract("x"),
-                        config.extract("y"), true)
+                val adapter = ConfigModel.moshi.adapter(Point::class.java)
+                val point = adapter.fromJson(list[2])!!
+                onEnemyConnect(controller.view, point.x, point.y, true)
             }
             MessageType.NotConnect -> {
-                val config = ConfigFactory.parseString(list[2])
-                onEnemyConnect(controller.view, config.extract("x"),
-                        config.extract("y"), false)
+                val adapter = ConfigModel.moshi.adapter(Point::class.java)
+                val point = adapter.fromJson(list[2])!!
+                onEnemyConnect(controller.view, point.x, point.y, false)
             }
             MessageType.TouchUp -> onEnemyTouchUp(controller.view)
             MessageType.NotEnough -> {
@@ -38,8 +38,10 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
                 }
             }
             MessageType.NewItem -> {
-                val config = ConfigFactory.parseString(list[2])
-                onNewItem(controller.view, config.extract("items"))
+                val type: Type =
+                        Types.newParameterizedType(List::class.java, NewItem::class.java)
+                val adapter = ConfigModel.moshi.adapter<List<NewItem>>(type)
+                onNewItem(controller.view, adapter.fromJson(list[2])!!)
             }
         }
     }
@@ -102,3 +104,5 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
     override fun onUserJoinedLobby(p0: LobbyData?, p1: String?) {
     }
 }
+
+data class Point(val x: Int, val y: Int)

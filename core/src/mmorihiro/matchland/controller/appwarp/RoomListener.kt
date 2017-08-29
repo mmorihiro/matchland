@@ -5,8 +5,6 @@ import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultC
 import com.shephertz.app42.gaming.multiplayer.client.events.LiveRoomInfoEvent
 import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent
 import com.shephertz.app42.gaming.multiplayer.client.listener.RoomRequestListener
-import com.typesafe.config.ConfigRenderOptions
-import io.github.config4k.toConfig
 import mmorihiro.matchland.model.ConfigModel
 
 
@@ -17,9 +15,9 @@ class RoomListener(private val controller: WarpController) : RoomRequestListener
                 controller.warpClient.subscribeRoom(event.data.id)
             }
             RESOURCE_NOT_FOUND -> {
+                val adapter = ConfigModel.moshi.adapter(IconList::class.java)
                 val pair = "iconList" to
-                        getIconList(controller.view).toConfig("list").root()
-                                .render(ConfigRenderOptions.concise())
+                        adapter.toJson(IconList(getIconList(controller.view)))
                 val type0 = "type0" to ConfigModel.config.itemType.name
                 controller.warpClient.createRoom("matchland", "shephertz",
                         2, hashMapOf(pair, type0))
@@ -67,3 +65,5 @@ class RoomListener(private val controller: WarpController) : RoomRequestListener
     override fun onSetCustomRoomDataDone(p0: LiveRoomInfoEvent?) {
     }
 }
+
+data class IconList(val list: List<List<Int>>)
