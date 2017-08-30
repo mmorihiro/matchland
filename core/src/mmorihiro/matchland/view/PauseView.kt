@@ -26,15 +26,17 @@ class PauseView : View() {
                 color = Color.GREEN
             }
             row()
-            resetButton = textButton("  Reset  ") {
+            resetButton = textButton("Reset") {
                 color = Color.GREEN
             }
             row()
-            homeButton = textButton("  Home  ") {
+            homeButton = textButton(" Home ") {
                 color = Color.GREEN
             }
             pack()
             centerPosition(Values.width, Values.height)
+            resetButton.width += 9f
+            resetButton.x -= 4f
             this@PauseView + this
         }
     }

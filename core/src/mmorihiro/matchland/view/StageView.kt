@@ -22,7 +22,7 @@ class StageView(private val onHome: () -> Unit, private val top: View) : View() 
     private var currentViews: List<View> = createView()
     private val label = Label("Lv ${ConfigModel.config.stageNumber}",
             Scene2DSkin.defaultSkin, "default-font2", Color.WHITE).apply {
-        x = 53f
+        x = 44f
         y = Values.height - 37f
         this@StageView + this
     }
@@ -30,11 +30,11 @@ class StageView(private val onHome: () -> Unit, private val top: View) : View() 
     private fun createView(): List<View> {
         val config = ConfigModel.config
         val barController = BarController({
+            ConfigModel.onStageChange()
             val clearView = StageChangeController("Stage Completed!") {
                 Gdx.input.inputProcessor = null
                 StageChangeEffect().addEffect(this)
                 this + (Actions.delay(0.9f) then Actions.run {
-                    ConfigModel.onStageChange()
                     label.setText("Lv ${ConfigModel.config.stageNumber}")
                     currentViews = createView()
                 })

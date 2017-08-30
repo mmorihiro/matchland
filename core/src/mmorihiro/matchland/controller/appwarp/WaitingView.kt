@@ -20,6 +20,7 @@ class WaitingView : View() {
             label("Now Searching...")
             pack()
             centerPosition(Values.width, Values.height)
+            y += 10f
             this@WaitingView + this
         }
         table {
@@ -28,7 +29,7 @@ class WaitingView : View() {
             }
             pack()
             centerPosition(Values.width, Values.height)
-            y -= 50f
+            y -= 40f
             this@WaitingView + this
         }
     }

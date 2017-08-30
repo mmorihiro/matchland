@@ -177,7 +177,7 @@
   },
   com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
     default: {
-      font: default-font,
+      font: default-font2,
       fontColor: default
     }
   },
