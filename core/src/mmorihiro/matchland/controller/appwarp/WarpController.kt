@@ -24,7 +24,7 @@ import java.lang.reflect.Type
 class WarpController(private val onStart: () -> Unit,
                      private val onHome: () -> Unit, private val top: View) : Controller {
     val warpClient: WarpClient by lazy { WarpClient.getInstance() }
-    lateinit var roomID: String
+    private lateinit var roomID: String
     private val dialogs = GDXDialogsSystem.install()
     private var errorDialogShown = false
     override val view = WarpPuzzleView(
@@ -43,37 +43,37 @@ class WarpController(private val onStart: () -> Unit,
                             sendMessage(MessageType.NotConnect, bx.toInt(), by.toInt())
                         })
             }, onTouchUp = { view ->
-        val warpView = view as WarpPuzzleView
-        if (warpView.connectEvent == null) return@WarpPuzzleView
-        val connectEvent = warpView.connectEvent!!
-        onTouchUp(view, { event ->
-            sendMessage(MessageType.TouchUp)
-            if (view.isEnemyTouchUp) {
-                view.enemyConnected = listOf()
-                iconReaction(view, event.enemy, false)
-                iconReaction(view, event.connectedItems, true)
-                addNewItems(view, event)
-                sendNewItems(view, event)
-                view.isEnemyTouchUp = false
-                changeBarValue(view)
-            } else {
-                view.isPlayerTouchUp = true
-                view.connectEvent = connectEvent
-            }
-        }, { sendMessage(MessageType.NotEnough) })
-    }, onFinish = {
-        warpClient.unsubscribeRoom(roomID)
-        warpClient.leaveRoom(roomID)
-        warpClient.disconnect()
-    }, onHome = onHome, top = top)
+                val warpView = view as WarpPuzzleView
+                if (warpView.connectEvent == null) return@WarpPuzzleView
+                val connectEvent = warpView.connectEvent!!
+                onTouchUp(view, { event ->
+                    sendMessage(MessageType.TouchUp)
+                    if (view.isEnemyTouchUp) {
+                        view.enemyConnected = listOf()
+                        iconReaction(view, event.enemy, false)
+                        iconReaction(view, event.connectedItems, true)
+                        addNewItems(view, event)
+                        sendNewItems(view, event)
+                        view.isEnemyTouchUp = false
+                        changeBarValue(view)
+                    } else {
+                        view.isPlayerTouchUp = true
+                        view.connectEvent = connectEvent
+                    }
+                }, { sendMessage(MessageType.NotEnough) })
+            }, onFinish = {
+                warpClient.unsubscribeRoom(roomID)
+                warpClient.leaveRoom(roomID)
+                warpClient.disconnect()
+            }, onHome = onHome, top = top)
 
     init {
         WarpClient.initialize(
                 "37e334f70df6e1984fc390d2a52939f75f8e546584c20ef3a31b87efec76d11f",
                 "ef2760dcfdbbff89c6d081934e985c26cc05e16dc026146b972ca1a1ad3fc9fc")
-        warpClient.addConnectionRequestListener(ConnectionListener(warpClient))
+        warpClient.addConnectionRequestListener(ConnectionListener(this))
         warpClient.addRoomRequestListener(RoomListener(this))
-        warpClient.addZoneRequestListener(ZoneListener(this, warpClient))
+        warpClient.addZoneRequestListener(ZoneListener(this))
         warpClient.addNotificationListener(NotificationListener(this))
         warpClient.connectWithUserName(view.playerType.name)
     }
