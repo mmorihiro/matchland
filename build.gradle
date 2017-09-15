@@ -26,6 +26,7 @@ allprojects {
         gdxVersion = '1.9.6'
         ktxVersion = '1.9.5-b1'
         kotlintestVersion = '2.0.0'
+        gdxDialogsVersion = '1.2.1'
     }
 
     repositories {
@@ -46,6 +47,7 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        compile "de.tomgrill.gdxdialogs:gdx-dialogs-desktop:$gdxDialogsVersion"
     }
 }
 
@@ -65,6 +67,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        compile "de.tomgrill.gdxdialogs:gdx-dialogs-android:$gdxDialogsVersion"
     }
 }
 
@@ -78,6 +81,8 @@ project(":core") {
         compile "com.github.czyzby:ktx-assets:$ktxVersion"
         compile "com.github.czyzby:ktx-scene2d:$ktxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+        compile "de.tomgrill.gdxdialogs:gdx-dialogs-core:$gdxDialogsVersion"
         compile fileTree('../libs')
     }
 }

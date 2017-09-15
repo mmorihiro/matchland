@@ -23,18 +23,17 @@ class RoomListener(private val controller: WarpController) : RoomRequestListener
                         2, hashMapOf(pair, type0))
             }
             else -> {
-                controller.warpClient.disconnect()
-                error("onJoinRoom")
+                controller.onLobbyError(this.javaClass.kotlin.simpleName, event.result)
             }
         }
     }
 
     override fun onSubscribeRoomDone(event: RoomEvent?) {
-        controller.warpClient.getLiveRoomInfo(event!!.data.id)
+        controller.warpClient.getLiveRoomInfo(event?.data?.id)
     }
 
     override fun onGetLiveRoomInfoDone(event: LiveRoomInfoEvent?) {
-        if (event!!.joinedUsers.size == 2) controller.startGame(event)
+        if (event?.joinedUsers?.size == 2) controller.startGame(event)
     }
 
     override fun onUnSubscribeRoomDone(p0: RoomEvent?) {
