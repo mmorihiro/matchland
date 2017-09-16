@@ -23,8 +23,9 @@ import java.lang.reflect.Type
 
 class WarpController(private val onStart: () -> Unit,
                      private val onHome: () -> Unit, private val top: View) : Controller {
-    val warpClient: WarpClient by lazy { WarpClient.getInstance() }
-    private lateinit var roomID: String
+    val warpClient: WarpClient by lazy { ClientHolder.client }
+    var roomID = ""
+    var canceled = false
     private val dialogs = GDXDialogsSystem.install()
     private var errorDialogShown = false
     override val view = WarpPuzzleView(
@@ -43,38 +44,28 @@ class WarpController(private val onStart: () -> Unit,
                             sendMessage(MessageType.NotConnect, bx.toInt(), by.toInt())
                         })
             }, onTouchUp = { view ->
-                val warpView = view as WarpPuzzleView
-                if (warpView.connectEvent == null) return@WarpPuzzleView
-                val connectEvent = warpView.connectEvent!!
-                onTouchUp(view, { event ->
-                    sendMessage(MessageType.TouchUp)
-                    if (view.isEnemyTouchUp) {
-                        view.enemyConnected = listOf()
-                        iconReaction(view, event.enemy, false)
-                        iconReaction(view, event.connectedItems, true)
-                        addNewItems(view, event)
-                        sendNewItems(view, event)
-                        view.isEnemyTouchUp = false
-                        changeBarValue(view)
-                    } else {
-                        view.isPlayerTouchUp = true
-                        view.connectEvent = connectEvent
-                    }
-                }, { sendMessage(MessageType.NotEnough) })
-            }, onFinish = {
-                warpClient.unsubscribeRoom(roomID)
-                warpClient.leaveRoom(roomID)
-                warpClient.disconnect()
-            }, onHome = onHome, top = top)
+        val warpView = view as WarpPuzzleView
+        if (warpView.connectEvent == null) return@WarpPuzzleView
+        val connectEvent = warpView.connectEvent!!
+        onTouchUp(view, { event ->
+            sendMessage(MessageType.TouchUp)
+            if (view.isEnemyTouchUp) {
+                view.enemyConnected = listOf()
+                iconReaction(view, event.enemy, false)
+                iconReaction(view, event.connectedItems, true)
+                addNewItems(view, event)
+                sendNewItems(view, event)
+                view.isEnemyTouchUp = false
+                changeBarValue(view)
+            } else {
+                view.isPlayerTouchUp = true
+                view.connectEvent = connectEvent
+            }
+        }, { sendMessage(MessageType.NotEnough) })
+    }, onFinish = { disconnect() }, onHome = onHome, top = top)
 
     init {
-        WarpClient.initialize(
-                "37e334f70df6e1984fc390d2a52939f75f8e546584c20ef3a31b87efec76d11f",
-                "ef2760dcfdbbff89c6d081934e985c26cc05e16dc026146b972ca1a1ad3fc9fc")
-        warpClient.addConnectionRequestListener(ConnectionListener(this))
-        warpClient.addRoomRequestListener(RoomListener(this))
-        warpClient.addZoneRequestListener(ZoneListener(this))
-        warpClient.addNotificationListener(NotificationListener(this))
+        ClientHolder.addListeners(this)
         warpClient.connectWithUserName(view.playerType.name)
     }
 
@@ -82,7 +73,6 @@ class WarpController(private val onStart: () -> Unit,
         Gdx.input.inputProcessor = null
         onStart()
         StageChangeEffect().resumeEffect(top)
-        roomID = event.data.id
         enemyType = event.joinedUsers.first { it != playerType.name }.let { typeName ->
             ItemType.values().first { it.name == typeName }
         }
@@ -148,13 +138,12 @@ class WarpController(private val onStart: () -> Unit,
     }
 
     internal fun onLobbyError(where: String?, result: Byte) {
-        if(errorDialogShown) return
+        if (errorDialogShown) return
         else errorDialogShown = true
 
-        warpClient.leaveLobby()
-        warpClient.disconnect()
+        disconnect()
 
-        val (resultCode, resultText) = when(result) {
+        val (resultCode, resultText) = when (result) {
             AUTH_ERROR -> "AUTH_ERROR" to "The session id sent in the request was incorrect. This can happen if the client connects without initializing with the correct keys."
             RESOURCE_MOVED -> "RESOURCE_MOVED" to "The resource for which the request was intended to has moved to a state where it can’t process the request. For example, if a client sends a chat or updatePeers message and the connected user is not present in any room."
             UNKNOWN_ERROR -> "UNKNOWN_ERROR" to "This is an unexpected error. Retrying the request is recommended if this happens."
@@ -181,5 +170,14 @@ class WarpController(private val onStart: () -> Unit,
         }
 
         bDialog.build().show()
+    }
+
+    fun disconnect() {
+        if (roomID.isNotEmpty()) {
+            warpClient.unsubscribeRoom(roomID)
+            warpClient.leaveRoom(roomID)
+            warpClient.deleteRoom(roomID)
+            warpClient.disconnect()
+        }
     }
 }

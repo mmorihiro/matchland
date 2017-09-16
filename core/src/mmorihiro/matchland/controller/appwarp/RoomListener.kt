@@ -8,7 +8,7 @@ import com.shephertz.app42.gaming.multiplayer.client.listener.RoomRequestListene
 import mmorihiro.matchland.model.ConfigModel
 
 
-class RoomListener(private val controller: WarpController) : RoomRequestListener {
+class RoomListener(var controller: WarpController) : RoomRequestListener {
     override fun onJoinRoomDone(event: RoomEvent?) {
         when (event!!.result) {
             SUCCESS -> {

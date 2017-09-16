@@ -1,15 +1,17 @@
 package mmorihiro.matchland.controller.appwarp
 
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode
 import com.shephertz.app42.gaming.multiplayer.client.events.*
 import com.shephertz.app42.gaming.multiplayer.client.listener.ZoneRequestListener
 
 
-class ZoneListener(private val controller: WarpController) : ZoneRequestListener {
+class ZoneListener(var controller: WarpController) : ZoneRequestListener {
     override fun onCreateRoomDone(event: RoomEvent?) {
         if (event!!.result == WarpResponseResultCode.SUCCESS) {
-            controller.warpClient.joinRoom(event.data.id)
+            if (controller.roomID.isEmpty()) {
+                controller.warpClient.joinRoom(event.data.id)
+                controller.roomID = event.data.id
+            }
         } else {
             controller.onLobbyError(this.javaClass.kotlin.simpleName, event.result)
         }

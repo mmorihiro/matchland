@@ -10,7 +10,7 @@ import java.lang.reflect.Type
 import java.util.*
 
 
-class NotificationListener(val controller: WarpController) : NotifyListener {
+class NotificationListener(var controller: WarpController) : NotifyListener {
     override fun onUpdatePeersReceived(event: UpdateEvent?) {
         val list = String(event!!.update).split("@")
         if (list[0] == ConfigModel.config.itemType.name) return
@@ -52,12 +52,7 @@ class NotificationListener(val controller: WarpController) : NotifyListener {
 
     override fun onUserLeftRoom(data: RoomData?, userName: String?) {
         if (userName == ConfigModel.config.itemType.name) return
-        controller.warpClient.run {
-            unsubscribeRoom(data!!.id)
-            leaveRoom(data.id)
-            deleteRoom(data.id)
-            disconnect()
-        }
+        controller.warpClient.disconnect()
         controller.view.showWindow(if (isEnemyCleared(controller.view)) "Lose" else "Win")
     }
 
