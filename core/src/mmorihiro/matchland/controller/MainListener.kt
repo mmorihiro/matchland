@@ -23,6 +23,7 @@ import mmorihiro.matchland.view.View
 class MainListener : ApplicationAdapter() {
     private val topView by lazy { View() }
     private var currentViews: List<View> = listOf()
+    private var warpController: WarpController? = null
 
     override fun create() {
         loadAssets()
@@ -37,16 +38,16 @@ class MainListener : ApplicationAdapter() {
                         topView)
             }, onBattle = {
                 val waitingView = WaitingView()
-                val warpController =
+                warpController =
                         WarpController({ currentViews -= waitingView }, { backHome() }, topView)
                 Gdx.input.inputProcessor = waitingView
                 waitingView.button.onClick { _, _ ->
-                    warpController.disconnect()
-                    warpController.canceled = true
+                    warpController!!.disconnect()
+                    warpController!!.canceled = true
                     backHome()
                     StageChangeEffect().resumeEffect(topView)
                 }
-                currentViews = listOf(warpController.view, topView, waitingView)
+                currentViews = listOf(warpController!!.view, topView, waitingView)
             }, top = topView).view
 
     private fun backHome() {
@@ -85,6 +86,7 @@ class MainListener : ApplicationAdapter() {
     }
 
     override fun dispose() {
+        warpController?.disconnect()
         unload("homeBackground.png")
         unload("background.png")
         unload("items.png")
