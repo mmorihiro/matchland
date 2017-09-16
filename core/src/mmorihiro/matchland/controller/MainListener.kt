@@ -41,8 +41,8 @@ class MainListener : ApplicationAdapter() {
                         WarpController({ currentViews -= waitingView }, { backHome() }, topView)
                 Gdx.input.inputProcessor = waitingView
                 waitingView.button.onClick { _, _ ->
-                    warpController.warpClient.leaveLobby()
-                    warpController.warpClient.disconnect()
+                    warpController.disconnect()
+                    warpController.canceled = true
                     backHome()
                     StageChangeEffect().resumeEffect(topView)
                 }

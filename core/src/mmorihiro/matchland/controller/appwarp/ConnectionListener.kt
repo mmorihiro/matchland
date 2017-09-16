@@ -5,14 +5,15 @@ import com.shephertz.app42.gaming.multiplayer.client.events.ConnectEvent
 import com.shephertz.app42.gaming.multiplayer.client.listener.ConnectionRequestListener
 
 
-class ConnectionListener(private val controller: WarpController) : ConnectionRequestListener {
+class ConnectionListener(var controller: WarpController) : ConnectionRequestListener {
     override fun onInitUDPDone(p0: Byte) {
 
     }
 
     override fun onConnectDone(event: ConnectEvent?) {
         if (event!!.result == WarpResponseResultCode.SUCCESS) {
-            controller.warpClient.joinRoomInRange(1, 1, false)
+            if (controller.canceled) controller.warpClient.disconnect()
+            else controller.warpClient.joinRoomInRange(1, 1, false)
         } else {
             controller.onLobbyError(this.javaClass.kotlin.simpleName, event.result)
         }
