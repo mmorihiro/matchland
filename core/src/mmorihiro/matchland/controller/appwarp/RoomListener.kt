@@ -11,29 +11,35 @@ import mmorihiro.matchland.model.ConfigModel
 class RoomListener(var controller: WarpController) : RoomRequestListener {
     override fun onJoinRoomDone(event: RoomEvent?) {
         when (event!!.result) {
-            SUCCESS -> {
-                controller.warpClient.subscribeRoom(event.data.id)
-            }
-            RESOURCE_NOT_FOUND -> {
-                val adapter = ConfigModel.moshi.adapter(IconList::class.java)
-                val pair = "iconList" to
-                        adapter.toJson(IconList(getIconList(controller.view)))
-                val type0 = "type0" to ConfigModel.config.itemType.name
-                controller.warpClient.createRoom("matchland", "shephertz",
-                        2, hashMapOf(pair, type0))
-            }
-            else -> {
-                controller.onLobbyError(this.javaClass.kotlin.simpleName, event.result)
-            }
+            SUCCESS -> controller.warpClient.subscribeRoom(event.data.id)
+            RESOURCE_NOT_FOUND -> createRoom()
+            else -> controller.onLobbyError(this.javaClass.kotlin.simpleName, event.result)
         }
+    }
+
+    private fun createRoom() {
+        val adapter = ConfigModel.moshi.adapter(IconList::class.java)
+        val pair = "iconList" to
+                adapter.toJson(IconList(getIconList(controller.view)))
+        val type0 = "type0" to ConfigModel.config.itemType.name
+        controller.warpClient.createRoom("matchland", "shephertz", 2, hashMapOf(pair, type0))
+        controller.createdRoom = true
     }
 
     override fun onSubscribeRoomDone(event: RoomEvent?) {
         controller.warpClient.getLiveRoomInfo(event?.data?.id)
     }
 
-    override fun onGetLiveRoomInfoDone(event: LiveRoomInfoEvent?) {
-        if (event?.joinedUsers?.size == 2) controller.startGame(event)
+    override fun onGetLiveRoomInfoDone(event: LiveRoomInfoEvent?) = controller.run {
+        if (event?.joinedUsers?.size == 2) {
+            val users = event.joinedUsers.map { it.split("@").first() }
+            if (users[0] != users[1]) controller.startGame(event, users)
+            else if (!createdRoom) {
+                warpClient.unsubscribeRoom(roomID)
+                warpClient.leaveRoom(roomID)
+                createRoom()
+            }
+        }
     }
 
     override fun onUnSubscribeRoomDone(p0: RoomEvent?) {
