@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import ktx.actors.plus
 import ktx.actors.then
 import ktx.assets.asset
-import mmorihiro.matchland.controller.BarController
+import mmorihiro.matchland.controller.ScoreController
 import mmorihiro.matchland.controller.StageChangeController
 import mmorihiro.matchland.controller.StageChangeEffect
 import mmorihiro.matchland.model.Point
@@ -39,11 +39,11 @@ class WarpPuzzleView(override val onTouchDown: (Puzzle, Int, Int) -> Unit,
         this + Actions.run { buildWindow(title) }
     }
 
-    private fun createBar(): BarController =
-            BarController(onClear = {
+    private fun createBar(): ScoreController =
+            ScoreController(onClear = {
                 onFinish()
                 buildWindow("Win!")
-            }, level = 0)
+            }, level = 6)
 
     private fun buildWindow(title: String) {
         val changeView = StageChangeController(title) {

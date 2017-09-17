@@ -9,8 +9,8 @@ import ktx.actors.onClick
 import ktx.actors.plus
 import ktx.actors.then
 import ktx.scene2d.Scene2DSkin
-import mmorihiro.matchland.controller.BarController
 import mmorihiro.matchland.controller.PuzzleController
+import mmorihiro.matchland.controller.ScoreController
 import mmorihiro.matchland.controller.StageChangeController
 import mmorihiro.matchland.controller.StageChangeEffect
 import mmorihiro.matchland.model.ConfigModel
@@ -29,7 +29,7 @@ class StageView(private val onHome: () -> Unit, private val top: View) : View() 
 
     private fun createView(): List<View> {
         val config = ConfigModel.config
-        val barController = BarController({
+        val barController = ScoreController({
             ConfigModel.onStageChange()
             val clearView = StageChangeController("Stage Completed!") {
                 Gdx.input.inputProcessor = null

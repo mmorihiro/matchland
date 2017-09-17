@@ -1,5 +1,6 @@
 package mmorihiro.matchland.controller
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.delay
 import ktx.actors.onClick
@@ -30,6 +31,10 @@ class PuzzleController(onTurnEnd: (Int) -> Unit,
         tiles.forEach { it.forEach { itemLayer + it } }
         items.forEach { it.forEach { itemLayer + it } }
         this + pauseButton
-        pauseButton.onClick { _, _ -> onPause() }
+        pauseButton.onClick { _, _ ->
+            pauseButton.color = Color(0.5f, 0.5f, 0.5f, 1f)
+            pauseButton + Actions.color(Color.WHITE, 0.2f)
+            onPause()
+        }
     }
 }
