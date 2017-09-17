@@ -51,7 +51,7 @@ class NotificationListener(var controller: WarpController) : NotifyListener {
     }
 
     override fun onUserLeftRoom(data: RoomData?, userName: String?) {
-        if (userName == ConfigModel.config.itemType.name) return
+        if (userName?.split("@")?.first() == ConfigModel.config.itemType.name) return
         controller.warpClient.disconnect()
         controller.view.showWindow(if (isEnemyCleared(controller.view)) "Lose" else "Win")
     }

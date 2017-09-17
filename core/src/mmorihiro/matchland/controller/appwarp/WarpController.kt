@@ -2,6 +2,7 @@ package mmorihiro.matchland.controller.appwarp
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode.*
@@ -26,6 +27,7 @@ class WarpController(private val onStart: () -> Unit,
     val warpClient: WarpClient by lazy { ClientHolder.client }
     var roomID = ""
     var canceled = false
+    var createdRoom = false
     private val dialogs = GDXDialogsSystem.install()
     private var errorDialogShown = false
     override val view = WarpPuzzleView(
@@ -66,15 +68,15 @@ class WarpController(private val onStart: () -> Unit,
 
     init {
         ClientHolder.addListeners(this)
-        warpClient.connectWithUserName(view.playerType.name)
+        warpClient.connectWithUserName("${view.playerType.name}@${MathUtils.random(1000)}")
     }
 
-    fun startGame(event: LiveRoomInfoEvent) = view.run {
+    fun startGame(event: LiveRoomInfoEvent, users: List<String>) = view.run {
         Gdx.input.inputProcessor = null
         onStart()
         StageChangeEffect().resumeEffect(top)
-        enemyType = event.joinedUsers.first { it != playerType.name }.let { typeName ->
-            ItemType.values().first { it.name == typeName }
+        enemyType = users.first { it != playerType.name }.let { typeName ->
+            ItemType.values().first { it.name == typeName.split("@").first() }
         }
         this + backGround
         this + itemLayer
