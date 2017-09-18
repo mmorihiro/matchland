@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewbox="0 0 512 512">
+  <defs>
+    <filter id="bg-drop-shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="0" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <g>
+    <!-- background -->
+    <rect x="3" y="3" width="506" height="506" rx="70" fill="#f8f8f8" filter="url(#bg-drop-shadow)"/>
+
+    <!-- mesh -->
+    <rect x="48" y="48" width="416" height="416"  rx="5" fill="#e0e0e0" />
+
+    <!-- cells -->
+    <g>
+      <g>
+        <rect x="59" y="59" width="70" height="70" rx="5" fill="#ffc184" />
+        <rect x="140" y="59" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="221" y="59" width="70" height="70" rx="5" fill="#93ffff" />
+        <rect x="302" y="59" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="383" y="59" width="70" height="70" rx="5" fill="#ffffbc" />
+      </g>
+      <g>
+        <rect x="59" y="140" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="140" y="140" width="70" height="70" rx="5" fill="#ffc184" />
+        <rect x="221" y="140" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="302" y="140" width="70" height="70" rx="5" fill="#93ffff" />
+        <rect x="383" y="140" width="70" height="70" rx="5" fill="#ffffbc" />
+      </g>
+      <g>
+        <rect x="59" y="221" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="140" y="221" width="70" height="70" rx="5" fill="#93ffff" />
+        <rect x="221" y="221" width="70" height="70" rx="5" fill="#ffc184" />
+        <rect x="302" y="221" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="383" y="221" width="70" height="70" rx="5" fill="#ffffbc" />
+      </g>
+      <g>
+        <rect x="59" y="302" width="70" height="70" rx="5" fill="#bfff7f" />
+        <rect x="140" y="302" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="221" y="302" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="302" y="302" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="383" y="302" width="70" height="70" rx="5" fill="#93ffff" />
+      </g>
+      <g>
+        <rect x="59" y="383" width="70" height="70" rx="5" fill="#ffc184" />
+        <rect x="140" y="383" width="70" height="70" rx="5" fill="#ffffbc" />
+        <rect x="221" y="383" width="70" height="70" rx="5" fill="#93ffff" />
+        <rect x="302" y="383" width="70" height="70" rx="5" fill="#93ffff" />
+        <rect x="383" y="383" width="70" height="70" rx="5" fill="#bfff7f" />
+      </g>
+    </g>
+  </g>
+</svg>
