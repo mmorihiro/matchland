@@ -66,9 +66,6 @@ class MainListener : ApplicationAdapter() {
         Assets.manager.finishLoading()
         load<Texture>("background.png")
         load<Texture>("backgroundTop.png")
-        load<Texture>("star.png")
-        load<Texture>("grayStar.png")
-        load<Texture>("bar.png")
         load<Texture>("white.png")
         load<Texture>("pause.png")
     }
@@ -87,14 +84,15 @@ class MainListener : ApplicationAdapter() {
 
     override fun dispose() {
         warpController?.disconnect()
+        unload("ui/uiskin.json")
         unload("homeBackground.png")
-        unload("background.png")
+        unload("play.png")
+        unload("online.png")
         unload("items.png")
         unload("tile.png")
-        unload("star.png")
-        unload("grayStar.png")
-        unload("bar.png")
+        unload("background.png")
+        unload("backgroundTop.png")
         unload("white.png")
-        unload("ui/uiskin.json")
+        unload("pause.png")
     }
 }
